@@ -25,9 +25,9 @@ $('#myModal').on('shown.bs.modal', function () {
 @stop
 
 @section('content')
-{{-- <h3 class="page-title">
+<h3 class="page-title">
     <b>Daftar Pendukung Acara</b>
-</h3> --}}
+</h3>
 @if(session('msg'))
 <div class="alert alert-success" role="alert">
     <button type="button" class="close" data-dismiss="alert">×</button> 
