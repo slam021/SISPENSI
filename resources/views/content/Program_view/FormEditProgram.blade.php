@@ -85,10 +85,10 @@
     ?> --}}
     
     <?php 
-        $gender =[
+        $organizer =[
             ''  => '',
-            '1' => 'Laki-laki',
-            '2' => 'Perempuan',
+            '1' => 'Kandidat',
+            '2' => 'Timses',
         ];
     ?>
 
@@ -98,8 +98,24 @@
             <div class="row form-group">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <a class="text-dark">Nama Timses<a class='red'> *</a></a>
+                        <a class="text-dark">Penyelenggara<a class='red'> *</a></a>
+                        {!! Form::select('program_organizer', $organizer, $program->program_organizer, ['class' => 'selection-search-clear select-form', 'id' => 'program_organizer','' ])!!}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <a class="text-dark">Timses<a class='red'> *</a></a>
+                        @if($program->program_organizer == 1)
+                        <select class="selection-search-clear" name="timses_id" id="timses_id">
+                                <option value="{{$program->timses_id}}"></option>
+                                @foreach($coretimses2 as $key => $val)
+                                <option value="{{$val->timses_id}}">{{$val->timses_name}}</option>
+                                @endforeach   
+                            </select> 
+                        {{-- {!! Form::select('timses_id', $coretimses, '', ['class' => 'selection-search-clear select-form', 'id' => 'timses_id' ])!!} --}}
+                        @else
                             {!! Form::select('timses_id', $coretimses, $program->timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
+                        @endif
                         <input class="form-control input-bb" type="hidden" name="program_id" id="program_id" value="{{$program->program_id}}" autocomplete="off"/>
                     </div>
                 </div>

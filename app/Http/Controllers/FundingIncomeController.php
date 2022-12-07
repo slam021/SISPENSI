@@ -253,4 +253,6 @@ class FundingIncomeController extends Controller
 
         return redirect('/funding-income')->with('msg',$msg);
     }
+
+    
 }

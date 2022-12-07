@@ -30,22 +30,25 @@ class ProgramController extends Controller
 
     public function index(){
     
-        $program = Program::select('program.*', 'core_location.location_name', 'core_period.period_name', 'core_candidate.candidate_full_name', 'core_timses.*')
-        ->where('program.data_state','=',0)
+        $program = Program::select('program.*', 'core_location.location_name', 'core_period.period_name', 'core_candidate.candidate_full_name')
         ->join('core_location', 'core_location.location_id', '=', 'program.location_id')
         ->join('core_period', 'core_period.period_id', '=', 'program.period_id')
         ->join('core_candidate', 'core_candidate.candidate_id', '=', 'program.candidate_id')
-        ->join('core_timses', 'core_timses.timses_id', '=', 'program.timses_id')
-        ->orderBy('program_id', 'ASC')     
+        // ->join('core_timses', 'core_timses.timses_id', '=', 'program.timses_id')
+        ->where('program.data_state','=',0)
+        // ->orderBy('program_id', 'ASC')     
         ->get();
 
-        // print_r($program); exit;
+        $coretimses = CoreTimses::select('timses_id', 'timses_name')
+        ->where('data_state', '=', 0)->get();
+       
+        // print_r($coretimses); exit;
 
         $programgender =array(
             1 => 'Laki-laki',
             2 => 'Perempuan',
         );
-        return view('content/Program_view/ListProgram', compact('program', 'programgender'));
+        return view('content/Program_view/ListProgram', compact('program', 'programgender', 'coretimses'));
     }
 
     public function addProgram(Request $request){
@@ -85,7 +88,8 @@ class ProgramController extends Controller
         $fields = $request->validate([
             'candidate_id'              => 'required',
             'location_id'               => 'required',
-            'timses_id'                 => 'required',
+            // 'timses_id'                 => 'required',
+            'program_organizer'         => 'required',
             'program_name'              => 'required',
             'program_description'       => 'required',
             'program_address'           => 'required',
@@ -99,7 +103,8 @@ class ProgramController extends Controller
             'candidate_id'                   => $fields['candidate_id'], 
             'location_id'                    => $fields['location_id'], 
             'period_id'                      => $fields['period_id'], 
-            'timses_id'                      => $fields['timses_id'], 
+            'timses_id'                      => $request['timses_id'], 
+            'program_organizer'              => $fields['program_organizer'], 
             'program_name'                   => $fields['program_name'], 
             'program_description'            => $fields['program_description'], 
             'program_address'                => $fields['program_address'], 
@@ -131,22 +136,26 @@ class ProgramController extends Controller
         $nullcorecandidate = Session::get('candidate_id');
 
         $coretimses = CoreTimses::where('data_state', '=', 0)->pluck('timses_name', 'timses_id');
-        $nullcoretimses  = Session::get('timses_id');
-        return view('content/Program_view/FormEditProgram', compact('program', 'corelocation', 'nullcorelocation', 'coreperiod', 'nullcoreperiod', 'corecandidate', 'nullcorecandidate', 'coretimses'));
+        $coretimses2 = CoreTimses::where('data_state', '=', 0)->get();
+        $nullcoretimses  = Program::where('data_state', '=', 0)->where('program_id', $program_id)->first();
+        return view('content/Program_view/FormEditProgram', compact('program', 'corelocation', 'nullcorelocation', 'coreperiod', 'nullcoreperiod', 'corecandidate', 'nullcorecandidate', 'coretimses', 'nullcoretimses', 'coretimses2'));
     }
 
     public function processEditProgram(Request $request){
+        // print_r($request->all());exit;
         $fields = $request->validate([
             'program_id'                => 'required',
             'candidate_id'              => 'required',
             'location_id'               => 'required',
             'period_id'                 => 'required',
-            'timses_id'                 => 'required',
+            // 'timses_id'                 => 'required',
             'program_name'              => 'required',
             'program_description'       => 'required',
             'program_address'           => 'required',
             'program_date'              => 'required',
             'program_fund'              => 'required',
+            'program_organizer'         => 'required',
+
             // 'candidate_photos'              => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
@@ -155,12 +164,14 @@ class ProgramController extends Controller
         $item->candidate_id                     = $fields['candidate_id'];
         $item->location_id                      = $fields['location_id'];
         $item->period_id                        = $fields['period_id'];
-        $item->timses_id                        = $fields['timses_id'];
+        $item->timses_id                        = $request['timses_id'];
+        $item->program_organizer                = $fields['program_organizer'];
         $item->program_name                     = $fields['program_name'];
         $item->program_description              = $fields['program_description'];
         $item->program_address                  = $fields['program_address'];
         $item->program_date                     = $fields['program_date'];
         $item->program_fund                     = $request['program_fund'];
+        // print_r($item);exit;
 
         if($item->save()){
             $msg = 'Edit Acara Berhasil';
@@ -171,13 +182,13 @@ class ProgramController extends Controller
         }
     }
 
-    public function detailProgram($program_id, $timses_id){
-        $program = Program::select('program.*', 'core_location.location_name', 'core_period.period_name', 'core_candidate.candidate_full_name', 'core_timses.*')
+    public function detailProgram($program_id){
+        $program = Program::select('program.*', 'core_location.location_name', 'core_period.period_name', 'core_candidate.candidate_full_name')
         ->where('program.data_state','=',0)
         ->join('core_location', 'core_location.location_id', '=', 'program.location_id')
         ->join('core_period', 'core_period.period_id', '=', 'program.period_id')
         ->join('core_candidate', 'core_candidate.candidate_id', '=', 'program.candidate_id')
-        ->join('core_timses', 'core_timses.timses_id', '=', 'program.timses_id')
+        // ->join('core_timses', 'core_timses.timses_id', '=', 'program.timses_id')
         ->where('program_id', $program_id)->first();
 
         $programsupport = ProgramSupport::select('core_supporter.*', 'program.*')
@@ -187,11 +198,23 @@ class ProgramController extends Controller
         ->where('program_support.program_id', $program_id)
         ->get();
 
-        $membertimses = CoreTimsesMember::where('data_state','=',0)
-        ->where('core_timses_member.timses_id', $timses_id)
-        ->get();
+        // print_r($program); exit;
 
-        return view('content/Program_view/FormDetailProgram', compact('program', 'programsupport', 'membertimses'));
+        // $membertimses = CoreTimsesMember::select('core_timses_member.*', 'core_timses.*')
+        // ->where('core_timses_member.data_state','=',0)
+        // ->join('core_timses', 'core_timses.timses_id', '=', 'program.timses_id')
+        // ->where('core_timses.program_id', $program_id)
+        // ->get();
+
+        return view('content/Program_view/FormDetailProgram', compact('program', 'programsupport'));
+    }
+
+    public function getTimsesName($program_id){
+        $coretimses = CoreTimses::select('timses_name')
+        ->where('timses_id', $program_id)
+        ->where('data_state', '=', 0)->first();
+        
+        return  $coretimses['timses_name'];
     }
 
     public function distributionFundProgram($program_id, $timses_id){
@@ -254,7 +277,59 @@ class ProgramController extends Controller
             return redirect()->back()->with('msg',$msg);
         }
     }
-    
+
+    public function editDistributionFundProgram($program_id, $timses_id, $distribution_fund_id){
+
+        $membertimses = CoreTimsesMember::where('data_state','=',0)
+        // ->where('core_timses_member.user_id', '!=', null)
+        ->where('core_timses_member.timses_id', $timses_id)
+        ->pluck('timses_member_name', 'timses_member_id');
+        $nullmembertimses = Session::get('timses_member_id');
+
+        $systemuser = User::where('data_state','=',0)
+        ->where('system_user.user_group_id', '=', 27)
+        ->pluck('name', 'user_id');
+        $nullsystemuser = Session::get('user_id');
+
+        $programdistributionfund = ProgramDistributionFund::where('program_distribution_fund.data_state','=',0)
+        // ->join('system_user', 'system_user.user_id', '=', 'program_distribution_fund.user_id')
+        // ->where('program_distribution_fund.program_id', $program_id)
+        // ->where('program_distribution_fund.timses_id', $timses_id)
+        ->where('program_distribution_fund.distribution_fund_id', $distribution_fund_id)
+        ->first();
+
+
+        return view('content/Program_view/FormEditDistributionFundProgram', compact('membertimses', 'nullmembertimses', 'programdistributionfund', 'systemuser', 'nullsystemuser'));
+    }
+    // 
+    public function processEditDistributionFundProgram(Request $request){
+        $request->validate([
+            'distribution_fund_id'               => 'required',
+            'program_id'                         => 'required',
+            'user_id'                            => 'required',
+            'timses_id'                          => 'required',
+            'timses_member_id'                   => 'required',
+            'distribution_fund_nominal'          => 'required',
+        ]);
+
+        $item  = ProgramDistributionFund::findOrFail($request['distribution_fund_id']);
+
+        $item->program_id                       = $request['program_id'];
+        $item->user_id                          = $request['user_id'];
+        $item->timses_id                        = $request['timses_id'];
+        $item->timses_member_id                 = $request['timses_member_id'];
+        $item->distribution_fund_nominal        = $request['distribution_fund_nominal'];
+        // print_r($item);exit;
+
+        if($item->save()){
+            $msg = 'Edit Penyaluran Dana Berhasil';
+            return redirect('program/distribution-fund/'.$request['program_id'].'/'.$request['timses_id'])->with('msg',$msg);
+        } else {
+            $msg = 'Edit Penyaluran Dana Gagal';
+            return redirect('program/distribution-fund/'.$request['program_id'].'/'.$request['timses_id'])->with('msg',$msg);
+
+        }
+    }
 
     // public function downloadProgramOrganizerPhotos($program_id){
     //     $program = Program::findOrFail($program_id); 

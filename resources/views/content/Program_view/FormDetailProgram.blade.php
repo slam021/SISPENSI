@@ -1,3 +1,5 @@
+@inject('Program', 'App\Http\Controllers\ProgramController')
+
 @extends('adminlte::page')
 
 @section('title', 'Sistem Pendukung Eleksi')
@@ -74,62 +76,81 @@
             $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
             return $hasil_rupiah;
         }
+
+        $organizer =[
+            ''  => '',
+            '1' => 'Kandidat',
+            '2' => 'Timses',
+        ];
     ?>
     @csrf
     <div class="card-body">
         <div class="row form-group">
             <div class="col-md-6">
                 <div class="form-group" >
-                    <a class="text-dark">Nama Timses<a class='red'> *</a></a>
-                    <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="{{$program->timses_name}}" autocomplete="off" readonly/>
+                    <a class="text-dark">Penyelengara<a class='red'> *</a></a>
+                    <input class="form-control input-bb" type="text" name="program_organizer" id="program_organizer" value="{{$organizer[$program->program_organizer]}}" autocomplete="off" readonly/>
                 </div>
             </div>
+            @if ($program->timses_id == null)
             <div class="col-md-6">
                 <div class="form-group" >
-                    <a class="text-dark">Partai Timses<a class='red'> *</a></a>
-                    <input class="form-control input-bb" type="text" name="timses_partai" id="timses_partai" value="{{$program->timses_partai}}" autocomplete="off" readonly/>
+                    <a class="text-dark">Nama Timses<a class='red'> *</a></a>
+                    <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="" autocomplete="off" readonly/>
                 </div>
             </div>
+            @else
+            <div class="col-md-6">
+                <div class="form-group" >
+                    <a class="text-dark">Nama Timses<a class='red'> *</a></a>
+                    <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="{{$Program->getTimsesName($program->timses_id)}}" autocomplete="off" readonly/>
+                </div>
+            </div>
+            @endif
         </div>
+        {{-- @if ($membertimses('timses_id') == null)
+            <br>
+        @else
         <div class="card-header border-dark bg-dark">
             <h5 class="mb-0 float-left">
                 Anggota Timses
             </h5>
         </div>
         <div class="card-body table-responsive">
-        <div class="table-responsive">
-            <table id="example2" class="table table-sm table-striped table-bordered table-hover " style="width:auto">
-                <thead>
-                    <tr>
-                        <th width="3%" style='text-align:center'>No</th>
-                        <th width="10%" style='text-align:center'>Nama</th>
-                        <th width="10%" style='text-align:center'>NIK</th>
-                        <th width="10%" style='text-align:center'>Alamat</th>
-                        <th width="10%" style='text-align:center'>No. Telp</th>
-                        <th width="10%" style='text-align:center'>Kelamin</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                        $no = 1; 
-                    ?>
-                    @foreach($membertimses as $key => $val)
-                    <tr>
-                        <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['timses_member_name']}}</td>
-                        <td>{{$val['timses_member_nik']}}</td>
-                        <td>{{$val['timses_member_address']}}</td>
-                        <td>{{$val['timses_member_phone']}}</td>
-                        <td>{{$gender[$val['timses_member_gender']]}}</td>
-                    </tr>
+            <div class="table-responsive">
+                <table id="example2" class="table table-sm table-striped table-bordered table-hover " style="width:auto">
+                    <thead>
+                        <tr>
+                            <th width="3%" style='text-align:center'>No</th>
+                            <th width="10%" style='text-align:center'>Nama</th>
+                            <th width="10%" style='text-align:center'>NIK</th>
+                            <th width="10%" style='text-align:center'>Alamat</th>
+                            <th width="10%" style='text-align:center'>No. Telp</th>
+                            <th width="10%" style='text-align:center'>Kelamin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                            $no = 1; 
+                        ?>
+                        @foreach($membertimses as $key => $val)
+                        <tr>
+                            <td style='text-align:center'>{{$no}}</td>
+                            <td>{{$val['timses_member_name']}}</td>
+                            <td>{{$val['timses_member_nik']}}</td>
+                            <td>{{$val['timses_member_address']}}</td>
+                            <td>{{$val['timses_member_phone']}}</td>
+                            <td>{{$gender[$val['timses_member_gender']]}}</td>
+                        </tr>
 
-                    <?php $no++; ?>
-                    @endforeach
-                    
-                </tbody>
-            </table>
+                        <?php $no++; ?>
+                        @endforeach
+                        
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
+        @endif --}}
     </div>
 </div>
     

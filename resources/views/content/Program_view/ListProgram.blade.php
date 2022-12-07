@@ -49,47 +49,51 @@
                     <tr>
                         <th width="5%" style='text-align:center'>No</th>
                         <th width="10%" style='text-align:center'>Penyelenggara</th>
-                        <th width="15%" style='text-align:center'>Nama Acara</th>
                         <th width="10%" style='text-align:center'>Kandidate</th>
+                        <th width="10%" style='text-align:center'>Timses</th>
+                        <th width="10%" style='text-align:center'>Nama Acara</th>
                         <th width="10%" style='text-align:center'>Deskripsi</th>
                         <th width="10%" style='text-align:center'>Lokasi</th>
-                        <th width="15%" style='text-align:center'>Alamat</th>
+                        <th width="10%" style='text-align:center'>Alamat</th>
                         <th width="10%" style='text-align:center'>Tanggal</th>
-                        <th width="13%" style='text-align:center'>Dana</th>
+                        <th width="10%" style='text-align:center'>Dana</th>
                         <th width="10%" style='text-align:center'>Periode</th>
-                        <th width="10%" style='text-align:center'>Status</th>
+                        {{-- <th width="10%" style='text-align:center'>Status</th> --}}
                         <th width="10%" style='text-align:center'>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php 
                         $no = 1; 
+
                         function rupiah($angka){
                             $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
                             return $hasil_rupiah;
                         }
+
+                        $organizer =[
+                            ''  => '',
+                            '1' => 'Kandidat',
+                            '2' => 'Timses',
+                        ];
                     ?>
                     @foreach($program as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['timses_name']}}</td>
-                        <td>{{$val['program_name']}}</td>
+                        <td>{{$organizer[$val['program_organizer']]}}</td>
                         <td>{{$val['candidate_full_name']}}</td>
+                        @if ($val['program_organizer'] == 1)
+                            <td style='text-align:center'>{{'_'}}</td>
+                        @else
+                            <td>{{$Program->getTimsesName($val['timses_id'])}}</td>
+                        @endif
+                        <td>{{$val['program_name']}}</td>
                         <td>{{$val['program_description']}}</td>
                         <td>{{$val['location_name']}}</td>
                         <td>{{$val['program_address']}}</td>
                         <td>{{$val['program_date']}}</td>
                         <td>{{rupiah($val['program_fund'])}}</td>
                         <td>{{$val['period_name']}}</td>
-                        <td>
-                            <?php
-                                if($val['program_status'] == 0){
-                                    echo "Aktif";
-                                }else{
-                                    echo "Tutup";
-                                }
-                            ?>
-                            </td>
                         {{-- <td><img width="150px" src="{{ url('/program-photos/'.$val['photos']) }}"></td> --}}
                         <td class="" style='text-align:left'>
                             <?php
@@ -99,13 +103,17 @@
                                     
                                 }
                             ?>
-                            <a type="button" class="badge bg-lime" href="{{ url('/program/detail/'.$val['program_id'].'/'.$val['timses_id'])}}" title="Detail Acara"><i class='fas fa-list-ul'></i> Detail</a>
+                            <a type="button" class="badge bg-lime" href="{{ url('/program/detail/'.$val['program_id'])}}" title="Detail Acara"><i class='fas fa-list-ul'></i> Detail</a>
                             <?php
+                            if ($val['program_organizer'] == 1){
+
+                            }else{
                                 if($val['program_status'] == 0){
                                     echo "<a type='button' class='badge bg-olive' href='".url('/program/distribution-fund/'.$val['program_id'].'/'.$val['timses_id'])."' title='Penyaluran Dana'><i class='fas fa-money-bill-alt'></i> Penyaluran</a>";
                                 }else{
                                     
                                 }
+                            }
                             ?>
                             <?php
                                 if($val['program_status'] == 0){
@@ -116,7 +124,7 @@
                             ?>
                             <?php
                                 if($val['program_status'] == 0){
-                                    echo "<a type='button' class='badge bg-navy' href='".url('/program/closing-program/'.$val['program_id'])."' title='Tutup Acara' onClick='javascript:return confirm(\"apakah Anda yakin ingin Menutup Acara ?\")'><i class='fa fa-exclamation-circle'></i> Tutup</a>";
+                                    echo "<a type='button' class='badge bg-navy' href='".url('/program/closing-program/'.$val['program_id'])."' title='Tutup Acara' onClick='javascript:return confirm(\"apakah Anda yakin ingin Menutup Acara ?\")'><i class='fa fa-exclamation-circle'></i> Tutup Acara</a>";
                                 }else{
                                     
                                 }

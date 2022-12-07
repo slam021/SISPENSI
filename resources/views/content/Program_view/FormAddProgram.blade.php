@@ -117,10 +117,10 @@
     ?> --}}
     
     <?php 
-        $gender =[
+        $organizer =[
             ''  => '',
-            '1' => 'Laki-laki',
-            '2' => 'Perempuan',
+            '1' => 'Kandidat',
+            '2' => 'Timses',
         ];
     ?>
 
@@ -130,8 +130,14 @@
                 <div class="row form-group">
                     <div class="col-md-4">
                         <div class="form-group">
-                            <a class="text-dark">Nama Timses<a class='red'> *</a></a>
-                            {!! Form::select('timses_id', $coretimses, $nullcoretimses, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
+                            <a class="text-dark">Penyelenggara<a class='red'> *</a></a>
+                            {!! Form::select('program_organizer', $organizer, '', ['class' => 'selection-search-clear select-form', 'id' => 'program_organizer','' ])!!}
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <a class="text-dark">Timses<a class='red'> *</a></a>
+                            {!! Form::select('timses_id', $coretimses, $nullcoretimses, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id', ''])!!}
                         </div>
                     </div>
                 </div>
@@ -148,14 +154,14 @@
                     <div class="row form-group">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <a class="text-dark">Nama Acara<a class='red'> *</a></a>
-                                <input class="form-control input-bb" type="text" name="program_name" id="program_name" value="{{old('program_name')}}" onChange="function_elements_add(this.name, this.value);" autocomplete="off"/>
+                                <a class="text-dark">Kandidate<a class='red'> *</a></a>
+                                {!! Form::select('candidate_id', $corecandidate, $nullcorecandidate, ['class' => 'selection-search-clear select-form', 'id' => 'candidate_id','' ])!!}
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <a class="text-dark">Kandidate<a class='red'> *</a></a>
-                                {!! Form::select('candidate_id', $corecandidate, $nullcorecandidate, ['class' => 'selection-search-clear select-form', 'id' => 'candidate_id','' ])!!}
+                                <a class="text-dark">Nama Acara<a class='red'> *</a></a>
+                                <input class="form-control input-bb" type="text" name="program_name" id="program_name" value="{{old('program_name')}}" onChange="function_elements_add(this.name, this.value);" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-3">
