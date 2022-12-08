@@ -18,6 +18,8 @@ use App\Http\Controllers\FinancialCategoryController;
 use App\Http\Controllers\FundingIncomeController;
 use App\Http\Controllers\FundingIncomeReportController;
 use App\Http\Controllers\FundingExpenditureController;
+use App\Http\Controllers\FundingExpenditureReportController;
+use App\Http\Controllers\FundingCombineReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -219,9 +221,23 @@ Route::post('/funding-expenditure-timses/process-edit', [FundingExpenditureContr
 
 Route::get('/funding-expenditure-timses/delete-funding-expenditure/{financial_flow_id}', [FundingExpenditureController::class, 'deleteFundingExpenditureTimses'])->name('delete-funding-expenditure-timses');
 
-//Report
+//Report Funding Income
 Route::get('/report-income', [FundingIncomeReportController::class, 'index']);
 Route::post('/report-income/filter',[FundingIncomeReportController::class, 'filterFundingIncomeReport'])->name('filter-report-income');
 Route::get('/report-income/filter-reset',[FundingIncomeReportController::class, 'filterResetFundingIncomeReport'])->name('filter-reset-report-income');
-// Route::get('/purchase-invoice-report/print',[PurchaseInvoiceReportController::class, 'printPurchaseInvoiceReport'])->name('print-purchase-invoice-report');
-// Route::get('/purchase-invoice-report/export',[PurchaseInvoiceReportController::class, 'exportPurchaseInvoiceReport'])->name('export-purchase-invoice-report');
+Route::get('/report-income/print',[FundingIncomeReportController::class, 'printFundingIncomeReport'])->name('print-funding-income-report');
+Route::get('/report-income/export',[FundingIncomeReportController::class, 'exportFundingIncomeReport'])->name('export-funding-income-report');
+
+//Report Funding Expenditure
+Route::get('/report-expenditure', [FundingExpenditureReportController::class, 'index']);
+Route::post('/report-expenditure/filter',[FundingExpenditureReportController::class, 'filterFundingExpenditureReport'])->name('filter-report-expenditure');
+Route::get('/report-expenditure/filter-reset',[FundingExpenditureReportController::class, 'filterResetFundingExpenditureReport'])->name('filter-reset-report-expenditure');
+Route::get('/report-expenditure/print',[FundingExpenditureReportController::class, 'printFundingExpenditureReport'])->name('print-funding-expenditure-report');
+Route::get('/report-expenditure/export',[FundingExpenditureReportController::class, 'exportFundingExpenditureReport'])->name('export-funding-expenditure-report');
+
+//Report Funding Combine
+Route::get('/report-combine', [FundingCombineReportController::class, 'index']);
+Route::post('/report-combine/filter',[FundingCombineReportController::class, 'filterFundingCombineReport'])->name('filter-report-combine');
+Route::get('/report-combine/filter-reset',[FundingCombineReportController::class, 'filterResetFundingCombineReport'])->name('filter-reset-report-combine');
+Route::get('/report-combine/print',[FundingCombineReportController::class, 'printFundingCombineReport'])->name('print-funding-combine-report');
+Route::get('/report-combine/export',[FundingCombineReportController::class, 'exportFundingCombineReport'])->name('export-funding-combine-report');

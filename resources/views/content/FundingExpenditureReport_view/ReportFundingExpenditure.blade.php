@@ -1,25 +1,25 @@
-@inject('ReportFI', 'App\Http\Controllers\FundingIncomeReportController')
+@inject('ReportFX', 'App\Http\Controllers\FundingExpenditureReportController')
 
 @extends('adminlte::page')
 
 @section('title', 'Sistem Timses Eleksi')
 <link rel="icon" href="{{ asset('resources/assets/logo_vote.ico') }}" />
 
+@section('js')
+<script>
+</script>
+@stop
 @section('content_header')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Daftar Laporan Pemasukan</li>
+        <li class="breadcrumb-item active" aria-current="page">Daftar Laporan Pengeluaran</li>
     </ol>
 </nav>
 @stop
 
 <?php 
-    $type =[
-        ''  => '',
-        '1' => 'Pemasukan',
-        '2' => 'Pengeluaran',
-    ];
+   
 ?>
 
 @section('content')
@@ -32,7 +32,7 @@
     {{session('msg')}}
 </div>
 @endif 
-    <form  method="post" action="{{ route('filter-report-income') }}" enctype="multipart/form-data">
+    <form  method="post" action="{{ route('filter-report-expenditure') }}" enctype="multipart/form-data">
         @csrf
             <div class="card border border-dark">
             <div class="card-header bg-dark" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -72,7 +72,7 @@
                         </div>
                         <div class = "col-md-4">
                             <div class="form-group form-md-line-input">
-                                <section class="control-label">Pemasukan
+                                <section class="control-label">Pengeluaran
                                     <span class="required text-danger">
                                         *
                                     </span>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="card-footer text-muted">
                     <div class="form-actions float-right">
-                        <a href="{{ route('filter-reset-report-income') }}" type="button" name="Reset" class="btn bg-yellow btn-sm"><i class="fas fa-sync"></i> Reset</a>
+                        <a href="{{ route('filter-reset-report-expenditure') }}" type="button" name="Reset" class="btn bg-yellow btn-sm"><i class="fas fa-sync"></i> Batal</a>
                         <button type="submit" name="Find" class="btn btn-primary btn-sm" title="Search Data"><i class="fa fa-search"></i> Cari</button>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
 <div class="card border border-dark">
     <div class="card-header bg-dark clearfix">
         <h5 class="mb-0 float-left">
-            Laporan Pemasukan
+            Laporan Pengeluaran
         </h5>
         {{-- <div class="form-actions float-right">
             <button onclick="location.href='{{ url('funding-income-timses/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Pemasukan Keuangan Baru</button>
@@ -107,7 +107,7 @@
                 <thead>
                     <tr>
                         <th width="2%" style='text-align:center'>No</th>
-                        <th width="10%" style='text-align:center'>Kategori Pemasukan</th>
+                        <th width="10%" style='text-align:center'>Kategori Pengeluaran</th>
                         {{-- <th width="10%" style='text-align:center'>Penyelenggara</th> --}}
                         <th width="10%" style='text-align:center'>Kandidat</th>
                         <th width="10%" style='text-align:center'>Timses</th>
@@ -125,20 +125,20 @@
                             return $hasil_rupiah;
                         } 
                     ?>
-                    @foreach($fundingincome as $key => $val)
+                    @foreach($fundingexpenditure as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$ReportFI->getCategoryName($val['financial_category_id'])}}</td>
+                        <td>{{$ReportFX->getCategoryName($val['financial_category_id'])}}</td>
                         {{-- <td>{{$val['candidate_id']}}</td> --}}
                         @if($val['candidate_id'] == null)
                         <td style='text-align:center'>-</td>
                         @else
-                        <td>{{$ReportFI->getCandidateName($val['candidate_id'])}}</td>
+                        <td>{{$ReportFX->getCandidateName($val['candidate_id'])}}</td>
                         @endif
                         @if($val['timses_id'] == null)
                         <td style='text-align:center'>-</td>
                         @else
-                        <td>{{$ReportFI->getTimsesName($val['timses_id'])}}</td>
+                        <td>{{$ReportFX->getTimsesName($val['timses_id'])}}</td>
                         @endif
                         <td>{{rupiah($val['financial_flow_nominal'])}}</td>
                         <td>{{$val['financial_flow_date']}}</td>
@@ -156,8 +156,8 @@
         </div>
         <div class="card-footer text-muted">
             <div class="form-actions float-right">
-                <a class="btn bg-red btn-sm" href="{{ url('/report-income/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
-                <a class="btn bg-olive btn-sm" href="{{ url('/report-income/export') }}"><i class="fa fa-download"></i> Export Data</a>
+                <a class="btn btn-danger btn-sm" href="{{ url('/report-expenditure/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
+                <a class="btn bg-olive btn-sm" href="{{ url('/report-expenditure/export') }}"><i class="fa fa-download"></i> Export Data</a>
             </div>
         </div>
     </div>

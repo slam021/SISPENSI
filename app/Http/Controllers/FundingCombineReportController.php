@@ -9,10 +9,11 @@ use App\Models\FinancialFlow;
 use App\Models\FinancialCategory;
 use App\Models\CoreTimses;
 use App\Models\CoreCandidate;
+// use App\Models\Program;
 use Elibyy\TCPDF\Facades\TCPDF;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-class FundingIncomeReportController extends Controller
+class FundingCombineReportController extends Controller
 {
     public function __construct()
     {
@@ -44,25 +45,25 @@ class FundingIncomeReportController extends Controller
         ];
         // dd($start_date);
         if ($financial_flow_code == '') {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 1)
+            $fundingcombine = FinancialFlow::where('data_state', '=', 0)
+            // ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
             ->where('financial_flow_date','<=',$end_date)
             ->where('financial_flow_code', '!=', null)
             ->get();
         } else {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 1)
+            $fundingcombine = FinancialFlow::where('data_state', '=', 0)
+            // ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
             ->where('financial_flow_date','<=',$end_date)
             ->where('financial_flow_code', $financial_flow_code)
             ->get();
         }
 
-        return view('content/FundingIncomeReport_view/ReportFundingIncome', compact('fundingincome', 'start_date', 'end_date', 'financial_flow_code', 'code'));
+        return view('content/FundingCombineReport_view/ReportFundingCombine', compact('fundingcombine', 'start_date', 'end_date', 'code', 'financial_flow_code'));
     }
 
-    public function filterFundingIncomeReport(Request $request)
+    public function filterFundingCombineReport(Request $request)
     {
         $start_date=$request->start_date;
         $end_date=$request->end_date;
@@ -75,17 +76,18 @@ class FundingIncomeReportController extends Controller
         Session::put('end_date', $end_date);
         Session::put('financial_flow_code', $financial_flow_code);
         // Session::put('candidate_id', $candidate_id);
-        return redirect('/report-income');
+
+        return redirect('/report-combine');
     }
 
-    public function filterResetFundingIncomeReport()
+    public function filterResetfundingcombineReport()
     {
         Session::forget('start_date');
         Session::forget('end_date');
         Session::forget('financial_flow_code');
         // Session::forget('candidate_id');
 
-        return redirect('/report-income');
+        return redirect('/report-combine');
     }
 
     public function getCategoryName($financial_category_id)
@@ -98,7 +100,7 @@ class FundingIncomeReportController extends Controller
 
     public function getTimsesName($timses_id)
     {
-        $data = CoreTimses::where('timses_id',$timses_id)
+        $data = CoreTimses::where('timses_id', $timses_id)
         ->first();
 
         return $data['timses_name'];
@@ -112,7 +114,7 @@ class FundingIncomeReportController extends Controller
         return $data['candidate_full_name'];
     }
 
-    public function printFundingIncomeReport()
+    public function printFundingCombineReport()
     {
         if(!Session::get('financial_flow_code')){
             $financial_flow_code     = '';
@@ -137,15 +139,15 @@ class FundingIncomeReportController extends Controller
         ];
         // dd($start_date);
         if ($financial_flow_code == '') {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 1)
+            $fundingcombine = FinancialFlow::where('data_state', '=', 0)
+            // ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
             ->where('financial_flow_date','<=',$end_date)
             ->where('financial_flow_code', '!=', null)
             ->get();
         } else {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 1)
+            $fundingcombine = FinancialFlow::where('data_state', '=', 0)
+            // ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
             ->where('financial_flow_date','<=',$end_date)
             ->where('financial_flow_code', $financial_flow_code)
@@ -175,7 +177,7 @@ class FundingIncomeReportController extends Controller
         $tbl = "
         <table cellspacing=\"0\" cellpadding=\"2\" border=\"0\">
             <tr>
-                <td><div style=\"text-align: center; font-size:14px; font-weight: bold\">LAPORAN PEMASUKAN</div></td>
+                <td><div style=\"text-align: center; font-size:14px; font-weight: bold\">LAPORAN PEMASUKAN DAN PENGELUARAN</div></td>
             </tr>
             <tr>
                 <td><div style=\"text-align: center; font-size:12px\">PERIODE : ".date('d M Y', strtotime($start_date))." s.d. ".date('d M Y', strtotime($end_date))."</div></td>
@@ -185,15 +187,16 @@ class FundingIncomeReportController extends Controller
         ";
         $pdf::writeHTML($tbl, true, false, false, false, '');
         
-        $tblIncome1 = "
+        $tblComb1 = "
         <table cellspacing=\"0\" cellpadding=\"1\" border=\"1\" width=\"100%\">
             <tr>
                 <th width=\"5%\" ><div style=\"text-align: center; font-weight: bold\">No</div></th>
-                <th width=\"25%\" ><div style=\"text-align: center; font-weight: bold\">Kategori Pemasukan</div></th>
+                <th width=\"15%\" ><div style=\"text-align: center; font-weight: bold\">Kategori</div></th>
+                <th width=\"15%\" ><div style=\"text-align: center; font-weight: bold\">Tipe</div></th>
                 <th width=\"17%\" ><div style=\"text-align: center; font-weight: bold\">Kandidat</div></th>
                 <th width=\"17%\" ><div style=\"text-align: center; font-weight: bold\">Timses</div></th>
+                <th width=\"15%\" ><div style=\"text-align: center; font-weight: bold\">Tanggal</div></th>
                 <th width=\"17%\" ><div style=\"text-align: center; font-weight: bold\">Nominal</div></th>
-                <th width=\"20%\" ><div style=\"text-align: center; font-weight: bold\">Tanggal</div></th>
             </tr>
         ";
 
@@ -201,14 +204,22 @@ class FundingIncomeReportController extends Controller
             $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
             return $hasil_rupiah;
         }
+
+        $type =[
+            ''  => '',
+            '1' => 'Pemasukan',
+            '2' => 'Pengeluaran',
+        ];
+
         $no = 1;
-        $tblIncome2= "";
-        foreach ($fundingincome as $key => $val) {
+        $tblComb2= "";
+        foreach ($fundingcombine as $key => $val) {
             if ($val->candidate_id == null ){
-                $tblIncome2 .="
+                $tblComb2 .="
                 <tr>			
                     <td style=\"text-align:center\">$no.</td>
                     <td> ".$this->getCategoryName($val['financial_category_id'])."</td>
+                    <td>".$type[$val['financial_category_type']]."</td>
                     <td style=\"text-align:center\">".'-'."</td>
                     <td> ".$this->getTimsesName($val['timses_id'])."</td>
                     <td> ".date('d-m-Y', strtotime($val['financial_flow_date']))."</td>
@@ -218,10 +229,11 @@ class FundingIncomeReportController extends Controller
                 ";
                 $no++;
             }else{
-                $tblIncome2 .="
+                $tblComb2 .="
                 <tr>			
                     <td style=\"text-align:center\">$no.</td>
                     <td> ".$this->getCategoryName($val['financial_category_id'])."</td>
+                    <td>".$type[$val['financial_category_type']]."</td>
                     <td> ".$this->getCandidateName($val['candidate_id'])."</td>
                     <td style=\"text-align:center\">".'-'."</td>
                     <td> ".date('d-m-Y', strtotime($val['financial_flow_date']))."</td>
@@ -231,10 +243,9 @@ class FundingIncomeReportController extends Controller
                 ";
                 $no++; 
             }
-            
         }
 
-        $tblIncome3 = "
+        $tblComb3 = "
         </table>
         <table cellspacing=\"0\" cellpadding=\"2\" border=\"0\">
             <tr>
@@ -243,13 +254,13 @@ class FundingIncomeReportController extends Controller
         </table>
         ";
 
-        $pdf::writeHTML($tblIncome1.$tblIncome2.$tblIncome3, true, false, false, false, '');
+        $pdf::writeHTML($tblComb1.$tblComb2.$tblComb3, true, false, false, false, '');
 
-        $filename = 'Laporan_Pemasukan.pdf';
+        $filename = 'Laporan_Pemasukan dan Pengeluaran.pdf';
         $pdf::Output($filename, 'I');
     }
 
-    public function exportFundingIncomeReport()
+    public function exportfundingcombineReport()
     {
         if(!Session::get('financial_flow_code')){
             $financial_flow_code     = '';
@@ -274,15 +285,15 @@ class FundingIncomeReportController extends Controller
         ];
         // dd($start_date);
         if ($financial_flow_code == '') {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 1)
+            $fundingcombine = FinancialFlow::where('data_state', '=', 0)
+            ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
             ->where('financial_flow_date','<=',$end_date)
             ->where('financial_flow_code', '!=', null)
             ->get();
         } else {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 1)
+            $fundingcombine = FinancialFlow::where('data_state', '=', 0)
+            ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
             ->where('financial_flow_date','<=',$end_date)
             ->where('financial_flow_code', $financial_flow_code)
@@ -291,7 +302,7 @@ class FundingIncomeReportController extends Controller
 
         $spreadsheet = new Spreadsheet();
 
-        if(count($fundingincome)>=0){
+        if(count($fundingcombine)>=0){
             $spreadsheet->getProperties()->setCreator("IBS CJDW")
                                         ->setLastModifiedBy("IBS CJDW")
                                         ->setTitle("Voucher Report")
@@ -319,14 +330,14 @@ class FundingIncomeReportController extends Controller
             $spreadsheet->getActiveSheet()->getStyle('B4:G4')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             $spreadsheet->getActiveSheet()->getStyle('B4:G4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-            $sheet->setCellValue('B1',"Laporan Pemasukan");	
+            $sheet->setCellValue('B1',"Laporan Pengeluaran");	
             $sheet->setCellValue('B2',date('d M Y', strtotime($start_date))." s.d. ".date('d M Y', strtotime($end_date)));	
             $sheet->setCellValue('B4',"No");
-            $sheet->setCellValue('C4',"Kategori Pemasukan");
+            $sheet->setCellValue('C4',"Kategori Pengeluaran");
             $sheet->setCellValue('D4',"Kandidat");
             $sheet->setCellValue('E4',"Timses");
-            $sheet->setCellValue('F4',"Nominal");
             $sheet->setCellValue('G4',"Tanggal");
+            $sheet->setCellValue('F4',"Nominal");
             
             $j=5;
             $no=0;
@@ -335,12 +346,12 @@ class FundingIncomeReportController extends Controller
                 return $hasil_rupiah;
             }
 
-            foreach($fundingincome as $key=>$val){
+            foreach($fundingcombine as $key=>$val){
 
                 if(is_numeric($key)){
                     
                     $sheet = $spreadsheet->getActiveSheet(0);
-                    $spreadsheet->getActiveSheet()->setTitle("Laporan Voucher");
+                    $spreadsheet->getActiveSheet()->setTitle("Laporan Pengeluaran");
                     $spreadsheet->getActiveSheet()->getStyle('B'.$j.':G'.$j)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             
                     $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -363,7 +374,6 @@ class FundingIncomeReportController extends Controller
                     }else{
                         $sheet->setCellValue('E'.$j, $this->getTimsesName($val['timses_id']));
                     }
-                    
                     $sheet->setCellValue('G'.$j, date('d-m-Y', strtotime($val['financial_flow_date'])));
                     $sheet->setCellValue('F'.$j, rupiah($val['financial_flow_nominal']));
                 }
@@ -375,7 +385,7 @@ class FundingIncomeReportController extends Controller
             $sheet->setCellValue('B'.$j, Auth::user()->name.", ".date('d-m-Y H:i'));
 
 
-            $filename='Laporan_Pemasukan.xls';
+            $filename='Laporan_Pengeluaran.xls';
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="'.$filename.'"');
             header('Cache-Control: max-age=0');
