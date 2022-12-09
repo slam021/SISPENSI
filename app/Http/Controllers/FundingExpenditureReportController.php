@@ -204,6 +204,8 @@ class FundingExpenditureReportController extends Controller
             return $hasil_rupiah;
         }
         $no = 1;
+        $total_nominal= 0;
+
         $tblExpen2= "";
         foreach ($fundingexpenditure as $key => $val) {
             if ($val->candidate_id == null ){
@@ -229,17 +231,24 @@ class FundingExpenditureReportController extends Controller
                     <td> ".date('d-m-Y', strtotime($val['financial_flow_date']))."</td>
                     <td style=\"text-align:right\"> ".rupiah($val['financial_flow_nominal'])."</td>
                     
+                    
                 </tr>
                 ";
                 $no++; 
+
+                
             }
+            $total_nominal += $val['financial_flow_nominal'];
         }
+        // dd($total_nominal);
 
         $tblExpen3 = "
         </table>
-        <table cellspacing=\"0\" cellpadding=\"2\" border=\"0\">
+        <table cellspacing=\"0\" cellpadding=\"1\" border=\"0\">
             <tr>
-                <td style=\"text-align:right\">".Auth::user()->name.", ".date('d-m-Y H:i')."</td>
+                <td width=\"30%\" style=\"text-align:left; font-style: italic;\">".Auth::user()->name.", ".date('d-m-Y H:i')."</td>
+                <td width=\"51%\" style=\"text-align:right; font-weight: bold;\">".'Total :'."</td>
+                <td width=\"20%\" style=\"text-align:right; font-weight: bold;\">".rupiah($total_nominal)."</td>
             </tr>
         </table>
         ";
@@ -326,15 +335,18 @@ class FundingExpenditureReportController extends Controller
             $sheet->setCellValue('C4',"Kategori Pengeluaran");
             $sheet->setCellValue('D4',"Kandidat");
             $sheet->setCellValue('E4',"Timses");
-            $sheet->setCellValue('F4',"Nominal");
-            $sheet->setCellValue('G4',"Tanggal");
+            $sheet->setCellValue('F4',"Tanggal");
+            $sheet->setCellValue('G4',"Nominal");
             
             $j=5;
+            $i=6;
             $no=0;
             function rupiah($angka){
                 $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
                 return $hasil_rupiah;
             }
+            
+            $total_nominal= 0;
 
             foreach($fundingexpenditure as $key=>$val){
 
@@ -349,7 +361,7 @@ class FundingExpenditureReportController extends Controller
                     $spreadsheet->getActiveSheet()->getStyle('D'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
                     $spreadsheet->getActiveSheet()->getStyle('E'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
                     $spreadsheet->getActiveSheet()->getStyle('F'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-                    $spreadsheet->getActiveSheet()->getStyle('G'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                    $spreadsheet->getActiveSheet()->getStyle('G'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                     $no++;
                     $sheet->setCellValue('B'.$j, $no);
@@ -364,15 +376,30 @@ class FundingExpenditureReportController extends Controller
                     }else{
                         $sheet->setCellValue('E'.$j, $this->getTimsesName($val['timses_id']));
                     }
-                    $sheet->setCellValue('G'.$j, date('d-m-Y', strtotime($val['financial_flow_date'])));
-                    $sheet->setCellValue('F'.$j, rupiah($val['financial_flow_nominal']));
+                    $sheet->setCellValue('F'.$j, date('d-m-Y', strtotime($val['financial_flow_date'])));
+                    $sheet->setCellValue('G'.$j, rupiah($val['financial_flow_nominal']));
+
+                    $total_nominal += $val['financial_flow_nominal'];
+                
                 }
                 $j++;
-        
+                $i++;
+
+                // $total_nominal += $nominal;
             }
+            // dd($nominal);
+
+            $spreadsheet->getActiveSheet()->mergeCells('B'.$i.':G'.$i);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$i)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+            
             $spreadsheet->getActiveSheet()->mergeCells('B'.$j.':G'.$j);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getFont()->setBold(true);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$j.':G'.$j)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            // $spreadsheet->getActiveSheet()->getStyle('B'.$j.':G'.$j)->getFill()->getStartColor()->setRGB('FFFF00');
             $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-            $sheet->setCellValue('B'.$j, Auth::user()->name.", ".date('d-m-Y H:i'));
+            $sheet->setCellValue('B'.$j, "Total : ". rupiah($total_nominal));
+            $sheet->setCellValue('B'.$i, Auth::user()->name.", ".date('d-m-Y H:i'));
+            
 
 
             $filename='Laporan_Pengeluaran.xls';

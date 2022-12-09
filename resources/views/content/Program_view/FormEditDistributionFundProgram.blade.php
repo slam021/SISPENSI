@@ -1,3 +1,5 @@
+@inject('DFP', 'App\Http\Controllers\ProgramController')
+
 @extends('adminlte::page')
 
 @section('title', 'Sistem Pendukung Eleksi')
@@ -28,6 +30,20 @@
 			}
 
 		});
+	}
+
+    function getUserAkun(timses_member_id){
+        // alert(timses_member_id);
+    $.ajax({
+				type: "GET",
+				url : "{{url('/program/get-user-akun')}}" + '/' + timses_member_id,
+				success: function(msg){
+                    console.log(msg);
+                        $("#user_id").val(msg); 
+                },
+
+		});
+		
 	}
 </script>
 @stop
@@ -79,24 +95,24 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <a class="text-dark">Nama Timses<a class='red'> *</a></a>
-                        <input class="form-control input-bb" type="text"name="timses_name" id="timses_name" value="{{$programdistributionfund->timses_name}}" readonly />
-                        <input class="form-control input-bb" type="text" name="program_id" id="program_id" value="{{$programdistributionfund->program_id}}" autocomplete="off" />
-                        <input class="form-control input-bb" type="text" name="timses_id" id="timses_id" value="{{$programdistributionfund->timses_id}}" autocomplete="off" />
-                        <input class="form-control input-bb" type="text" name="distribution_fund_id" id="distribution_fund_id" value="{{$programdistributionfund->distribution_fund_id}}" autocomplete="off" />
+                        <input class="form-control input-bb" type="text"name="timses_name" id="timses_name" value="{{$DFP->getNameTimses($programdistributionfund->timses_id)}}" readonly />
+                        <input class="form-control input-bb" type="hidden" name="program_id" id="program_id" value="{{$programdistributionfund->program_id}}" autocomplete="off" />
+                        <input class="form-control input-bb" type="hidden" name="timses_id" id="timses_id" value="{{$programdistributionfund->timses_id}}" autocomplete="off" />
+                        <input class="form-control input-bb" type="hidden" name="distribution_fund_id" id="distribution_fund_id" value="{{$programdistributionfund->distribution_fund_id}}" autocomplete="off" />
                         
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <a class="text-dark">Anggota Timses<a class='red'> *</a></a>
-                        {!! Form::select('timses_member_id', $membertimses, $programdistributionfund->timses_member_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!} 
+                        {!! Form::select('timses_member_id', $membertimses, $programdistributionfund->timses_member_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id', 'onChange' => 'getUserAkun(this.value)' ])!!} 
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <a class="text-dark">Akun<a class='red'> *</a></a>
-                        {!! Form::select('user_id', $systemuser, $programdistributionfund->user_id, ['class' => 'selection-search-clear select-form', 'id' => 'user_id','' ])!!} 
-                        {{-- <input class="form-control input-bb" type="text" name="user_id" id="user_id" value="{{$programdistributionfund->user_id}}" autocomplete="off" readonly/> --}}
+                        {{-- {!! Form::select('user_id', $systemuser, $programdistributionfund->user_id, ['class' => 'selection-search-clear select-form', 'id' => 'user_id','' ])!!}  --}}
+                        <input class="form-control input-bb" type="text" name="user_id" id="user_id" value="{{$DFP->getAkunName($programdistributionfund->user_id)}}" autocomplete="off" readonly/>
                     </div>
                 </div>
                 <div class="col-md-6">

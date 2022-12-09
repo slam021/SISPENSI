@@ -103,7 +103,7 @@
 
     <div class="card-body table-responsive">
         <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered table-hover " style="width:auto">
+            <table id="example" class="table table-sm table-striped table-bordered table-hover " style="width:auto">
                 <thead>
                     <tr>
                         <th width="2%" style='text-align:center'>No</th>

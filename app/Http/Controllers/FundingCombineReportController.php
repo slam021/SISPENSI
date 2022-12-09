@@ -286,14 +286,14 @@ class FundingCombineReportController extends Controller
         // dd($start_date);
         if ($financial_flow_code == '') {
             $fundingcombine = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 2)
+            // ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
             ->where('financial_flow_date','<=',$end_date)
             ->where('financial_flow_code', '!=', null)
             ->get();
         } else {
             $fundingcombine = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 2)
+            // ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
             ->where('financial_flow_date','<=',$end_date)
             ->where('financial_flow_code', $financial_flow_code)
@@ -319,25 +319,27 @@ class FundingCombineReportController extends Controller
             $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(20);
             $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(20);
             $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+            $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(20);
     
-            $spreadsheet->getActiveSheet()->mergeCells("B1:G1");
-            $spreadsheet->getActiveSheet()->mergeCells("B2:G2");
+            $spreadsheet->getActiveSheet()->mergeCells("B1:H1");
+            $spreadsheet->getActiveSheet()->mergeCells("B2:H2");
             $spreadsheet->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $spreadsheet->getActiveSheet()->getStyle('B2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $spreadsheet->getActiveSheet()->getStyle('B1')->getFont()->setBold(true)->setSize(16);
-            $spreadsheet->getActiveSheet()->getStyle('B4:G4')->getFont()->setBold(true);
+            $spreadsheet->getActiveSheet()->getStyle('B4:H4')->getFont()->setBold(true);
 
-            $spreadsheet->getActiveSheet()->getStyle('B4:G4')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-            $spreadsheet->getActiveSheet()->getStyle('B4:G4')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $spreadsheet->getActiveSheet()->getStyle('B4:H4')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+          
 
-            $sheet->setCellValue('B1',"Laporan Pengeluaran");	
+            $sheet->setCellValue('B1',"Laporan Pemasukan & Pengeluaran");	
             $sheet->setCellValue('B2',date('d M Y', strtotime($start_date))." s.d. ".date('d M Y', strtotime($end_date)));	
             $sheet->setCellValue('B4',"No");
-            $sheet->setCellValue('C4',"Kategori Pengeluaran");
-            $sheet->setCellValue('D4',"Kandidat");
-            $sheet->setCellValue('E4',"Timses");
+            $sheet->setCellValue('C4',"Kategori");
+            $sheet->setCellValue('D4',"Tipe");
+            $sheet->setCellValue('E4',"Kandidat");
+            $sheet->setCellValue('F4',"Timses");
             $sheet->setCellValue('G4',"Tanggal");
-            $sheet->setCellValue('F4',"Nominal");
+            $sheet->setCellValue('H4',"Nominal");
             
             $j=5;
             $no=0;
@@ -345,6 +347,12 @@ class FundingCombineReportController extends Controller
                 $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
                 return $hasil_rupiah;
             }
+            
+            $type =[
+                ''  => '',
+                '1' => 'Pemasukan',
+                '2' => 'Pengeluaran',
+            ];
 
             foreach($fundingcombine as $key=>$val){
 
@@ -352,7 +360,7 @@ class FundingCombineReportController extends Controller
                     
                     $sheet = $spreadsheet->getActiveSheet(0);
                     $spreadsheet->getActiveSheet()->setTitle("Laporan Pengeluaran");
-                    $spreadsheet->getActiveSheet()->getStyle('B'.$j.':G'.$j)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    $spreadsheet->getActiveSheet()->getStyle('B'.$j.':H'.$j)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
             
                     $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                     $spreadsheet->getActiveSheet()->getStyle('C'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
@@ -360,27 +368,29 @@ class FundingCombineReportController extends Controller
                     $spreadsheet->getActiveSheet()->getStyle('E'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
                     $spreadsheet->getActiveSheet()->getStyle('F'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
                     $spreadsheet->getActiveSheet()->getStyle('G'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                    $spreadsheet->getActiveSheet()->getStyle('H'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
 
                     $no++;
                     $sheet->setCellValue('B'.$j, $no);
                     $sheet->setCellValue('C'.$j, $this->getCategoryName($val['financial_category_id']));
+                    $sheet->setCellValue('D'.$j, $type[$val['financial_category_type']]);
                     if($val['candidate_id'] == null){
-                        $sheet->setCellValue('D'.$j, '-');
-                    }else{
-                        $sheet->setCellValue('D'.$j, $this->getCandidateName($val['candidate_id']));
-                    }
-                    if($val['timses_id'] == null){
                         $sheet->setCellValue('E'.$j, '-');
                     }else{
-                        $sheet->setCellValue('E'.$j, $this->getTimsesName($val['timses_id']));
+                        $sheet->setCellValue('E'.$j, $this->getCandidateName($val['candidate_id']));
+                    }
+                    if($val['timses_id'] == null){
+                        $sheet->setCellValue('F'.$j, '-');
+                    }else{
+                        $sheet->setCellValue('F'.$j, $this->getTimsesName($val['timses_id']));
                     }
                     $sheet->setCellValue('G'.$j, date('d-m-Y', strtotime($val['financial_flow_date'])));
-                    $sheet->setCellValue('F'.$j, rupiah($val['financial_flow_nominal']));
+                    $sheet->setCellValue('H'.$j, rupiah($val['financial_flow_nominal']));
                 }
                 $j++;
         
             }
-            $spreadsheet->getActiveSheet()->mergeCells('B'.$j.':G'.$j);
+            $spreadsheet->getActiveSheet()->mergeCells('B'.$j.':H'.$j);
             $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             $sheet->setCellValue('B'.$j, Auth::user()->name.", ".date('d-m-Y H:i'));
 

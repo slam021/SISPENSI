@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 
+
 class ProgramController extends Controller
 {
     public function __construct()
@@ -227,7 +228,7 @@ class ProgramController extends Controller
         ->where('program_id', $program_id)->first();
 
         $membertimses = CoreTimsesMember::where('data_state','=',0)
-        // ->where('core_timses_member.user_id', '!=', null)
+        ->where('core_timses_member.user_id', '!=', null)
         ->where('core_timses_member.timses_id', $timses_id)
         ->pluck('timses_member_name', 'timses_member_id');
         $nullmembertimses = Session::get('timses_member_id');
@@ -253,15 +254,13 @@ class ProgramController extends Controller
         $program_id = $request['program_id'];
         $request->validate([
             'program_id'                         => 'required',
-            'user_id'                            => 'required',
             'timses_id'                          => 'required',
             'timses_member_id'                   => 'required',
             'distribution_fund_nominal'          => 'required',
         ]);
 
         $data = array(
-            'program_id'                         => $request['program_id'], 
-            'user_id'                            => $request['user_id'], 
+            'program_id'                         => $request['program_id'],  
             'timses_id'                          => $request['timses_id'], 
             'timses_member_id'                   => $request['timses_member_id'], 
             'distribution_fund_nominal'          => $request['distribution_fund_nominal'], 
@@ -278,10 +277,38 @@ class ProgramController extends Controller
         }
     }
 
+    public function getUserAkun($timses_member_id){
+        $membertimses = CoreTimsesMember::join('system_user', 'system_user.user_id', '=', 'core_timses_member.user_id')
+        ->where('core_timses_member.data_state','=',0)
+        ->where('core_timses_member.timses_member_id', $timses_member_id)
+        ->first();
+
+        if (empty($membertimses)) {
+            return '';
+        } else {
+            return $membertimses['name'];
+        }
+    }
+
+    public function getAkunName($user_id){
+        $data = User::where('user_id',$user_id)
+        ->first();
+
+        return $data['name'];
+    }
+
+    public function getNameTimses($timses_id){
+        $data = CoreTimses::where('timses_id',$timses_id)
+        ->first();
+
+        return $data['timses_name'];
+    }
+    
+
     public function editDistributionFundProgram($program_id, $timses_id, $distribution_fund_id){
 
         $membertimses = CoreTimsesMember::where('data_state','=',0)
-        // ->where('core_timses_member.user_id', '!=', null)
+        ->where('core_timses_member.user_id', '!=', null)
         ->where('core_timses_member.timses_id', $timses_id)
         ->pluck('timses_member_name', 'timses_member_id');
         $nullmembertimses = Session::get('timses_member_id');
@@ -291,12 +318,15 @@ class ProgramController extends Controller
         ->pluck('name', 'user_id');
         $nullsystemuser = Session::get('user_id');
 
-        $programdistributionfund = ProgramDistributionFund::where('program_distribution_fund.data_state','=',0)
+        $programdistributionfund = ProgramDistributionFund::select('core_timses_member.*', 'program_distribution_fund.*')
+        ->where('program_distribution_fund.data_state','=',0)
         // ->join('system_user', 'system_user.user_id', '=', 'program_distribution_fund.user_id')
+        ->join('core_timses_member', 'core_timses_member.timses_member_id', '=', 'program_distribution_fund.timses_member_id')
         // ->where('program_distribution_fund.program_id', $program_id)
         // ->where('program_distribution_fund.timses_id', $timses_id)
         ->where('program_distribution_fund.distribution_fund_id', $distribution_fund_id)
         ->first();
+        // dd($programdistributionfund);
 
 
         return view('content/Program_view/FormEditDistributionFundProgram', compact('membertimses', 'nullmembertimses', 'programdistributionfund', 'systemuser', 'nullsystemuser'));
@@ -306,7 +336,6 @@ class ProgramController extends Controller
         $request->validate([
             'distribution_fund_id'               => 'required',
             'program_id'                         => 'required',
-            'user_id'                            => 'required',
             'timses_id'                          => 'required',
             'timses_member_id'                   => 'required',
             'distribution_fund_nominal'          => 'required',
@@ -315,7 +344,6 @@ class ProgramController extends Controller
         $item  = ProgramDistributionFund::findOrFail($request['distribution_fund_id']);
 
         $item->program_id                       = $request['program_id'];
-        $item->user_id                          = $request['user_id'];
         $item->timses_id                        = $request['timses_id'];
         $item->timses_member_id                 = $request['timses_member_id'];
         $item->distribution_fund_nominal        = $request['distribution_fund_nominal'];

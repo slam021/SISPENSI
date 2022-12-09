@@ -20,6 +20,7 @@ use App\Http\Controllers\FundingIncomeReportController;
 use App\Http\Controllers\FundingExpenditureController;
 use App\Http\Controllers\FundingExpenditureReportController;
 use App\Http\Controllers\FundingCombineReportController;
+use App\Http\Controllers\RecapitulationReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,7 +144,7 @@ Route::get('/program/distribution-fund/{program_id}/{timses_id}', [ProgramContro
 Route::post('/program/process-distribution-fund', [ProgramController::class, 'processDistributionFundProgram'])->name('process-distribution-fund');
 Route::get('/program/edit-distribution-fund/{program_id}/{timses_id}/{distribution_fund_id}', [ProgramController::class, 'editDistributionFundProgram'])->name('edit-distribution-fund');
 Route::post('/program/process-edit-distribution-fund', [ProgramController::class, 'processEditDistributionFundProgram'])->name('process-edit-distribution-fund');
-// Route::get('/program/download/{program_id}', [ProgramController::class, 'downloadProgramOrganizerPhotos'])->name('program-photos-download');
+Route::get('/program/get-user-akun/{timses_member_id}', [ProgramController::class, 'getUserAkun'])->name('get-user-akun');
 
 Route::get('/program/add-program-support/{program_id}', [ProgramController::class, 'addProgramSupport'])->name('add-program-support');
 Route::post('/program/process-add-program-support', [ProgramController::class, 'processAddProgramSupport'])->name('process-add-program-support');
@@ -241,3 +242,10 @@ Route::post('/report-combine/filter',[FundingCombineReportController::class, 'fi
 Route::get('/report-combine/filter-reset',[FundingCombineReportController::class, 'filterResetFundingCombineReport'])->name('filter-reset-report-combine');
 Route::get('/report-combine/print',[FundingCombineReportController::class, 'printFundingCombineReport'])->name('print-funding-combine-report');
 Route::get('/report-combine/export',[FundingCombineReportController::class, 'exportFundingCombineReport'])->name('export-funding-combine-report');
+
+//Recapitulation Report
+Route::get('/report-recap',[RecapitulationReportController::class, 'index'])->name('ledger-report');
+Route::post('/report-recap/filter',[RecapitulationReportController::class, 'filterLedgerReport'])->name('filter-report-recap');
+Route::get('/report-recap/reset-filter',[RecapitulationReportController::class, 'resetFilterLedgerReport'])->name('reset-filter-report-recap');
+Route::get('/report-recap/print',[RecapitulationReportController::class, 'printLedgerReport'])->name('print-report-recap');
+Route::get('/report-recap/export',[RecapitulationReportController::class, 'exportLedgerReport'])->name('export-report-recap');

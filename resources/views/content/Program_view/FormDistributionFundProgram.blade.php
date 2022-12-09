@@ -1,3 +1,5 @@
+@inject('DFP', 'App\Http\Controllers\ProgramController')
+
 @extends('adminlte::page')
 
 @section('title', 'Sistem Pendukung Eleksi')
@@ -18,13 +20,19 @@
         }
     });
 
-    $(document).ready(function(){
-        var user_id = {!! json_encode($nullsystemuser) !!};
-        
-        if(user_id == null){
-            $("#user_id").select2("val", "0");
-        }
-    });
+    function getUserAkun(timses_member_id){
+        // alert(timses_member_id);
+    $.ajax({
+				type: "GET",
+				url : "{{url('/program/get-user-akun')}}" + '/' + timses_member_id,
+				success: function(msg){
+                    console.log(msg);
+                        $("#user_id").val(msg); 
+                },
+
+		});
+		
+	}
 
 </script>
 @stop
@@ -106,14 +114,14 @@ function rupiah($angka){
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <a class="text-dark">Anggota Timses<a class='red'> *</a></a>
-                                    {!! Form::select('timses_member_id', $membertimses, $nullmembertimses, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!} 
+                                    {!! Form::select('timses_member_id', $membertimses, $nullmembertimses, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','onChange' => 'getUserAkun(this.value)' ])!!} 
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <a class="text-dark">Akun<a class='red'> *</a></a>
                                     {{-- {!! Form::select('user_id', $systemuser, $nullsystemuser, ['class' => 'selection-search-clear select-form', 'id' => 'user_id','' ])!!}  --}}
-                                    <input class="form-control input-bb" type="text" name="user_id" id="user_id" value="{{old('user_id')}}" onChange="function_elements_add(this.name, this.value);" autocomplete="off" readonly/>
+                                    <input class="form-control input-bb" type="text" name="user_id" id="user_id" autocomplete="off" readonly/>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -152,7 +160,7 @@ function rupiah($angka){
                         <td style='text-align:center'>{{$no}}</td>
                         <td>{{$val['timses_name']}}</td>
                         <td>{{$val['timses_member_name']}}</td>
-                        <td>{{$val['name']}}</td>
+                        <td>{{$DFP->getAkunName($val['user_id'])}}</td>
                         <td>{{rupiah($val['distribution_fund_nominal'])}}</td>
                         <td class="" style='text-align:center'>
                             <a type="button" class="badge badge-warning" href="{{ url('/program/edit-distribution-fund/'.$val['program_id'].'/'.$val['timses_id'].'/'.$val['distribution_fund_id']) }}" title="edit"><i class='far fa-edit'></i> Edit</a>
