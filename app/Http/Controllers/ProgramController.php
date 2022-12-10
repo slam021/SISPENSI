@@ -16,6 +16,7 @@ use App\Models\CoreSupporter;
 use App\Models\CoreTimses;
 use App\Models\CoreTimsesMember;
 use App\Models\User;
+use App\Models\FinancialFlow;
 use App\Models\DocumentationProgram;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -115,7 +116,20 @@ class ProgramController extends Controller
             'created_at'                     => date('Y-m-d'),
         );
 
-        if(Program::create($data)){
+        $data_financial_flow = [
+            'financial_category_id'          => $request['financial_category_id'],
+            'candidate_id'                   => $request['candidate_id'], 
+            'timses_id'                      => $request['timses_id'], 
+            'financial_flow_nominal'         => $request['program_fund'],
+            'financial_flow_description'     => $request['program_description'],
+            'financial_flow_date'            => $request['program_date'],
+            'created_id'                     => Auth::id(),
+            'created_at'                     => date('Y-m-d'),
+        ];
+
+        // dd($data_financial_flow);
+
+        if(Program::create($data) || FinancialFlow::create($data_financial_flow)){
             $msg = 'Tambah Acara Berhasil';
             return redirect('/program/add')->with('msg',$msg);
         } else {
@@ -331,7 +345,7 @@ class ProgramController extends Controller
 
         return view('content/Program_view/FormEditDistributionFundProgram', compact('membertimses', 'nullmembertimses', 'programdistributionfund', 'systemuser', 'nullsystemuser'));
     }
-    // 
+
     public function processEditDistributionFundProgram(Request $request){
         $request->validate([
             'distribution_fund_id'               => 'required',

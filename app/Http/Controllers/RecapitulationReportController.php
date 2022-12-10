@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\AcctAccount;
-use App\Models\AcctAccountBalance;
+use App\Models\FinancialFlow;
 use App\Models\AcctAccountBalanceDetail;
 use App\Models\JournalVoucher;
 use Elibyy\TCPDF\Facades\TCPDF;
@@ -24,45 +24,57 @@ class RecapitulationReportController extends Controller
 
     public function index()
     {
-        if(!$start_month = Session::get('start_month')){
-            $start_month = date('m');
+        if(!Session::get('financial_flow_code')){
+            $financial_flow_code     = '';
         }else{
-            $start_month = Session::get('start_month');
+            $financial_flow_code = Session::get('financial_flow_code');
         }
-        if(!$end_month = Session::get('end_month')){
-            $end_month = date('m');
+        if(!Session::get('start_date')){
+            $start_date     = date('Y-m-d');
         }else{
-            $end_month = Session::get('end_month');
+            $start_date = Session::get('start_date');
         }
-        if(!$year = Session::get('year')){
-            $year = date('Y');
+        if(!Session::get('end_date')){
+            $end_date     = date('Y-m-d');
         }else{
-            $year = Session::get('year');
+            $end_date = Session::get('end_date');
         }
-        if(!$account_id = Session::get('account_id')){
-            $account_id = '';
+        if(!Session::get('financial_category_id')){
+            $financial_category_id = '';
         }else{
-            $account_id = Session::get('account_id');
+            $financial_category_id = Session::get('financial_category_id');
         }
-        $monthlist = array(
-            '01' => 'Januari',
-            '02' => 'Februari',
-            '03' => 'Maret',
-            '04' => 'April',
-            '05' => 'Mei',
-            '06' => 'Juni',
-            '07' => 'Juli',
-            '08' => 'Agustus',
-            '09' => 'September',
-            '10' => 'Oktober',
-            '11' => 'November',
-            '12' => 'Desember',
-        );
 
-        $year_now 	=	date('Y');
-        for($i=($year_now-2); $i<($year_now+2); $i++){
-            $yearlist[$i] = $i;
-        } 
+        $code = [
+            ''  => '',
+            '1' => 'Kandidat',
+            '2' => 'Timses',
+        ];
+
+        $listfinancialflow = FinancialFlow::select('financial_flow.*', 'financial_category.*')
+        ->join('financial_category', 'financial_flow.financial_category_id', '=', 'financial_category.financial_category_id')
+        ->where('financial_flow.data_state', '=', 0)
+        ->pluck('financial_category_name', 'financial_category_id');
+        $nullfinancialflow_category = Session::get('financial_category_id');
+
+        if ($financial_flow_code && $financial_category_id  == '') {
+            $financialflow = FinancialFlow::where('data_state', '=', 0)
+            // ->where('financial_flow.financial_category_type', '=', 2)
+            ->where('financial_flow_date','>=',$start_date)
+            ->where('financial_flow_date','<=',$end_date)
+            ->where('financial_flow_code', '!=', null)
+            ->where('financial_category_id', '!=', null)
+            ->get();
+        } else {
+            $financialflow = FinancialFlow::where('data_state', '=', 0)
+            // ->where('financial_flow.financial_category_type', '=', 2)
+            ->where('financial_flow_date','>=',$start_date)
+            ->where('financial_flow_date','<=',$end_date)
+            ->where('financial_flow_code', $financial_flow_code)
+            ->where('financial_category_id', $financial_category_id)
+            ->get();
+        }
+
         // $accountlist = AcctAccount::select(DB::raw("CONCAT(account_code,' - ',account_name) AS full_account"),'account_id')
         // ->where('data_state',0)
         // ->where('company_id',Auth::user()->company_id)
@@ -139,32 +151,33 @@ class RecapitulationReportController extends Controller
         //     array_push($acctgeneralledgerreport, $acctgeneralledgerreport_detail);
         // }
   
-        return view('content.RecapitulationReport_view.ReportRecapitulation', compact('monthlist','yearlist','year','start_month','end_month'));
+        return view('content.RecapitulationReport_view.ReportRecapitulation', compact('start_date','end_date', 'code', 'listfinancialflow', 'nullfinancialflow_category', 'financialflow'));
     }
 
     public function filterLedgerReport(Request $request)
     {
-        $start_month = $request->start_month;
-        $end_month   = $request->end_month;
-        $year        = $request->year;
-        $account_id  = $request->account_id;
+        $start_date=$request->start_date;
+        $end_date=$request->end_date;
+        // $financial_flow_code = $request->financial_flow_code;
+        // $candidate_id = $request->candidate_id;
 
-        Session::put('start_month',$start_month);
-        Session::put('end_month',$end_month);
-        Session::put('year',$year);
-        Session::put('account_id',$account_id);
+        // dd( $financial_flow_code);
 
-        return redirect('/ledger-report');
+        Session::put('start_date', $start_date);
+        Session::put('end_date', $end_date);
+        // Session::put('financial_flow_code', $financial_flow_code);
+
+        return redirect('/report-recap');
     }
 
     public function resetFilterLedgerReport()
     {
-        Session::put('start_month');
-        Session::put('end_month');
-        Session::put('year');
-        Session::put('account_id');
+        Session::forget('start_date');
+        Session::forget('end_date');
+        // Session::forget('financial_flow_code');
+        // Session::forget('candidate_id');
 
-        return redirect('/ledger-report');
+        return redirect('/report-recap');
     }
 
     public function getAccountName($account_id)

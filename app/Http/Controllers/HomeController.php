@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Models\CoreCandidate;
 use App\Models\CoreLocation;
 use App\Models\CorePollingStation;
@@ -29,6 +30,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        Session::forget('start_date');
+        Session::forget('end_date');
+        Session::forget('financial_flow_code');
+
         $menus =  User::select('system_menu_mapping.*','system_menu.*')
         ->join('system_user_group','system_user_group.user_group_id','=','system_user.user_group_id')
         ->join('system_menu_mapping','system_menu_mapping.user_group_level','=','system_user_group.user_group_level')

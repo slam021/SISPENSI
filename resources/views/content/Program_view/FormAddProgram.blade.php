@@ -30,6 +30,17 @@
 		});
 	}
 
+    function disabledTimses(value){
+        var organizer = document.getElementById('program_organizer').value;
+        console.log(organizer);
+        if(organizer == 1){
+            document.getElementById('timses_id').disabled = true;
+        }
+        if(organizer == 2){
+            document.getElementById('timses_id').disabled = false;
+        }
+    }
+
     $(document).ready(function(){
         var location_id = {!! json_encode($nullcorelocation) !!};
         
@@ -122,6 +133,7 @@
             '1' => 'Kandidat',
             '2' => 'Timses',
         ];
+        $acara = 8;
     ?>
 
     <form method="post" action="{{route('process-add-program')}}" enctype="multipart/form-data">
@@ -131,7 +143,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <a class="text-dark">Penyelenggara<a class='red'> *</a></a>
-                            {!! Form::select('program_organizer', $organizer, '', ['class' => 'selection-search-clear select-form', 'id' => 'program_organizer','' ])!!}
+                            {!! Form::select('program_organizer', $organizer, '', ['class' => 'selection-search-clear select-form', 'id' => 'program_organizer','onChange' => 'disabledTimses(this.value);' ])!!}
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -155,7 +167,8 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <a class="text-dark">Kandidate<a class='red'> *</a></a>
-                                {!! Form::select('candidate_id', $corecandidate, $nullcorecandidate, ['class' => 'selection-search-clear select-form', 'id' => 'candidate_id','' ])!!}
+                                {!! Form::select('candidate_id', $corecandidate, $nullcorecandidate, ['class' => 'selection-search-clear select-form', 'id' => 'candidate_id' ])!!}
+                                <input class="form-control input-bb" type="hidden" name="financial_category_id" id="financial_category_id" value="{{$acara}}" autocomplete="off"/>
                             </div>
                         </div>
                         <div class="col-md-3">
