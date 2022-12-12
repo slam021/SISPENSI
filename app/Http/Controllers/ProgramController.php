@@ -129,7 +129,8 @@ class ProgramController extends Controller
 
         // dd($data_financial_flow);
 
-        if(Program::create($data) || FinancialFlow::create($data_financial_flow)){
+        if(Program::create($data)){
+            FinancialFlow::create($data_financial_flow);
             $msg = 'Tambah Acara Berhasil';
             return redirect('/program/add')->with('msg',$msg);
         } else {

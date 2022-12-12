@@ -2,7 +2,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Sistem Timses Eleksi')
+@section('title', 'Sistem Pendukung Eleksi')
 <link rel="icon" href="{{ asset('resources/assets/logo_vote.ico') }}" />
 
 @section('js')
