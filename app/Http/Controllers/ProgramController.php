@@ -118,8 +118,9 @@ class ProgramController extends Controller
 
         $data_financial_flow = [
             'financial_category_id'          => $request['financial_category_id'],
+            'financial_category_type'        => 2,
             'candidate_id'                   => $request['candidate_id'], 
-            'timses_id'                      => $request['timses_id'], 
+            // 'timses_id'                      => $request['timses_id'], 
             'financial_flow_nominal'         => $request['program_fund'],
             'financial_flow_description'     => $request['program_description'],
             'financial_flow_date'            => $request['program_date'],
@@ -127,7 +128,7 @@ class ProgramController extends Controller
             'created_at'                     => date('Y-m-d'),
         ];
 
-        // dd($data_financial_flow);
+        // dd($data);
 
         if(Program::create($data)){
             FinancialFlow::create($data_financial_flow);

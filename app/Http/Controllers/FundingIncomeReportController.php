@@ -21,11 +21,16 @@ class FundingIncomeReportController extends Controller
 
     public function index()
     {
-        if(!Session::get('financial_flow_code')){
-            $financial_flow_code     = '';
-        }else{
-            $financial_flow_code = Session::get('financial_flow_code');
-        }
+        // if(!$timses_id = Session::get('timses_id')){
+        //     $timses_id     = '';
+        // }else{
+        //     $timses_id = Session::get('timses_id');
+        // }
+        // if(!$candidate_id = Session::get('candidate_id')){
+        //     $candidate_id   = '';
+        // }else{
+        //     $candidate_id = Session::get('candidate_id');
+        // }
         if(!Session::get('start_date')){
             $start_date     = date('Y-m-d');
         }else{
@@ -37,44 +42,86 @@ class FundingIncomeReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
+        $listcoretimses = CoreTimses :: where('data_state', 0)
+        ->get()
+        ->pluck('timses_name', 'timses_id');
+
+        $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        ->get()
+        ->pluck('candidate_full_name', 'candidate_id');
+
+        // $''corecandidate = Session::get('candidate_id');
         $code = [
             ''  => '',
             '1' => 'Kandidat',
             '2' => 'Timses',
         ];
         // dd($start_date);
-        if ($financial_flow_code == '') {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
+        // if ($timses_id == '' ) {
+        //     $fundingincome = FinancialFlow::where('data_state', '=', 0)
+        //     ->where('financial_flow.financial_category_type', '=', 1)
+        //     ->where('financial_flow_date','>=',$start_date)
+        //     ->where('financial_flow_date','<=',$end_date)
+        //     ->where('timses_id', '=', '')
+        //     ->get();
+        // } else {
+        //     $fundingincome = FinancialFlow::where('data_state', '=', 0)
+        //     ->where('financial_flow.financial_category_type', '=', 1)
+        //     ->where('financial_flow_date','>=',$start_date)
+        //     ->where('financial_flow_date','<=',$end_date)
+        //     ->where('timses_id', $timses_id)
+        //     ->get();
+        // }
+        $fundingincome = FinancialFlow::where('data_state', '=', 0)
             ->where('financial_flow.financial_category_type', '=', 1)
             ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', '!=', null)
-            ->get();
-        } else {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 1)
-            ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', $financial_flow_code)
-            ->get();
-        }
+            ->where('financial_flow_date','<=',$end_date);
+            // ->where('timses_id', '=', '')
+            // ->get();
 
-        return view('content/FundingIncomeReport_view/ReportFundingIncome', compact('fundingincome', 'start_date', 'end_date', 'financial_flow_code', 'code'));
+        $candidate_id = Session::get('candidate_id');
+        $timses_id = Session::get('timses_id');
+
+        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+            $fundingincome   = $fundingincome->where('candidate_id', $candidate_id);
+        }
+        if($timses_id||$timses_id!=null||$timses_id!=''){
+            $fundingincome   = $fundingincome->where('timses_id', $timses_id);
+        }
+        $fundingincome   = $fundingincome->get();
+
+        // if ($candidate_id == ''  ) {
+        //     $fundingincome = FinancialFlow::where('data_state', '=', 0)
+        //     ->where('financial_flow.financial_category_type', '=', 1)
+        //     ->where('financial_flow_date','>=',$start_date)
+        //     ->where('financial_flow_date','<=',$end_date)
+        //     ->where('candidate_id', '=', '')
+        //     ->get();
+        // } else {
+        //     $fundingincome = FinancialFlow::where('data_state', '=', 0)
+        //     ->where('financial_flow.financial_category_type', '=', 1)
+        //     ->where('financial_flow_date','>=',$start_date)
+        //     ->where('financial_flow_date','<=',$end_date)
+        //     ->where('candidate_id', $candidate_id)
+        //     ->get();
+        // }
+
+        return view('content/FundingIncomeReport_view/ReportFundingIncome', compact('fundingincome', 'start_date', 'end_date', 'listcorecandidate', 'listcoretimses', 'candidate_id', 'timses_id', 'code'));
     }
 
     public function filterFundingIncomeReport(Request $request)
     {
         $start_date=$request->start_date;
         $end_date=$request->end_date;
-        $financial_flow_code = $request->financial_flow_code;
-        // $candidate_id = $request->candidate_id;
+        $timses_id = $request->timses_id;
+        $candidate_id = $request->candidate_id;
 
-        // dd( $financial_flow_code);
+        // dd( $timses_id);
 
         Session::put('start_date', $start_date);
         Session::put('end_date', $end_date);
-        Session::put('financial_flow_code', $financial_flow_code);
-        // Session::put('candidate_id', $candidate_id);
+        Session::put('timses_id', $timses_id);
+        Session::put('candidate_id', $candidate_id);
         return redirect('/report-income');
     }
 
@@ -82,8 +129,8 @@ class FundingIncomeReportController extends Controller
     {
         Session::forget('start_date');
         Session::forget('end_date');
-        Session::forget('financial_flow_code');
-        // Session::forget('candidate_id');
+        Session::forget('timses_id');
+        Session::forget('candidate_id');
 
         return redirect('/report-income');
     }
