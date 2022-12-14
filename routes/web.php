@@ -244,8 +244,8 @@ Route::get('/report-combine/print',[FundingCombineReportController::class, 'prin
 Route::get('/report-combine/export',[FundingCombineReportController::class, 'exportFundingCombineReport'])->name('export-funding-combine-report');
 
 //Recapitulation Report
-Route::get('/report-recap',[RecapitulationReportController::class, 'index'])->name('ledger-report');
-Route::post('/report-recap/filter',[RecapitulationReportController::class, 'filterLedgerReport'])->name('filter-report-recap');
-Route::get('/report-recap/reset-filter',[RecapitulationReportController::class, 'resetFilterLedgerReport'])->name('reset-filter-report-recap');
+Route::get('/report-recap',[RecapitulationReportController::class, 'index']);
+Route::post('/report-recap/filter',[RecapitulationReportController::class, 'filterRecapitulationReport'])->name('filter-report-recap');
+Route::get('/report-recap/reset-filter',[RecapitulationReportController::class, 'filterResetRecapitulationReport'])->name('filter-reset-report-recap');
 Route::get('/report-recap/print',[RecapitulationReportController::class, 'printLedgerReport'])->name('print-report-recap');
 Route::get('/report-recap/export',[RecapitulationReportController::class, 'exportLedgerReport'])->name('export-report-recap');

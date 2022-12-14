@@ -22,11 +22,6 @@ class FundingExpenditureReportController extends Controller
 
     public function index()
     {
-        if(!Session::get('financial_flow_code')){
-            $financial_flow_code     = '';
-        }else{
-            $financial_flow_code = Session::get('financial_flow_code');
-        }
         if(!Session::get('start_date')){
             $start_date     = date('Y-m-d');
         }else{
@@ -38,44 +33,56 @@ class FundingExpenditureReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
+        $listcoretimses = CoreTimses :: where('data_state', 0)
+        ->get()
+        ->pluck('timses_name', 'timses_id');
+
+        $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        ->get()
+        ->pluck('candidate_full_name', 'candidate_id');
+
+        // $''corecandidate = Session::get('candidate_id');
         $code = [
             ''  => '',
             '1' => 'Kandidat',
             '2' => 'Timses',
         ];
         // dd($start_date);
-        if ($financial_flow_code == '') {
-            $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
+        
+        $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
             ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', '!=', null)
-            ->get();
-        } else {
-            $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 2)
-            ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', $financial_flow_code)
-            ->get();
-        }
+            ->where('financial_flow_date','<=',$end_date);
+            // ->where('timses_id', '=', '')
+            // ->get();
 
-        return view('content/FundingExpenditureReport_view/ReportFundingExpenditure', compact('fundingexpenditure', 'start_date', 'end_date', 'code', 'financial_flow_code'));
+        $candidate_id = Session::get('candidate_id');
+        $timses_id = Session::get('timses_id');
+
+        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+            $fundingexpenditure   = $fundingexpenditure->where('candidate_id', $candidate_id);
+        }
+        if($timses_id||$timses_id!=null||$timses_id!=''){
+            $fundingexpenditure   = $fundingexpenditure->where('timses_id', $timses_id);
+        }
+        $fundingexpenditure   = $fundingexpenditure->get();
+
+        return view('content/FundingExpenditureReport_view/ReportFundingExpenditure', compact('fundingexpenditure', 'start_date', 'end_date', 'listcorecandidate', 'listcoretimses', 'candidate_id', 'timses_id', 'code'));
     }
 
     public function filterFundingExpenditureReport(Request $request)
     {
         $start_date=$request->start_date;
         $end_date=$request->end_date;
-        $financial_flow_code = $request->financial_flow_code;
-        // $candidate_id = $request->candidate_id;
+        $timses_id = $request->timses_id;
+        $candidate_id = $request->candidate_id;
 
-        // dd( $financial_flow_code);
+        // dd( $timses_id);
 
         Session::put('start_date', $start_date);
         Session::put('end_date', $end_date);
-        Session::put('financial_flow_code', $financial_flow_code);
-        // Session::put('candidate_id', $candidate_id);
+        Session::put('timses_id', $timses_id);
+        Session::put('candidate_id', $candidate_id);
 
         return redirect('/report-expenditure');
     }
@@ -84,8 +91,8 @@ class FundingExpenditureReportController extends Controller
     {
         Session::forget('start_date');
         Session::forget('end_date');
-        Session::forget('financial_flow_code');
-        // Session::forget('candidate_id');
+        Session::forget('timses_id');
+        Session::forget('candidate_id');
 
         return redirect('/report-expenditure');
     }
@@ -116,11 +123,6 @@ class FundingExpenditureReportController extends Controller
 
     public function printFundingExpenditureReport()
     {
-        if(!Session::get('financial_flow_code')){
-            $financial_flow_code     = '';
-        }else{
-            $financial_flow_code = Session::get('financial_flow_code');
-        }
         if(!Session::get('start_date')){
             $start_date     = date('Y-m-d');
         }else{
@@ -132,27 +134,39 @@ class FundingExpenditureReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
+        $listcoretimses = CoreTimses :: where('data_state', 0)
+        ->get()
+        ->pluck('timses_name', 'timses_id');
+
+        $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        ->get()
+        ->pluck('candidate_full_name', 'candidate_id');
+
+        // $''corecandidate = Session::get('candidate_id');
         $code = [
             ''  => '',
             '1' => 'Kandidat',
             '2' => 'Timses',
         ];
         // dd($start_date);
-        if ($financial_flow_code == '') {
-            $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
+        
+        $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
             ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', '!=', null)
-            ->get();
-        } else {
-            $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 2)
-            ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', $financial_flow_code)
-            ->get();
+            ->where('financial_flow_date','<=',$end_date);
+            // ->where('timses_id', '=', '')
+            // ->get();
+
+        $candidate_id = Session::get('candidate_id');
+        $timses_id = Session::get('timses_id');
+
+        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+            $fundingexpenditure   = $fundingexpenditure->where('candidate_id', $candidate_id);
         }
+        if($timses_id||$timses_id!=null||$timses_id!=''){
+            $fundingexpenditure   = $fundingexpenditure->where('timses_id', $timses_id);
+        }
+        $fundingexpenditure   = $fundingexpenditure->get();
 
         $pdf = new TCPDF('P', PDF_UNIT, 'F4', true, 'UTF-8', false);
 
@@ -261,11 +275,6 @@ class FundingExpenditureReportController extends Controller
 
     public function exportFundingExpenditureReport()
     {
-        if(!Session::get('financial_flow_code')){
-            $financial_flow_code     = '';
-        }else{
-            $financial_flow_code = Session::get('financial_flow_code');
-        }
         if(!Session::get('start_date')){
             $start_date     = date('Y-m-d');
         }else{
@@ -277,27 +286,39 @@ class FundingExpenditureReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
+        $listcoretimses = CoreTimses :: where('data_state', 0)
+        ->get()
+        ->pluck('timses_name', 'timses_id');
+
+        $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        ->get()
+        ->pluck('candidate_full_name', 'candidate_id');
+
+        // $''corecandidate = Session::get('candidate_id');
         $code = [
             ''  => '',
             '1' => 'Kandidat',
             '2' => 'Timses',
         ];
         // dd($start_date);
-        if ($financial_flow_code == '') {
-            $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
+        
+        $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
             ->where('financial_flow.financial_category_type', '=', 2)
             ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', '!=', null)
-            ->get();
-        } else {
-            $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 2)
-            ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', $financial_flow_code)
-            ->get();
+            ->where('financial_flow_date','<=',$end_date);
+            // ->where('timses_id', '=', '')
+            // ->get();
+
+        $candidate_id = Session::get('candidate_id');
+        $timses_id = Session::get('timses_id');
+
+        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+            $fundingexpenditure   = $fundingexpenditure->where('candidate_id', $candidate_id);
         }
+        if($timses_id||$timses_id!=null||$timses_id!=''){
+            $fundingexpenditure   = $fundingexpenditure->where('timses_id', $timses_id);
+        }
+        $fundingexpenditure   = $fundingexpenditure->get();
 
         $spreadsheet = new Spreadsheet();
 

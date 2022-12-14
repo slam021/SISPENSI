@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\CoreCandidate;
-use App\Models\FinancialFlow;
-use App\Models\CoreTimses;
-use App\Models\FinancialCategory;
+use App\Models\AcctAccount;
+use App\Models\AcctAccountBalance;
+use App\Models\AcctAccountBalanceDetail;
+use App\Models\JournalVoucher;
 use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
-class RecapitulationReportController extends Controller
+class AcctLedgerReportController extends Controller
 {
     public function __construct()
     {
@@ -39,11 +39,11 @@ class RecapitulationReportController extends Controller
         }else{
             $year = Session::get('year');
         }
-        
-        $financial_category_id = Session::get('financial_category_id');
-        $candidate_id = Session::get('candidate_id');
-        $timses_id = Session::get('timses_id');
-
+        if(!$account_id = Session::get('account_id')){
+            $account_id = '';
+        }else{
+            $account_id = Session::get('account_id');
+        }
         $monthlist = array(
             '01' => 'Januari',
             '02' => 'Februari',
@@ -63,151 +63,108 @@ class RecapitulationReportController extends Controller
         for($i=($year_now-2); $i<($year_now+2); $i++){
             $yearlist[$i] = $i;
         } 
-  
-        $code = [
-            ''  => '',
-            '1' => 'Kandidat',
-            '2' => 'Timses',
-        ];
-
-        $listfinancialcategory = FinancialCategory::where('data_state', '=', 0)
-        ->pluck('financial_category_name', 'financial_category_id');
-        // $nullfinancialflow_category = Session::get('financial_category_id');
-
-        $listcoretimses = CoreTimses :: where('data_state', 0)
+        $accountlist = AcctAccount::select(DB::raw("CONCAT(account_code,' - ',account_name) AS full_account"),'account_id')
+        ->where('data_state',0)
+        ->where('company_id',Auth::user()->company_id)
         ->get()
-        ->pluck('timses_name', 'timses_id');
+        ->pluck('full_account','account_id');
 
-        $listcorecandidate = CoreCandidate :: where('data_state', 0)
-        ->get()
-        ->pluck('candidate_full_name', 'candidate_id');
-
-        // if ($financial_flow_code && $financial_category_id  == '') {
-        //     $financialflow = FinancialFlow::where('data_state', '=', 0)
-        //     // ->where('financial_flow.financial_category_type', '=', 2)
-        //     ->where('financial_flow_date','>=',$start_date)
-        //     ->where('financial_flow_date','<=',$end_date)
-        //     ->where('financial_flow_code', '!=', null)
-        //     ->where('financial_category_id', '!=', null)
-        //     ->get();
-        // } else {
-        //     $financialflow = FinancialFlow::where('data_state', '=', 0)
-        //     // ->where('financial_flow.financial_category_type', '=', 2)
-        //     ->where('financial_flow_date','>=',$start_date)
-        //     ->where('financial_flow_date','<=',$end_date)
-        //     ->where('financial_flow_code', $financial_flow_code)
-        //     ->where('financial_category_id', $financial_category_id)
-        //     ->get();
-        // }
-
-        // $accountlist = AcctAccount::select(DB::raw("CONCAT(account_code,' - ',account_name) AS full_account"),'account_id')
-        // ->where('data_state',0)
-        // ->where('company_id',Auth::user()->company_id)
-        // ->get()
-        // ->pluck('full_account','account_id');
-
-        // $account = AcctAccount::where('data_state',0)
-        // ->where('company_id', Auth::user()->company_id)
-        // ->where('account_id', $account_id)
-        // ->first();
+        $account = AcctAccount::where('data_state',0)
+        ->where('company_id', Auth::user()->company_id)
+        ->where('account_id', $account_id)
+        ->first();
         
-        // $accountbalancedetail = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
-        // ->select('acct_account_balance_detail.transaction_id','acct_account_balance_detail.last_balance','acct_account_balance_detail.account_in','acct_account_balance_detail.account_out','acct_account_balance_detail.transaction_date','acct_account_balance_detail.account_id')
-        // ->where('acct_account_balance_detail.account_id' ,$account_id)
-        // ->whereMonth('acct_account_balance_detail.transaction_date','>=',$start_month)
-        // ->whereMonth('acct_account_balance_detail.transaction_date','<=',$end_month)
-        // ->whereYear('acct_account_balance_detail.transaction_date',$year)
-        // ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
-        // ->orderBy('acct_account_balance_detail.transaction_date', 'ASC')
-        // ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'ASC')
-        // ->get();
-        // $accountbalancedetail_old = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
-        // ->select('acct_account_balance_detail.last_balance')
-        // ->where('acct_account_balance_detail.account_id' ,$account_id)
-        // ->whereMonth('acct_account_balance_detail.transaction_date',$start_month-1)
-        // ->whereYear('acct_account_balance_detail.transaction_date',$year)
-        // ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
-        // ->orderBy('acct_account_balance_detail.transaction_date', 'DESC')
-        // ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'DESC')
-        // ->first();
+        $accountbalancedetail = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
+        ->select('acct_account_balance_detail.transaction_id','acct_account_balance_detail.last_balance','acct_account_balance_detail.account_in','acct_account_balance_detail.account_out','acct_account_balance_detail.transaction_date','acct_account_balance_detail.account_id')
+        ->where('acct_account_balance_detail.account_id' ,$account_id)
+        ->whereMonth('acct_account_balance_detail.transaction_date','>=',$start_month)
+        ->whereMonth('acct_account_balance_detail.transaction_date','<=',$end_month)
+        ->whereYear('acct_account_balance_detail.transaction_date',$year)
+        ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
+        ->orderBy('acct_account_balance_detail.transaction_date', 'ASC')
+        ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'ASC')
+        ->get();
+        $accountbalancedetail_old = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
+        ->select('acct_account_balance_detail.last_balance')
+        ->where('acct_account_balance_detail.account_id' ,$account_id)
+        ->whereMonth('acct_account_balance_detail.transaction_date',$start_month-1)
+        ->whereYear('acct_account_balance_detail.transaction_date',$year)
+        ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
+        ->orderBy('acct_account_balance_detail.transaction_date', 'DESC')
+        ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'DESC')
+        ->first();
 
-        // $acctgeneralledgerreport = array();
-        // foreach($accountbalancedetail as $val){
-        //     $description = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_description');
-        //     $no_journal = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_no');
-        //     $data_state = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('data_state');
+        $acctgeneralledgerreport = array();
+        foreach($accountbalancedetail as $val){
+            $description = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_description');
+            $no_journal = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_no');
+            $data_state = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('data_state');
             
-        //     if($account['account_default_status'] == 0 || $val['last_balance'] >= 0 ){
-        //             $debit 	= $val['account_in'];
-        //             $credit = $val['account_out'];
+            if($account['account_default_status'] == 0 || $val['last_balance'] >= 0 ){
+                    $debit 	= $val['account_in'];
+                    $credit = $val['account_out'];
 
-        //             if($val['last_balance'] >= 0){
-        //                 $last_balance_debit 	= $val['last_balance'];
-        //                 $last_balance_credit 	= 0;
-        //             } else {
-        //                 $last_balance_debit 	= 0;
-        //                 $last_balance_credit 	= $val['last_balance'];
-        //             }
-        //         } else {
-        //             $debit 	= $val['account_out'];
-        //             $credit = $val['account_in'];
+                    if($val['last_balance'] >= 0){
+                        $last_balance_debit 	= $val['last_balance'];
+                        $last_balance_credit 	= 0;
+                    } else {
+                        $last_balance_debit 	= 0;
+                        $last_balance_credit 	= $val['last_balance'];
+                    }
+                } else {
+                    $debit 	= $val['account_out'];
+                    $credit = $val['account_in'];
 
-        //             if($val['last_balance'] >= 0){
-        //                 $last_balance_debit 	= 0;
-        //                 $last_balance_credit 	= $val['last_balance'];
-        //             } else {
+                    if($val['last_balance'] >= 0){
+                        $last_balance_debit 	= 0;
+                        $last_balance_credit 	= $val['last_balance'];
+                    } else {
                         
-        //                 $last_balance_debit 	= $val['last_balance'];
-        //                 $last_balance_credit 	= 0;
-        //             }
-        //         }
+                        $last_balance_debit 	= $val['last_balance'];
+                        $last_balance_credit 	= 0;
+                    }
+                }
         
-        //     $acctgeneralledgerreport_detail = array(
-        //         'date' => $val['transaction_date'],
-        //         'no_journal' => $no_journal['journal_voucher_no'],
-        //         'description' => $description['journal_voucher_description'],
-        //         'account_id' => $val['account_id'],
-        //         'account_in' => $debit,
-        //         'account_out' => $credit,
-        //         'last_balance_debit' => $last_balance_debit,
-        //         'last_balance_credit' => $last_balance_credit,
-        //         'data_state' => $data_state['data_state']
-        //     );
-        //     array_push($acctgeneralledgerreport, $acctgeneralledgerreport_detail);
-        // }
-
-        return view('content.RecapitulationReport_view.ReportRecapitulation', compact('start_month','end_month', 'monthlist', 'year' , 'yearlist', 'year_now', 'code', 'listfinancialcategory', 'financial_category_id', 'timses_id', 'candidate_id', 'listcoretimses', 'listcorecandidate'));
+            $acctgeneralledgerreport_detail = array(
+                'date' => $val['transaction_date'],
+                'no_journal' => $no_journal['journal_voucher_no'],
+                'description' => $description['journal_voucher_description'],
+                'account_id' => $val['account_id'],
+                'account_in' => $debit,
+                'account_out' => $credit,
+                'last_balance_debit' => $last_balance_debit,
+                'last_balance_credit' => $last_balance_credit,
+                'data_state' => $data_state['data_state']
+            );
+            array_push($acctgeneralledgerreport, $acctgeneralledgerreport_detail);
+        }
+  
+        return view('content.AcctLedgerReport.ListLedgerReport', compact('monthlist','yearlist','accountlist', 'acctgeneralledgerreport','accountbalancedetail_old','account','year','start_month','end_month','account_id'));
     }
 
-    public function filterRecapitulationReport(Request $request)
+    public function filterLedgerReport(Request $request)
     {
-        $start_month  = $request->start_month;
-        $end_month    = $request->end_month;
-        $year         = $request->year;
-        $timses_id    = $request->timses_id;
-        $candidate_id = $request->candidate_id;
-        $financial_category_id = $request->financial_category_id;
+        $start_month = $request->start_month;
+        $end_month   = $request->end_month;
+        $year        = $request->year;
+        $account_id  = $request->account_id;
 
-        Session::put('timses_id', $timses_id);
-        Session::put('financial_category_id', $financial_category_id);
-        Session::put('candidate_id', $candidate_id);
         Session::put('start_month',$start_month);
         Session::put('end_month',$end_month);
         Session::put('year',$year);
+        Session::put('account_id',$account_id);
 
-        return redirect('/report-recap');
+        return redirect('/ledger-report');
     }
 
-    public function filterResetRecapitulationReport()
+    public function resetFilterLedgerReport()
     {
         Session::put('start_month');
         Session::put('end_month');
         Session::put('year');
-        Session::forget('timses_id');
-        Session::forget('candidate_id');
-        Session::forget('financial_category_id');
+        Session::put('account_id');
 
-        return redirect('/report-recap');
+        return redirect('/ledger-report');
     }
 
     public function getAccountName($account_id)
@@ -661,4 +618,3 @@ class RecapitulationReportController extends Controller
         }
     }
 }
-

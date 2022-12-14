@@ -7,7 +7,7 @@
 
 @section('js')
 <script>
-     $(document).ready(function(){
+    $(document).ready(function(){
         var timses_id = {!! json_encode($timses_id) !!};
         
         if(timses_id == null){
@@ -22,10 +22,9 @@
             $("#candidate_id").select2("val", "0");
         }
     });
-
-    
 </script>
 @stop
+
 @section('content_header')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -196,7 +195,7 @@
         </div>
         <div class="card-footer text-muted">
             <div class="form-actions float-right">
-                <a class="btn bg-red btn-sm" href="{{ url('/report-income/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
+                <a class="btn bg-orange btn-sm" href="{{ url('/report-income/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
                 <a class="btn bg-olive btn-sm" href="{{ url('/report-income/export') }}"><i class="fa fa-download"></i> Export Data</a>
             </div>
         </div>

@@ -21,16 +21,6 @@ class FundingIncomeReportController extends Controller
 
     public function index()
     {
-        // if(!$timses_id = Session::get('timses_id')){
-        //     $timses_id     = '';
-        // }else{
-        //     $timses_id = Session::get('timses_id');
-        // }
-        // if(!$candidate_id = Session::get('candidate_id')){
-        //     $candidate_id   = '';
-        // }else{
-        //     $candidate_id = Session::get('candidate_id');
-        // }
         if(!Session::get('start_date')){
             $start_date     = date('Y-m-d');
         }else{
@@ -57,21 +47,7 @@ class FundingIncomeReportController extends Controller
             '2' => 'Timses',
         ];
         // dd($start_date);
-        // if ($timses_id == '' ) {
-        //     $fundingincome = FinancialFlow::where('data_state', '=', 0)
-        //     ->where('financial_flow.financial_category_type', '=', 1)
-        //     ->where('financial_flow_date','>=',$start_date)
-        //     ->where('financial_flow_date','<=',$end_date)
-        //     ->where('timses_id', '=', '')
-        //     ->get();
-        // } else {
-        //     $fundingincome = FinancialFlow::where('data_state', '=', 0)
-        //     ->where('financial_flow.financial_category_type', '=', 1)
-        //     ->where('financial_flow_date','>=',$start_date)
-        //     ->where('financial_flow_date','<=',$end_date)
-        //     ->where('timses_id', $timses_id)
-        //     ->get();
-        // }
+        
         $fundingincome = FinancialFlow::where('data_state', '=', 0)
             ->where('financial_flow.financial_category_type', '=', 1)
             ->where('financial_flow_date','>=',$start_date)
@@ -89,22 +65,6 @@ class FundingIncomeReportController extends Controller
             $fundingincome   = $fundingincome->where('timses_id', $timses_id);
         }
         $fundingincome   = $fundingincome->get();
-
-        // if ($candidate_id == ''  ) {
-        //     $fundingincome = FinancialFlow::where('data_state', '=', 0)
-        //     ->where('financial_flow.financial_category_type', '=', 1)
-        //     ->where('financial_flow_date','>=',$start_date)
-        //     ->where('financial_flow_date','<=',$end_date)
-        //     ->where('candidate_id', '=', '')
-        //     ->get();
-        // } else {
-        //     $fundingincome = FinancialFlow::where('data_state', '=', 0)
-        //     ->where('financial_flow.financial_category_type', '=', 1)
-        //     ->where('financial_flow_date','>=',$start_date)
-        //     ->where('financial_flow_date','<=',$end_date)
-        //     ->where('candidate_id', $candidate_id)
-        //     ->get();
-        // }
 
         return view('content/FundingIncomeReport_view/ReportFundingIncome', compact('fundingincome', 'start_date', 'end_date', 'listcorecandidate', 'listcoretimses', 'candidate_id', 'timses_id', 'code'));
     }
@@ -161,11 +121,6 @@ class FundingIncomeReportController extends Controller
 
     public function printFundingIncomeReport()
     {
-        if(!Session::get('financial_flow_code')){
-            $financial_flow_code     = '';
-        }else{
-            $financial_flow_code = Session::get('financial_flow_code');
-        }
         if(!Session::get('start_date')){
             $start_date     = date('Y-m-d');
         }else{
@@ -177,27 +132,39 @@ class FundingIncomeReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
+        $listcoretimses = CoreTimses :: where('data_state', 0)
+        ->get()
+        ->pluck('timses_name', 'timses_id');
+
+        $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        ->get()
+        ->pluck('candidate_full_name', 'candidate_id');
+
+        // $''corecandidate = Session::get('candidate_id');
         $code = [
             ''  => '',
             '1' => 'Kandidat',
             '2' => 'Timses',
         ];
         // dd($start_date);
-        if ($financial_flow_code == '') {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
+        
+        $fundingincome = FinancialFlow::where('data_state', '=', 0)
             ->where('financial_flow.financial_category_type', '=', 1)
             ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', '!=', null)
-            ->get();
-        } else {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 1)
-            ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', $financial_flow_code)
-            ->get();
+            ->where('financial_flow_date','<=',$end_date);
+            // ->where('timses_id', '=', '')
+            // ->get();
+
+        $candidate_id = Session::get('candidate_id');
+        $timses_id = Session::get('timses_id');
+
+        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+            $fundingincome   = $fundingincome->where('candidate_id', $candidate_id);
         }
+        if($timses_id||$timses_id!=null||$timses_id!=''){
+            $fundingincome   = $fundingincome->where('timses_id', $timses_id);
+        }
+        $fundingincome   = $fundingincome->get();
 
         $pdf = new TCPDF('P', PDF_UNIT, 'F4', true, 'UTF-8', false);
 
@@ -302,11 +269,6 @@ class FundingIncomeReportController extends Controller
 
     public function exportFundingIncomeReport()
     {
-        if(!Session::get('financial_flow_code')){
-            $financial_flow_code     = '';
-        }else{
-            $financial_flow_code = Session::get('financial_flow_code');
-        }
         if(!Session::get('start_date')){
             $start_date     = date('Y-m-d');
         }else{
@@ -318,27 +280,39 @@ class FundingIncomeReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
+        $listcoretimses = CoreTimses :: where('data_state', 0)
+        ->get()
+        ->pluck('timses_name', 'timses_id');
+
+        $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        ->get()
+        ->pluck('candidate_full_name', 'candidate_id');
+
+        // $''corecandidate = Session::get('candidate_id');
         $code = [
             ''  => '',
             '1' => 'Kandidat',
             '2' => 'Timses',
         ];
         // dd($start_date);
-        if ($financial_flow_code == '') {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
+        
+        $fundingincome = FinancialFlow::where('data_state', '=', 0)
             ->where('financial_flow.financial_category_type', '=', 1)
             ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', '!=', null)
-            ->get();
-        } else {
-            $fundingincome = FinancialFlow::where('data_state', '=', 0)
-            ->where('financial_flow.financial_category_type', '=', 1)
-            ->where('financial_flow_date','>=',$start_date)
-            ->where('financial_flow_date','<=',$end_date)
-            ->where('financial_flow_code', $financial_flow_code)
-            ->get();
+            ->where('financial_flow_date','<=',$end_date);
+            // ->where('timses_id', '=', '')
+            // ->get();
+
+        $candidate_id = Session::get('candidate_id');
+        $timses_id = Session::get('timses_id');
+
+        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+            $fundingincome   = $fundingincome->where('candidate_id', $candidate_id);
         }
+        if($timses_id||$timses_id!=null||$timses_id!=''){
+            $fundingincome   = $fundingincome->where('timses_id', $timses_id);
+        }
+        $fundingincome   = $fundingincome->get();
 
         $spreadsheet = new Spreadsheet();
 

@@ -6,11 +6,25 @@
 
 @section('js')
 <script>
-     $(document).ready(function(){
-        var financial_category_id = {!! json_encode($nullfinancialflow_category) !!};
+    $(document).ready(function(){
+        var financial_category_id = {!! json_encode($financial_category_id) !!};
         
         if(financial_category_id == null){
             $("#financial_category_id").select2("val", "0");
+        }
+    });
+    $(document).ready(function(){
+        var candidate_id = {!! json_encode($candidate_id) !!};
+        
+        if(candidate_id == null){
+            $("#candidate_id").select2("val", "0");
+        }
+    });
+    $(document).ready(function(){
+        var timses_id = {!! json_encode($timses_id) !!};
+        
+        if(timses_id == null){
+            $("#timses_id").select2("val", "0");
         }
     });
 </script>
@@ -20,10 +34,10 @@
     
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
-      <li class="breadcrumb-item active" aria-current="page"> Daftar Rekapitulasi </li>
+        <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
+        <li class="breadcrumb-item active" aria-current="page"> Daftar Laporan Rekapitulasi </li>
     </ol>
-  </nav>
+</nav>
 
 @stop
 
@@ -54,54 +68,73 @@
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
                     <div class = "row">
-                        <div class = "col-md-3">
+                        <div class = "col-md-4">
                             <div class="form-group form-md-line-input">
-                                <section class="control-label">Tanggal Mulai
+                                <section class="control-label">Periode Awal
                                     <span class="required text-danger">
                                         *
                                     </span>
                                 </section>
-                                <input type="date" class="form-control input-bb" name="start_date" value="{{ $start_date }}">
-
-                                {{-- <input type ="date" class="form-control form-control-inline input-medium date-picker input-date" data-date-format="dd-mm-yyyy" name="start_date" id="start_date"  style="width: 15rem;"/> --}}
+                                {!! Form::select(0, $monthlist, $start_month, ['class' => 'selection-search-clear select-form', 'id' => 'start_month', 'name' => 'start_month']) !!}
                             </div>
                         </div>
     
-                        <div class = "col-md-3">
+                        <div class = "col-md-4">
                             <div class="form-group form-md-line-input">
-                                <section class="control-label">Tanggal Akhir
+                                <section class="control-label">Periode Akhir
                                     <span class="required text-danger">
                                         *
                                     </span>
                                 </section>
-                                <input type="date" class="form-control input-bb" name="end_date" value="{{ $end_date }}">
+                                {!! Form::select(0, $monthlist, $end_month, ['class' => 'selection-search-clear select-form', 'id' => 'end_month', 'name' => 'end_month']) !!}
                             </div>
                         </div>
-                        <div class = "col-md-3">
+    
+                        <div class = "col-md-4">
+                            <div class="form-group form-md-line-input">
+                                <section class="control-label">Tahun
+                                    <span class="required text-danger">
+                                        *
+                                    </span>
+                                </section>
+                                {!! Form::select(0, $yearlist, $year, ['class' => 'selection-search-clear select-form', 'id' => 'year', 'name' => 'year']) !!}
+                            </div>
+                        </div>
+                        <div class = "col-md-4">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Kategori
                                     <span class="required text-danger">
                                         *
                                     </span>
                                 </section>
-                                {!! Form::select('financial_category_id', $listfinancialflow, $nullfinancialflow_category, ['class' => 'selection-search-clear select-form', 'id' => 'financial_category_id','' ])!!}
+                                {!! Form::select('financial_category_id', $listfinancialcategory, $financial_category_id, ['class' => 'selection-search-clear select-form', 'id' => 'financial_category_id','' ])!!}
                             </div>
                         </div>
-                        <div class = "col-md-3">
+                        <div class = "col-md-4">
                             <div class="form-group form-md-line-input">
-                                <section class="control-label">Kepemilikan
+                                <section class="control-label">Nama Kandidat
                                     <span class="required text-danger">
                                         *
                                     </span>
                                 </section>
-                                {!! Form::select('financial_flow_code', $code, '', ['class' => 'selection-search-clear select-form', 'id' => 'financial_flow_code','' ])!!}
+                                {!! Form::select('candidate_id', $listcorecandidate, $candidate_id, ['class' => 'selection-search-clear select-form', 'id' => 'candidate_id','' ])!!}
+                            </div>
+                        </div>
+                        <div class = "col-md-4">
+                            <div class="form-group form-md-line-input">
+                                <section class="control-label">Nama Timses
+                                    <span class="required text-danger">
+                                        *
+                                    </span>
+                                </section>
+                                {!! Form::select('timses_id', $listcoretimses, $timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer text-muted">
                     <div class="form-actions float-right">
-                        <a href="{{ route('filter-reset-report-income') }}" type="button" name="Reset" class="btn bg-yellow btn-sm"><i class="fas fa-sync"></i> Reset</a>
+                        <a href="{{ route('filter-reset-report-recap') }}" type="button" name="Reset" class="btn bg-yellow btn-sm"><i class="fas fa-sync"></i> Reset</a>
                         <button type="submit" name="Find" class="btn btn-primary btn-sm" title="Search Data"><i class="fa fa-search"></i> Cari</button>
                     </div>
                 </div>
@@ -242,7 +275,7 @@
     </div>
     <div class="card-footer text-muted">
         <div class="form-actions float-right">
-            <a class="btn bg-red btn-sm" href="{{ url('/report-combine/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
+            <a class="btn bg-orange btn-sm" href="{{ url('/report-combine/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
             <a class="btn bg-olive btn-sm" href="{{ url('/report-combine/export') }}"><i class="fa fa-download"></i> Export Data</a>
         </div>
     </div>

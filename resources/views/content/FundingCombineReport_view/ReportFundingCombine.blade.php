@@ -5,6 +5,28 @@
 @section('title', 'Sistem Pendukung Eleksi')
 <link rel="icon" href="{{ asset('resources/assets/logo_vote.ico') }}" />
 
+@section('js')
+<script>
+    $(document).ready(function(){
+        var timses_id = {!! json_encode($timses_id) !!};
+        
+        if(timses_id == null){
+            $("#timses_id").select2("val", "0");
+        }
+    });
+
+    $(document).ready(function(){
+        var candidate_id = {!! json_encode($candidate_id) !!};
+        
+        if(candidate_id == null){
+            $("#candidate_id").select2("val", "0");
+        }
+    });
+
+    
+</script>
+@stop
+
 @section('content_header')
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -47,7 +69,7 @@
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
                     <div class = "row">
-                        <div class = "col-md-4">
+                        <div class = "col-md-3">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Tanggal Mulai
                                     <span class="required text-danger">
@@ -60,7 +82,7 @@
                             </div>
                         </div>
     
-                        <div class = "col-md-4">
+                        <div class = "col-md-3">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Tanggal Akhir
                                     <span class="required text-danger">
@@ -70,14 +92,24 @@
                                 <input type="date" class="form-control input-bb" name="end_date" value="{{ $end_date }}">
                             </div>
                         </div>
-                        <div class = "col-md-4">
+                        <div class = "col-md-3">
                             <div class="form-group form-md-line-input">
-                                <section class="control-label">Pemasukan & Pengeluaran
+                                <section class="control-label">Nama Kandidat
                                     <span class="required text-danger">
                                         *
                                     </span>
                                 </section>
-                                {!! Form::select('financial_flow_code', $code, $financial_flow_code, ['class' => 'selection-search-clear select-form', 'id' => 'financial_flow_code','' ])!!}
+                                {!! Form::select('candidate_id', $listcorecandidate, $candidate_id, ['class' => 'selection-search-clear select-form', 'id' => 'candidate_id','' ])!!}
+                            </div>
+                        </div>
+                        <div class = "col-md-3">
+                            <div class="form-group form-md-line-input">
+                                <section class="control-label">Nama Timses
+                                    <span class="required text-danger">
+                                        *
+                                    </span>
+                                </section>
+                                {!! Form::select('timses_id', $listcoretimses, $timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
                             </div>
                         </div>
                     </div>
@@ -165,7 +197,7 @@
         </div>
         <div class="card-footer text-muted">
             <div class="form-actions float-right">
-                <a class="btn bg-red btn-sm" href="{{ url('/report-combine/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
+                <a class="btn bg-orange btn-sm" href="{{ url('/report-combine/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
                 <a class="btn bg-olive btn-sm" href="{{ url('/report-combine/export') }}"><i class="fa fa-download"></i> Export Data</a>
             </div>
         </div>
