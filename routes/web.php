@@ -150,7 +150,7 @@ Route::get('/program/add-program-support/{program_id}', [ProgramController::clas
 Route::post('/program/process-add-program-support', [ProgramController::class, 'processAddProgramSupport'])->name('process-add-program-support');
 Route::get('/program/add-supporter-new/{program_support_id}', [ProgramController::class, 'addCoreSupporterNew'])->name('add-supporter-new');
 Route::post('/program/process-add-supporter-new', [ProgramController::class, 'processAddCoreSupporterNew'])->name('process-add-supporter-new');
-Route::get('/program/delete-program-support/{program_id}/{program_support_id}', [ProgramController::class, 'deleteProgramSupport'])->name('delete-program-support');
+Route::get('/program/delete-program-support/{program_support_id}', [ProgramController::class, 'deleteProgramSupport'])->name('delete-program-support');
 
 Route::get('/program/documentation-program/{program_id}', [ProgramController::class, 'documentationProgram'])->name('documentation-program');
 Route::post('/program/process-documentation-program', [ProgramController::class, 'processDocumentationProgram'])->name('process-documentation-program');

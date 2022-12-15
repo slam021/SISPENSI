@@ -179,7 +179,7 @@ $('#myModal').on('shown.bs.modal', function () {
                         <td>{{$supportergender[$val['supporter_gender']]}}</td>
                         <td>{{$val['supporter_address']}}</td>
                         <td class="" style='text-align:center'>
-                            <a type="button" class="badge badge-danger" href="{{ url('/program/delete-program-support/'.$program_id.'/'.$val['program_support_id']) }}" title="Hapus"><i class='far fa-trash-alt'></i> Hapus</a>
+                            <a type="button" class="badge badge-danger" href="{{ url('/program/delete-program-support/'.$val['program_support_id']) }}" title="Hapus"><i class='far fa-trash-alt'></i> Hapus</a>
                         </td>
                     </tr>
 

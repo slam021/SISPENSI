@@ -19,11 +19,9 @@ class RecapitulationReportController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        
     }
 
-    public function index()
-    {
+    public function index(){
         if(!$start_month = Session::get('start_month')){
             $start_month = date('m');
         }else{
@@ -39,10 +37,6 @@ class RecapitulationReportController extends Controller
         }else{
             $year = Session::get('year');
         }
-        
-        $financial_category_id = Session::get('financial_category_id');
-        $candidate_id = Session::get('candidate_id');
-        $timses_id = Session::get('timses_id');
 
         $monthlist = array(
             '01' => 'Januari',
@@ -63,16 +57,20 @@ class RecapitulationReportController extends Controller
         for($i=($year_now-2); $i<($year_now+2); $i++){
             $yearlist[$i] = $i;
         } 
-  
-        $code = [
-            ''  => '',
-            '1' => 'Kandidat',
-            '2' => 'Timses',
-        ];
+
+        if(!Session::get('start_date')){
+            $start_date     = date('Y-m-d');
+        }else{
+            $start_date = Session::get('start_date');
+        }
+        if(!Session::get('end_date')){
+            $end_date     = date('Y-m-d');
+        }else{
+            $end_date = Session::get('end_date');
+        }
 
         $listfinancialcategory = FinancialCategory::where('data_state', '=', 0)
         ->pluck('financial_category_name', 'financial_category_id');
-        // $nullfinancialflow_category = Session::get('financial_category_id');
 
         $listcoretimses = CoreTimses :: where('data_state', 0)
         ->get()
@@ -81,108 +79,44 @@ class RecapitulationReportController extends Controller
         $listcorecandidate = CoreCandidate :: where('data_state', 0)
         ->get()
         ->pluck('candidate_full_name', 'candidate_id');
-
-        // if ($financial_flow_code && $financial_category_id  == '') {
-        //     $financialflow = FinancialFlow::where('data_state', '=', 0)
-        //     // ->where('financial_flow.financial_category_type', '=', 2)
-        //     ->where('financial_flow_date','>=',$start_date)
-        //     ->where('financial_flow_date','<=',$end_date)
-        //     ->where('financial_flow_code', '!=', null)
-        //     ->where('financial_category_id', '!=', null)
-        //     ->get();
-        // } else {
-        //     $financialflow = FinancialFlow::where('data_state', '=', 0)
-        //     // ->where('financial_flow.financial_category_type', '=', 2)
-        //     ->where('financial_flow_date','>=',$start_date)
-        //     ->where('financial_flow_date','<=',$end_date)
-        //     ->where('financial_flow_code', $financial_flow_code)
-        //     ->where('financial_category_id', $financial_category_id)
-        //     ->get();
-        // }
-
-        // $accountlist = AcctAccount::select(DB::raw("CONCAT(account_code,' - ',account_name) AS full_account"),'account_id')
-        // ->where('data_state',0)
-        // ->where('company_id',Auth::user()->company_id)
-        // ->get()
-        // ->pluck('full_account','account_id');
-
-        // $account = AcctAccount::where('data_state',0)
-        // ->where('company_id', Auth::user()->company_id)
-        // ->where('account_id', $account_id)
-        // ->first();
+    
+        $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        // ->join('financial_category', 'financial_flow.financial_category_id', '=', 'financial_category.financial_category_id')
         
-        // $accountbalancedetail = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
-        // ->select('acct_account_balance_detail.transaction_id','acct_account_balance_detail.last_balance','acct_account_balance_detail.account_in','acct_account_balance_detail.account_out','acct_account_balance_detail.transaction_date','acct_account_balance_detail.account_id')
-        // ->where('acct_account_balance_detail.account_id' ,$account_id)
-        // ->whereMonth('acct_account_balance_detail.transaction_date','>=',$start_month)
-        // ->whereMonth('acct_account_balance_detail.transaction_date','<=',$end_month)
-        // ->whereYear('acct_account_balance_detail.transaction_date',$year)
-        // ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
-        // ->orderBy('acct_account_balance_detail.transaction_date', 'ASC')
-        // ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'ASC')
-        // ->get();
-        // $accountbalancedetail_old = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
-        // ->select('acct_account_balance_detail.last_balance')
-        // ->where('acct_account_balance_detail.account_id' ,$account_id)
-        // ->whereMonth('acct_account_balance_detail.transaction_date',$start_month-1)
-        // ->whereYear('acct_account_balance_detail.transaction_date',$year)
-        // ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
-        // ->orderBy('acct_account_balance_detail.transaction_date', 'DESC')
-        // ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'DESC')
+        // ->where('financial_category.data_state', '=', 0)
+        // ->where('financial_flow.financial_category_id', $financial_category_id)
+        // ->where('financial_flow.candidate_id', $candidate_id)
+        // ->where('financial_flow.timses_id', $timses_id)
+        // ->where('financial_flow.financial_flow_date','>=',$start_date)
+        // ->where('financial_flow.financial_flow_date','<=',$end_date)
+        ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
+        ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
+        ->whereYear('financial_flow.financial_flow_date',$year);
         // ->first();
 
-        // $acctgeneralledgerreport = array();
-        // foreach($accountbalancedetail as $val){
-        //     $description = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_description');
-        //     $no_journal = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_no');
-        //     $data_state = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('data_state');
-            
-        //     if($account['account_default_status'] == 0 || $val['last_balance'] >= 0 ){
-        //             $debit 	= $val['account_in'];
-        //             $credit = $val['account_out'];
-
-        //             if($val['last_balance'] >= 0){
-        //                 $last_balance_debit 	= $val['last_balance'];
-        //                 $last_balance_credit 	= 0;
-        //             } else {
-        //                 $last_balance_debit 	= 0;
-        //                 $last_balance_credit 	= $val['last_balance'];
-        //             }
-        //         } else {
-        //             $debit 	= $val['account_out'];
-        //             $credit = $val['account_in'];
-
-        //             if($val['last_balance'] >= 0){
-        //                 $last_balance_debit 	= 0;
-        //                 $last_balance_credit 	= $val['last_balance'];
-        //             } else {
-                        
-        //                 $last_balance_debit 	= $val['last_balance'];
-        //                 $last_balance_credit 	= 0;
-        //             }
-        //         }
+        $financial_category_id = Session::get('financial_category_id');
+        $candidate_id = Session::get('candidate_id');
+        $timses_id = Session::get('timses_id');
         
-        //     $acctgeneralledgerreport_detail = array(
-        //         'date' => $val['transaction_date'],
-        //         'no_journal' => $no_journal['journal_voucher_no'],
-        //         'description' => $description['journal_voucher_description'],
-        //         'account_id' => $val['account_id'],
-        //         'account_in' => $debit,
-        //         'account_out' => $credit,
-        //         'last_balance_debit' => $last_balance_debit,
-        //         'last_balance_credit' => $last_balance_credit,
-        //         'data_state' => $data_state['data_state']
-        //     );
-        //     array_push($acctgeneralledgerreport, $acctgeneralledgerreport_detail);
-        // }
+        if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
+            $financialflow   = $financialflow->where('financial_category_id', $financial_category_id);
+        }
+        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+            $financialflow   = $financialflow->where('candidate_id', $candidate_id);
+        }
+        if($timses_id||$timses_id!=null||$timses_id!=''){
+            $financialflow   = $financialflow->where('timses_id', $timses_id);
+        }
+        $financialflow   = $financialflow->get();
 
-        return view('content.RecapitulationReport_view.ReportRecapitulation', compact('start_month','end_month', 'monthlist', 'year' , 'yearlist', 'year_now', 'code', 'listfinancialcategory', 'financial_category_id', 'timses_id', 'candidate_id', 'listcoretimses', 'listcorecandidate'));
+        return view('content.RecapitulationReport_view.ReportRecapitulation', compact('start_month','end_month', 'monthlist', 'year' , 'yearlist', 'year_now', 'listfinancialcategory', 'financial_category_id', 'timses_id', 'candidate_id', 'listcoretimses', 'listcorecandidate', 'financialflow', 'start_date', 'end_date'));
     }
 
-    public function filterRecapitulationReport(Request $request)
-    {
+    public function filterRecapitulationReport(Request $request){
         $start_month  = $request->start_month;
         $end_month    = $request->end_month;
+        $start_date  = $request->start_date;
+        $end_date    = $request->end_date;
         $year         = $request->year;
         $timses_id    = $request->timses_id;
         $candidate_id = $request->candidate_id;
@@ -193,15 +127,19 @@ class RecapitulationReportController extends Controller
         Session::put('candidate_id', $candidate_id);
         Session::put('start_month',$start_month);
         Session::put('end_month',$end_month);
+        Session::put('start_date',$start_date);
+        Session::put('end_date',$end_date);
         Session::put('year',$year);
-
+// dd($request->all());
         return redirect('/report-recap');
     }
 
-    public function filterResetRecapitulationReport()
-    {
+    public function filterResetRecapitulationReport(){
         Session::put('start_month');
         Session::put('end_month');
+        Session::put('start_date');
+        Session::put('end_date');
+        Session::put('year');
         Session::put('year');
         Session::forget('timses_id');
         Session::forget('candidate_id');
@@ -210,30 +148,25 @@ class RecapitulationReportController extends Controller
         return redirect('/report-recap');
     }
 
-    public function getAccountName($account_id)
-    {
-        $data = AcctAccount::select(DB::raw("CONCAT(account_code,' - ',account_name) AS full_account"),'account_id')
-        ->where('account_id', $account_id)
+    public function getCategoryName($financial_category_id){
+        $data = FinancialCategory::where('financial_category_id',$financial_category_id)
         ->first();
 
-        return $data['full_account'];
+        return $data['financial_category_name'];
     }
 
-    public function getAccountStatus($account_id)
-    {
-        $data = AcctAccount::select('account_default_status')
-        ->where('account_id', $account_id)
+    public function getTimsesName($timses_id){
+        $data = CoreTimses::where('timses_id', $timses_id)
         ->first();
-        $account_status = array(
-            '0' => 'Debit',
-            '1' => 'Kredit',
-            '3' => ''
-        );
-        if(isset($data)){
-            return $account_status[$data['account_default_status']];
-        } else {
-            return $account_status[3];
-        }
+
+        return $data['timses_name'];
+    }
+
+    public function getCandidateName($candidate_id){
+        $data = CoreCandidate::where('candidate_id',$candidate_id)
+        ->first();
+
+        return $data['candidate_full_name'];
     }
 
     public function printLedgerReport()
@@ -253,11 +186,7 @@ class RecapitulationReportController extends Controller
         }else{
             $year = Session::get('year');
         }
-        if(!$account_id = Session::get('account_id')){
-            $account_id = '';
-        }else{
-            $account_id = Session::get('account_id');
-        }
+
         $monthlist = array(
             '01' => 'Januari',
             '02' => 'Februari',
@@ -277,59 +206,35 @@ class RecapitulationReportController extends Controller
         for($i=($year_now-2); $i<($year_now+2); $i++){
             $yearlist[$i] = $i;
         } 
-        $accountlist = AcctAccount::where('data_state',0)->where('company_id',Auth::user()->company_id)->get()->pluck('account_name','account_id');
-        $account = AcctAccount::where('data_state',0)
-        ->where('company_id', Auth::user()->company_id)
-        ->where('account_id', $account_id)
-        ->first();
+    
+        $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        // ->join('financial_category', 'financial_flow.financial_category_id', '=', 'financial_category.financial_category_id')
         
-        $accountbalancedetail = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
-        ->select('acct_account_balance_detail.transaction_id','acct_account_balance_detail.last_balance','acct_account_balance_detail.account_in','acct_account_balance_detail.account_out','acct_account_balance_detail.transaction_date','acct_account_balance_detail.account_id')
-        ->where('acct_account_balance_detail.account_id' ,$account_id)
-        ->whereMonth('acct_account_balance_detail.transaction_date','>=',$start_month)
-        ->whereMonth('acct_account_balance_detail.transaction_date','<=',$end_month)
-        ->whereYear('acct_account_balance_detail.transaction_date','<=',$year)
-        ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
-        ->orderBy('acct_account_balance_detail.transaction_date', 'ASC')
-        ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'ASC')
-        ->get();
-        $accountbalancedetail_old = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
-        ->select('acct_account_balance_detail.last_balance')
-        ->where('acct_account_balance_detail.account_id' ,$account_id)
-        ->whereMonth('acct_account_balance_detail.transaction_date',$start_month-1)
-        ->whereYear('acct_account_balance_detail.transaction_date',$year)
-        ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
-        ->orderBy('acct_account_balance_detail.transaction_date', 'DESC')
-        ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'DESC')
-        ->first();
+        // ->where('financial_category.data_state', '=', 0)
+        // ->where('financial_flow.financial_category_id', $financial_category_id)
+        // ->where('financial_flow.candidate_id', $candidate_id)
+        // ->where('financial_flow.timses_id', $timses_id)
+        ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
+        ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
+        ->whereYear('financial_flow.financial_flow_date',$year);
+        // ->first();
 
-        $acctgeneralledgerreport = array();
-        foreach($accountbalancedetail as $val){
-            $description = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_description');
-            $no_journal = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_no');
-            $data_state = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('data_state');
-            if($val['last_balance'] <= 0){
-                $debit = 0;
-                $credit = $val['last_balance'];
-            } else {
-                $debit = $val['last_balance'];
-                $credit = 0;
-            }
+        $financial_category_id = Session::get('financial_category_id');
+        $candidate_id = Session::get('candidate_id');
+        $timses_id = Session::get('timses_id');
         
-            $acctgeneralledgerreport_detail = array(
-                'date' => $val['transaction_date'],
-                'no_journal' => $no_journal['journal_voucher_no'],
-                'description' => $description['journal_voucher_description'],
-                'account_id' => $val['account_id'],
-                'account_in' => $val['account_in'],
-                'account_out' => $val['account_out'],
-                'debit' => $debit,
-                'credit' => $credit,
-                'data_state' => $data_state['data_state']
-            );
-            array_push($acctgeneralledgerreport, $acctgeneralledgerreport_detail);
+        if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
+            $financialflow   = $financialflow->where('financial_category_id', $financial_category_id);
         }
+        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+            $financialflow   = $financialflow->where('candidate_id', $candidate_id);
+        }
+        if($timses_id||$timses_id!=null||$timses_id!=''){
+            $financialflow   = $financialflow->where('timses_id', $timses_id);
+        }
+        $financialflow   = $financialflow->get();
 
+        //-----------TCPF-----------
         $pdf = new TCPDF('P', PDF_UNIT, 'F4', true, 'UTF-8', false);
 
         $pdf::SetPrintHeader(false);
@@ -353,7 +258,7 @@ class RecapitulationReportController extends Controller
         $tbl = "
         <table cellspacing=\"0\" cellpadding=\"2\" border=\"0\">
             <tr>
-                <td><div style=\"text-align: center; font-size:14px; font-weight: bold\">BUKU BESAR</div></td>
+                <td><div style=\"text-align: center; font-size:14px; font-weight: bold\">LAPORAN REKAPITULASI</div></td>
             </tr>
             <tr>
                 <td><div style=\"text-align: center; font-size:12px\">PERIODE : ".$monthlist[$start_month]." - ".$monthlist[$end_month] ." ".$year."</div></td>
@@ -362,24 +267,52 @@ class RecapitulationReportController extends Controller
         ";
         $pdf::writeHTML($tbl, true, false, false, false, '');
 
+        if ($financial_category_id == null ){
+            $category_name = '-';
+        }else{
+            $category_name = $this->getCategoryName($financial_category_id);
+        }
+
+        if ($candidate_id == null ){
+            $candidate_name = '-';
+        }else{
+            $candidate_name = $this->getCandidateName($candidate_id);
+        }
+
+        if ($timses_id == null ){
+            $timses_name = '-';
+        }else{
+            $timses_name = $this->getTimsesName($timses_id);
+        }
+
         $tbl = "
         <br>
         <br>
         <table cellspacing=\"0\" cellpadding=\"2\" border=\"0\">
             <tr>
-                <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Nama. Perkiraan</div></td>
+                <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Kategori</div></td>
                 <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
-                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$this->getAccountName($account_id)."</div></td>
+                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$category_name."</div></td>
+            </tr>
+            <tr>
+                <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Kandidate</div></td>
+                <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
+                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$candidate_name."</div></td>
+            </tr>
+            <tr>
+                <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Timses</div></td>
+                <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
+                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$timses_name."</div></td>
             </tr>
             <tr>
                 <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Posisi Saldo</div></td>
                 <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
-                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$this->getAccountStatus($account_id)."</div></td>
+                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\"></div></td>
             </tr>
             <tr>
                 <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Saldo Awal</div></td>
                 <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
-                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".number_format($accountbalancedetail_old['last_balance'],2,'.',',')."</div></td>
+                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\"></div></td>
             </tr>
         </table>";
         $pdf::writeHTML($tbl, true, false, false, false, '');
@@ -389,33 +322,55 @@ class RecapitulationReportController extends Controller
         $tblStock1 = "
         <table cellspacing=\"0\" cellpadding=\"1\" border=\"1\" width=\"100%\">
             <tr>
-                <td width=\"5%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">No</div></td>
-                <td width=\"12%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Tanggal</div></td>
-                <td width=\"25%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Uraian</div></td>
-                <td width=\"15%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Debet </div></td>
-                <td width=\"15%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Kredit </div></td>
-                <td width=\"30%\" colspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Saldo </div></td>
+                <td width=\"4%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">No</div></td>
+                <td width=\"10%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Tanggal</div></td>
+                <td width=\"15%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Kandidat</div></td>
+                <td width=\"15%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Timses</div></td>
+                <td width=\"14%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Pemasukan</div></td>
+                <td width=\"14%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Pengeluaran </div></td>
+                <td width=\"28%\" colspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Saldo </div></td>
             </tr>
             
             <tr>
-                <td width=\"15%\"><div style=\"text-align: center; font-weight: bold\">Debet </div></td>
-                <td width=\"15%\"><div style=\"text-align: center; font-weight: bold\">Kredit </div></td>
+                <td width=\"14%\"><div style=\"text-align: center; font-weight: bold\">Pemasukan </div></td>
+                <td width=\"14%\"><div style=\"text-align: center; font-weight: bold\">Pengeluaran </div></td>
             </tr>
         
-             ";
-
+            ";
+        function rupiah($angka){
+            $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
+            return $hasil_rupiah;
+        }
         $tblStock2 = " ";
         $no = 1;
-        foreach ($acctgeneralledgerreport as $key => $val) {
+        foreach ($financialflow as $key => $val) {
+
+            if ($val['candidate_id'] == null ){
+                $candidate_name = '-';
+                $timses_name = $this->getTimsesName($val['timses_id']);
+            }else{
+                $candidate_name = $this->getCandidateName($val['candidate_id']);
+                $timses_name = '-';
+            }
+
+            if ($val->financial_category_type == 1){
+                $income = rupiah($val['financial_flow_nominal']);
+                $expenditure = '-';
+            }else{
+                $income = '-';
+                $expenditure = rupiah($val['financial_flow_nominal']);
+            }
+
             $tblStock2 .="
                     <tr>			
                         <td style=\"text-align:center\">$no.</td>
-                        <td style=\"text-align:center\">".$val['date']."</td>
-                        <td>".$val['description']."</td>
-                        <td><div style=\"text-align: right;\">".number_format($val['account_in'],2,'.',',')."</div></td>
-                        <td><div style=\"text-align: right;\">".number_format($val['account_out'],2,'.',',')."</div></td>
-                        <td><div style=\"text-align: right;\">".number_format($val['debit'],2,'.',',')."</div></td>
-                        <td><div style=\"text-align: right;\">".number_format($val['credit'],2,'.',',')."</div></td>
+                        <td style=\"text-align:center\">".$val['financial_flow_date']."</td>
+                        <td> ".$candidate_name."</td>
+                        <td> ".$timses_name."</td>
+                        <td><div style=\"text-align: right;\">".$income."</div></td>
+                        <td><div style=\"text-align: right;\">".$expenditure."</div></td>
+                        <td><div style=\"text-align: right;\"></div></td>
+                        <td><div style=\"text-align: right;\"></div></td>
                     </tr>
                     
                 ";
@@ -425,14 +380,14 @@ class RecapitulationReportController extends Controller
         </table>
         <table cellspacing=\"0\" cellpadding=\"2\" border=\"0\">
             <tr>
-                <td style=\"text-align:right\">".Auth::user()->name.", ".date('d-m-Y H:i')."</td>
+                <td style=\"text-align:right; font-style: italic;\">".Auth::user()->name.", ".date('d-m-Y H:i')."</td>
             </tr>
         </table>";
 
         $pdf::writeHTML($tblStock1.$tblStock2.$tblStock4, true, false, false, false, '');
 
 
-        $filename = 'Buku_Besar_.pdf';
+        $filename = 'Lap_Rekapitulasi_.pdf';
         $pdf::Output($filename, 'I');
 
         return redirect('/ledger');
@@ -455,11 +410,7 @@ class RecapitulationReportController extends Controller
         }else{
             $year = Session::get('year');
         }
-        if(!$account_id = Session::get('account_id')){
-            $account_id = '';
-        }else{
-            $account_id = Session::get('account_id');
-        }
+
         $monthlist = array(
             '01' => 'Januari',
             '02' => 'Februari',
@@ -479,73 +430,49 @@ class RecapitulationReportController extends Controller
         for($i=($year_now-2); $i<($year_now+2); $i++){
             $yearlist[$i] = $i;
         } 
-        $accountlist = AcctAccount::where('data_state',0)->where('company_id',Auth::user()->company_id)->get()->pluck('account_name','account_id');
-        $account = AcctAccount::where('data_state',0)
-        ->where('company_id', Auth::user()->company_id)
-        ->where('account_id', $account_id)
-        ->first();
+    
+        $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        // ->join('financial_category', 'financial_flow.financial_category_id', '=', 'financial_category.financial_category_id')
         
-        $accountbalancedetail = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
-        ->select('acct_account_balance_detail.transaction_id','acct_account_balance_detail.last_balance','acct_account_balance_detail.account_in','acct_account_balance_detail.account_out','acct_account_balance_detail.transaction_date','acct_account_balance_detail.account_id')
-        ->where('acct_account_balance_detail.account_id' ,$account_id)
-        ->whereMonth('acct_account_balance_detail.transaction_date','>=',$start_month)
-        ->whereMonth('acct_account_balance_detail.transaction_date','<=',$end_month)
-        ->whereYear('acct_account_balance_detail.transaction_date','<=',$year)
-        ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
-        ->orderBy('acct_account_balance_detail.transaction_date', 'ASC')
-        ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'ASC')
-        ->get();
-        $accountbalancedetail_old = AcctAccountBalanceDetail::join('acct_account', 'acct_account.account_id','=','acct_account_balance_detail.account_id')
-        ->select('acct_account_balance_detail.last_balance')
-        ->where('acct_account_balance_detail.account_id' ,$account_id)
-        ->whereMonth('acct_account_balance_detail.transaction_date',$start_month-1)
-        ->whereYear('acct_account_balance_detail.transaction_date',$year)
-        ->where('acct_account_balance_detail.company_id', Auth::user()->company_id)
-        ->orderBy('acct_account_balance_detail.transaction_date', 'DESC')
-        ->orderBy('acct_account_balance_detail.account_balance_detail_id', 'DESC')
-        ->first();
+        // ->where('financial_category.data_state', '=', 0)
+        // ->where('financial_flow.financial_category_id', $financial_category_id)
+        // ->where('financial_flow.candidate_id', $candidate_id)
+        // ->where('financial_flow.timses_id', $timses_id)
+        ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
+        ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
+        ->whereYear('financial_flow.financial_flow_date',$year);
+        // ->first();
 
-        $acctgeneralledgerreport = array();
-        foreach($accountbalancedetail as $val){
-            $description = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_description');
-            $no_journal = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('journal_voucher_no');
-            $data_state = JournalVoucher::where('journal_voucher_id', $val['transaction_id'])->first('data_state');
-            if($val['last_balance'] <= 0){
-                $debit = 0;
-                $credit = $val['last_balance'];
-            } else {
-                $debit = $val['last_balance'];
-                $credit = 0;
-            }
+        $financial_category_id = Session::get('financial_category_id');
+        $candidate_id = Session::get('candidate_id');
+        $timses_id = Session::get('timses_id');
         
-            $acctgeneralledgerreport_detail = array(
-                'date' => $val['transaction_date'],
-                'no_journal' => $no_journal['journal_voucher_no'],
-                'description' => $description['journal_voucher_description'],
-                'account_id' => $val['account_id'],
-                'account_in' => $val['account_in'],
-                'account_out' => $val['account_out'],
-                'debit' => $debit,
-                'credit' => $credit,
-                'data_state' => $data_state['data_state']
-            );
-            array_push($acctgeneralledgerreport, $acctgeneralledgerreport_detail);
+        if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
+            $financialflow   = $financialflow->where('financial_category_id', $financial_category_id);
         }
+        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+            $financialflow   = $financialflow->where('candidate_id', $candidate_id);
+        }
+        if($timses_id||$timses_id!=null||$timses_id!=''){
+            $financialflow   = $financialflow->where('timses_id', $timses_id);
+        }
+        $financialflow   = $financialflow->get();
         
+        //--------------SpreadsheetPHP--------------
         $spreadsheet = new Spreadsheet();
         
-        if(count($acctgeneralledgerreport)>=0){
+        if(count($financialflow)>=0){
             
-            $spreadsheet->getProperties()->setCreator("MOZAIC Minimarket")
-                                 ->setLastModifiedBy("MOZAIC Minimarket")
-                                 ->setTitle("Buku Besar")
-                                 ->setSubject("")
-                                 ->setDescription("Buku Besar")
-                                 ->setKeywords("Buku Besar")
-                                 ->setCategory("Buku Besar");
-                                 
+            $spreadsheet->getProperties()->setCreator("SISPENSI")
+                                ->setLastModifiedBy("SISPENSI")
+                                ->setTitle("Laporan Rekapitulasi")
+                                ->setSubject("")
+                                ->setDescription("Laporan Rekapitulasi")
+                                ->setKeywords("Laporan Rekapitulasi")
+                                ->setCategory("Laporan Rekapitulasi");
+                                
             $sheet = $spreadsheet->getActiveSheet(0);
-            $spreadsheet->getActiveSheet()->setTitle("Buku Besar");
+            $spreadsheet->getActiveSheet()->setTitle("Laporan Rekapitulasi");
             $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
             $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(5);
@@ -588,30 +515,48 @@ class RecapitulationReportController extends Controller
             $spreadsheet->getActiveSheet()->getStyle('B7:D7')->getFont()->setBold(true);
 
 
+            if ($financial_category_id == null ){
+                $category_name = '-';
+            }else{
+                $category_name = $this->getCategoryName($financial_category_id);
+            }
+    
+            if ($candidate_id == null ){
+                $candidate_name = '-';
+            }else{
+                $candidate_name = $this->getCandidateName($candidate_id);
+            }
+    
+            if ($timses_id == null ){
+                $timses_name = '-';
+            }else{
+                $timses_name = $this->getTimsesName($timses_id);
+            }
             
-            $sheet->setCellValue('B1',"Buku Besar Dari Periode ".$monthlist[$start_month]." s.d ".$monthlist[$end_month]." ".$year);	
-            $sheet->setCellValue('B5',"Nama Perkiraan");
-            $sheet->setCellValue('D5', $this->getAccountName($account_id));
-            $sheet->setCellValue('B6',"Posisi Saldo");
-            $sheet->setCellValue('D6', $this->getAccountStatus($account_id));
-            $sheet->setCellValue('B7',"Saldo Awal");
-            $sheet->setCellValue('D7', number_format($accountbalancedetail_old['last_balance'],2,'.',','));
+            $sheet->setCellValue('B1',"Laporan Rekapitulasi Dari Periode ".$monthlist[$start_month]." s.d ".$monthlist[$end_month]." ".$year);	
+            $sheet->setCellValue('B5',"Kategori");
+            $sheet->setCellValue('D5', $category_name);
+            $sheet->setCellValue('B6',"Kandidat");
+            $sheet->setCellValue('D6', $candidate_name);
+            $sheet->setCellValue('B7',"Timses");
+            $sheet->setCellValue('D7', $timses_name);
             $sheet->setCellValue('B8',"No");
             $sheet->setCellValue('C8',"Tanggal");
-            $sheet->setCellValue('D8',"Uraian");
-            $sheet->setCellValue('E8',"Debet");
-            $sheet->setCellValue('F8',"Kredit");
-            $sheet->setCellValue('G8',"Saldo");
+            $sheet->setCellValue('D8',"Kandidat");
+            $sheet->setCellValue('E8',"Timses");
+            $sheet->setCellValue('F8',"Pemasukan");
+            $sheet->setCellValue('G8',"Pengeluaran");
+            $sheet->setCellValue('H8',"Saldo");
 
             
-            $sheet->setCellValue('G9',"Debet");
-            $sheet->setCellValue('H9',"Kredit");
+            $sheet->setCellValue('H9',"Pemasukan");
+            $sheet->setCellValue('I9',"Pengeluaran");
             
             
             $j=10;
             $no=0;
             
-            foreach($acctgeneralledgerreport as $key=>$val){
+            foreach($financialflow as $key=>$val){
 
                 if(is_numeric($key)){
                     
@@ -627,15 +572,17 @@ class RecapitulationReportController extends Controller
                     $spreadsheet->getActiveSheet()->getStyle('F'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                     $spreadsheet->getActiveSheet()->getStyle('G'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                     $spreadsheet->getActiveSheet()->getStyle('H'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                    $spreadsheet->getActiveSheet()->getStyle('I'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                         $no++;
                         $sheet->setCellValue('B'.$j, $no);
-                        $sheet->setCellValue('C'.$j, $val['date']);
-                        $sheet->setCellValue('D'.$j, $val['description']);
-                        $sheet->setCellValue('E'.$j, $val['account_in']);
-                        $sheet->setCellValue('F'.$j, $val['account_out']);
-                        $sheet->setCellValue('G'.$j, $val['debit']);
-                        $sheet->setCellValue('H'.$j, $val['credit']);
+                        $sheet->setCellValue('C'.$j, $val['financial_flow_date']);
+                        $sheet->setCellValue('D'.$j, $val['Candidate_id']);
+                        $sheet->setCellValue('E'.$j, $val['timses_id']);
+                        $sheet->setCellValue('F'.$j, $val['financial_category_id']);
+                        $sheet->setCellValue('G'.$j, $val['financial_flow_nominal']);
+                        $sheet->setCellValue('H'.$j, $val['financial_flow_nominal']);
+                        $sheet->setCellValue('I'.$j, $val['financial_flow_nominal']);
                         
                         
                     
@@ -649,7 +596,7 @@ class RecapitulationReportController extends Controller
             $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             $sheet->setCellValue('B'.$j, Auth::user()->name.", ".date('d-m-Y H:i'));
 
-            $filename='Buku_Besar.xls';
+            $filename='Laporan_Rekapitulasi.xls';
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="'.$filename.'"');
             header('Cache-Control: max-age=0');

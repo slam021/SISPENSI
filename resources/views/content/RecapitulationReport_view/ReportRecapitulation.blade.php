@@ -1,4 +1,4 @@
-@inject('RecapitulationReport','App\Http\Controllers\RecapitulationReportController')
+@inject('RR','App\Http\Controllers\RecapitulationReportController')
 @extends('adminlte::page')
 
 @section('title', 'Sistem Pendukung Eleksi')
@@ -89,7 +89,6 @@
                                 {!! Form::select(0, $monthlist, $end_month, ['class' => 'selection-search-clear select-form', 'id' => 'end_month', 'name' => 'end_month']) !!}
                             </div>
                         </div>
-    
                         <div class = "col-md-4">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Tahun
@@ -100,6 +99,28 @@
                                 {!! Form::select(0, $yearlist, $year, ['class' => 'selection-search-clear select-form', 'id' => 'year', 'name' => 'year']) !!}
                             </div>
                         </div>
+
+                        {{-- <div class = "col-md-3">
+                            <div class="form-group form-md-line-input">
+                                <section class="control-label">Tanggal Mulai
+                                    <span class="required text-danger">
+                                        *
+                                    </span>
+                                </section>
+                                <input type="month" class="form-control input-bb" id="start_month" name="start_month" value="{{ $start_month }}">
+                            </div>
+                        </div>
+    
+                        <div class = "col-md-3">
+                            <div class="form-group form-md-line-input">
+                                <section class="control-label">Tanggal Akhir
+                                    <span class="required text-danger">
+                                        *
+                                    </span>
+                                </section>
+                                <input type="month" class="form-control input-bb"  id="end_month" name="end_month" value="{{ $end_month }}">
+                            </div>
+                        </div> --}}
                         <div class = "col-md-4">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Kategori
@@ -160,13 +181,14 @@
                 <thead>
                     <tr>
                         <th width="5%" rowspan="2" style="vertical-align : middle;text-align:center;">No</th>
-                        <th width="10%" rowspan="2" style="vertical-align : middle;text-align:center;">Tanggal</th>
-                        <th width="10%" rowspan="2" style="vertical-align : middle;text-align:center;">Kepemilikan</th>
-                        <th width="25%" rowspan="2" style="vertical-align : middle;text-align:center;">Deskripsi</th>
-                        <th width="20%" rowspan="2" style="vertical-align : middle;text-align:center;">Nama Kategori</th>
-                        <th width="15%" rowspan="2" style="vertical-align : middle;text-align:center;">Pemasukan</th>
-                        <th width="15%" rowspan="2" style="vertical-align : middle;text-align:center;">Pengeluaran</th>
-                        <th width="15%" colspan="2" style="vertical-align : middle;text-align:center;">Saldo</th>
+                        <th width="8%" rowspan="2" style="vertical-align : middle;text-align:center;">Tanggal</th>
+                        <th width="15%" rowspan="2" style="vertical-align : middle;text-align:center;">Kandidat</th>
+                        <th width="15%" rowspan="2" style="vertical-align : middle;text-align:center;">Timses</th>
+                        <th width="15%" rowspan="2" style="vertical-align : middle;text-align:center;">Deskripsi</th>
+                        <th width="15%" rowspan="2" style="vertical-align : middle;text-align:center;">Kategori</th>
+                        <th width="13%" rowspan="2" style="vertical-align : middle;text-align:center;">Pemasukan</th>
+                        <th width="13%" rowspan="2" style="vertical-align : middle;text-align:center;">Pengeluaran</th>
+                        <th width="20%" colspan="2" style="vertical-align : middle;text-align:center;">Saldo</th>
                     </tr>
                     <tr>
                         <th width="15%" style="vertical-align : middle;text-align:center;">Pemasukan</th>
@@ -175,113 +197,124 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th style="text-align: center" colspan="5">Saldo Awal</th>
+                        <th style="text-align: center" colspan="8">Saldo Awal</th>
+                        <td style='text-align: right'>0,00</td>
+                        <td style='text-align: right'>0,00</td>
+                    </tr> 
+
+                <?php 
+                    $no = 1;
+                    $total_nominal_in = 0;
+                    $total_nominal_out = 0;
+                    $type =[
+                        ''  => '',
+                        '1' => 'Pemasukan',
+                        '2' => 'Pengeluaran',
+                    ];
+
+                    function rupiah($angka){
+                        $hasil_rupiah = number_format($angka,2,',','.');
+                        return $hasil_rupiah;
+                    } 
+                ?> 
+
+                @foreach($financialflow as $key => $val)
+                <tr>
+                    <td style='text-align:center'>{{$no}}</td>
+                    <td>{{$val['financial_flow_date']}}</td>
+                    @if($val['candidate_id'] == null)
+                        <td></td>
+                    @else
+                        <td>{{$RR->getCandidateName($val['candidate_id'])}}</td>
+                    @endif
+
+                    @if($val['timses_id'] == null)
+                        <td></td>
+                    @else
+                        <td>{{$RR->getTimsesName($val['timses_id'])}}</td>
+                    @endif
+
+                    <td></td>
+                    <td>{{$RR->getCategoryName($val['financial_category_id'])}}</td>
+                    @if($val['financial_category_type']==1)
+                        <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
+                    @else
+                        <td style='text-align:right'>0,00</td>
+                    @endif
+
+                    @if($val['financial_category_type']==2)
+                        <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
+                    @else
+                        <td style='text-align:right'>0,00</td>
+                    @endif
+
+                    @if($val['financial_category_type']==1)
+                        @if($val['candidate_id'])
+                            <td style='text-align:right'>{{rupiah($val['last_balance_candidate'])}}</td>
+                            <td style='text-align:right'>0,00</td>
+                        @else
+                            <td style='text-align:right'>{{rupiah($val['last_balance_timses'])}}</td>
+                            <td style='text-align:right'>0,00</td>
+                        @endif
+                    @else 
+                        @if($val['candidate_id'])
+                        <td style='text-align:right'>0,00</td>
+                            <td>{{rupiah($val['last_balance_candidate'])}}</td>
+                        @else
+                        <td style='text-align:right'>0,00</td>
+                            <td>{{rupiah($val['last_balance_timses'])}}</td>
+                        @endif  
+                    @endif
+                </tr>
+                <?php 
+                    $no++; 
+                    
+                    if($val['financial_category_type'] == 1){
+                        $total_nominal_in += $val['financial_flow_nominal'];
+                    }else{
+                        $total_nominal_out += $val['financial_flow_nominal'];
+                    } 
+                ?>
+                @endforeach
+                    
+                    <tr>
                         <td></td>
                         <td></td>
-                        {{-- <?php 
-                            if($account['account_default_status']==0 || $accountbalancedetail_old['last_balance'] >= 0){  
-                                if (isset($accountbalancedetail_old['last_balance'])) {
-                                    if($accountbalancedetail_old['last_balance'] >= 0){
-                                        echo "
-                                            <td style='text-align: right'>".number_format($accountbalancedetail_old['last_balance'],2,'.',',')."</td>
-                                            <td style='text-align: right'>0.00</td>
-                                        ";
-                                    } else {
-                                        echo "
-                                            <td style='text-align: right'>0.00</td>
-                                            <td style='text-align: right'>".number_format($accountbalancedetail_old['last_balance'],2,'.',',')."</td>
-                                        ";
-                                    }
-                                } else {
-                                    echo "
-                                        <td style='text-align: right'>0.00</td>
-                                        <td style='text-align: right'>0.00</td>
-                                    ";
-                                }
-                                
-                            
-                            } else {
-                                if (isset($accountbalancedetail_old['last_balance'])) {
-                                    if($accountbalancedetail_old['last_balance'] >= 0){
-                                        echo "
-                                            <td style='text-align: right'>0.00</td>
-                                            <td style='text-align: right'>".number_format($accountbalancedetail_old['last_balance'],2,'.',',')."</td>
-                                            
-                                        ";
-                                    } else {
-                                        echo "
-                                            <td style='text-align: right'>".number_format($accountbalancedetail_old['last_balance'],2,'.',',')."</td>
-                                            <td style='text-align: right'>0.00</td>
-                                        ";
-                                    }
-                                } else {
-                                    echo "
-                                        <td style='text-align: right'>0.00</td>
-                                        <td style='text-align: right'>0.00</td>
-                                    ";
-                                }
-                            }
-                        ?>
-                    </tr>
-                    
-                        <?php
-                        $no = 1;
-                        $voucher_debit = 0;
-                        $voucher_credit = 0;
-                        $last_balance_debit = 0;
-                        $last_balance_credit = 0;
-                        foreach ($acctgeneralledgerreport as $key => $val) {
-                            if($val['data_state']==0){
-                                echo "<tr>
-                                    <td class='text-center'>".$no++.".</td>
-                                    <td>".$val['date']."</td>
-                                    <td>".$val['no_journal']."</td>
-                                    <td>".$val['description']."</td>
-                                    <td>".$AcctLedgerReport->getAccountName($val['account_id'])."</td>
-                                    <td style='text-align: right'>".number_format($val['account_in'],2,'.',',')."</td>
-                                    <td style='text-align: right'>".number_format($val['account_out'],2,'.',',')."</td>
-                                    <td style='text-align: right'>".number_format($val['last_balance_debit'],2,'.',',')."</td>
-                                    <td style='text-align: right'>".number_format($val['last_balance_credit'],2,'.',',')."</td>
-                                ";
-                            }
-                                $voucher_debit += $val['account_in'];
-                                $voucher_credit += $val['account_out'];
-                                $last_balance_debit = $val['last_balance_debit'];
-                                $last_balance_credit = $val['last_balance_credit'];
-                        }
-                        ?> --}}
-                    
-                    {{-- <tr>
-                        <th style="text-align: center" colspan="5">Total Debet Kredit</th>
-                        <?php
+                        <td></td>
+                        <th style="text-align: center" colspan="3">Total Pemasukan & Pengeluaran</th>
+                        {{-- <?php
                             echo "
-                                <td style='text-align: right'>".number_format($voucher_debit,2,'.',',')."</td>
-                                <td style='text-align: right'>".number_format($voucher_credit,2,'.',',')."</td>
+                                <td style='text-align: right'>".0,00."</td>
+                                <td style='text-align: right'>".0,00."</td>
                             ";
-                        ?>
+                        ?> --}}
+                      
+                            
+                                <td style="text-align: right">{{rupiah($total_nominal_in)}}</td>
+                                <td style="text-align: right">{{rupiah($total_nominal_out)}}</td>
+                            
+                
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <th style="text-align: center" colspan="5">Saldo Akhir</th>
-                        <td></td>
-                        <td></td>
-                        <td style="text-align: right">{{ number_format($last_balance_debit,2,'.',',') }}</td>
-                        <td style="text-align: right">{{ number_format($last_balance_credit,2,'.',',') }}</td>
-                    </tr> --}}
+                        <th style="text-align: center" colspan="8">Saldo Akhir</th>
+                        <td style="text-align: right">0,00</td>
+                        <td style="text-align: right">0,00</td>
+                    </tr> 
                 </tbody>
             </table>
         </div>
     </div>
     <div class="card-footer text-muted">
         <div class="form-actions float-right">
-            <a class="btn bg-orange btn-sm" href="{{ url('/report-combine/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
-            <a class="btn bg-olive btn-sm" href="{{ url('/report-combine/export') }}"><i class="fa fa-download"></i> Export Data</a>
+            <a class="btn bg-orange btn-sm" href="{{ url('/report-recap/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
+            <a class="btn bg-olive btn-sm" href="{{ url('/report-recap/export') }}"><i class="fa fa-download"></i> Export Data</a>
         </div>
     </div>
   </div>
-</div>
-
+<br>
+<br>
 @stop
 
 @section('footer')

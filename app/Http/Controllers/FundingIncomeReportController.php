@@ -203,11 +203,11 @@ class FundingIncomeReportController extends Controller
         <table cellspacing=\"0\" cellpadding=\"1\" border=\"1\" width=\"100%\">
             <tr>
                 <th width=\"5%\" ><div style=\"text-align: center; font-weight: bold\">No</div></th>
+                <th width=\"20%\" ><div style=\"text-align: center; font-weight: bold\">Tanggal</div></th>
                 <th width=\"25%\" ><div style=\"text-align: center; font-weight: bold\">Kategori Pemasukan</div></th>
                 <th width=\"17%\" ><div style=\"text-align: center; font-weight: bold\">Kandidat</div></th>
                 <th width=\"17%\" ><div style=\"text-align: center; font-weight: bold\">Timses</div></th>
                 <th width=\"17%\" ><div style=\"text-align: center; font-weight: bold\">Nominal</div></th>
-                <th width=\"20%\" ><div style=\"text-align: center; font-weight: bold\">Tanggal</div></th>
             </tr>
         ";
 
@@ -223,10 +223,10 @@ class FundingIncomeReportController extends Controller
                 $tblIncome2 .="
                 <tr>			
                     <td style=\"text-align:center\">$no.</td>
+                    <td> ".date('d-m-Y', strtotime($val['financial_flow_date']))."</td>
                     <td> ".$this->getCategoryName($val['financial_category_id'])."</td>
                     <td style=\"text-align:center\">".'-'."</td>
                     <td> ".$this->getTimsesName($val['timses_id'])."</td>
-                    <td> ".date('d-m-Y', strtotime($val['financial_flow_date']))."</td>
                     <td style=\"text-align:right\"> ".rupiah($val['financial_flow_nominal'])."</td>
                     
                 </tr>
@@ -236,10 +236,10 @@ class FundingIncomeReportController extends Controller
                 $tblIncome2 .="
                 <tr>			
                     <td style=\"text-align:center\">$no.</td>
+                    <td> ".date('d-m-Y', strtotime($val['financial_flow_date']))."</td>
                     <td> ".$this->getCategoryName($val['financial_category_id'])."</td>
                     <td> ".$this->getCandidateName($val['candidate_id'])."</td>
                     <td style=\"text-align:center\">".'-'."</td>
-                    <td> ".date('d-m-Y', strtotime($val['financial_flow_date']))."</td>
                     <td style=\"text-align:right\"> ".rupiah($val['financial_flow_nominal'])."</td>
                     
                 </tr>
@@ -379,19 +379,19 @@ class FundingIncomeReportController extends Controller
 
                     $no++;
                     $sheet->setCellValue('B'.$j, $no);
-                    $sheet->setCellValue('C'.$j, $this->getCategoryName($val['financial_category_id']));
+                    $sheet->setCellValue('C'.$j, date('d-m-Y', strtotime($val['financial_flow_date'])));
+                    $sheet->setCellValue('D'.$j, $this->getCategoryName($val['financial_category_id']));
                     if($val['candidate_id'] == null){
-                        $sheet->setCellValue('D'.$j, '-');
-                    }else{
-                        $sheet->setCellValue('D'.$j, $this->getCandidateName($val['candidate_id']));
-                    }
-                    if($val['timses_id'] == null){
                         $sheet->setCellValue('E'.$j, '-');
                     }else{
-                        $sheet->setCellValue('E'.$j, $this->getTimsesName($val['timses_id']));
+                        $sheet->setCellValue('E'.$j, $this->getCandidateName($val['candidate_id']));
+                    }
+                    if($val['timses_id'] == null){
+                        $sheet->setCellValue('F'.$j, '-');
+                    }else{
+                        $sheet->setCellValue('F'.$j, $this->getTimsesName($val['timses_id']));
                     }
                     
-                    $sheet->setCellValue('F'.$j, date('d-m-Y', strtotime($val['financial_flow_date'])));
                     $sheet->setCellValue('G'.$j, rupiah($val['financial_flow_nominal']));
                 
                     $total_nominal += $val['financial_flow_nominal'];

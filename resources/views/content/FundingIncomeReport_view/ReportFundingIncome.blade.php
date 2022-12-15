@@ -146,12 +146,12 @@
                 <thead>
                     <tr>
                         <th width="2%" style='text-align:center'>No</th>
+                        <th width="7%" style='text-align:center'>Tanggal</th>
                         <th width="10%" style='text-align:center'>Kategori Pemasukan</th>
                         {{-- <th width="10%" style='text-align:center'>Penyelenggara</th> --}}
                         <th width="10%" style='text-align:center'>Kandidat</th>
                         <th width="10%" style='text-align:center'>Timses</th>
                         <th width="10%" style='text-align:center'>Nominal</th>
-                        <th width="10%" style='text-align:center'>Tanggal</th>
                         {{-- <th width="10%" style='text-align:center'>Keterangan</th> --}}
                         {{-- <th width="3%" style='text-align:center'>Aksi</th> --}}
                     </tr>
@@ -167,6 +167,7 @@
                     @foreach($fundingincome as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
+                        <td>{{$val['financial_flow_date']}}</td>
                         <td>{{$ReportFI->getCategoryName($val['financial_category_id'])}}</td>
                         {{-- <td>{{$val['candidate_id']}}</td> --}}
                         @if($val['candidate_id'] == null)
@@ -179,8 +180,7 @@
                         @else
                         <td>{{$ReportFI->getTimsesName($val['timses_id'])}}</td>
                         @endif
-                        <td>{{rupiah($val['financial_flow_nominal'])}}</td>
-                        <td>{{$val['financial_flow_date']}}</td>
+                        <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
                         {{-- <td>{{$val['financial_flow_description']}}</td> --}}
                         {{-- <td class="" style='text-align:center'>
                             <a type="button" class="badge badge-warning btn-sm" href="{{ url('/funding-income-timses/edit/'.$val['financial_flow_id'])}}"><i class='fas fa-edit'></i> Edit</a>

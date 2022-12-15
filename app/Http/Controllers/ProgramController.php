@@ -477,7 +477,7 @@ class ProgramController extends Controller
             $msg = 'Hapus Acara Gagal';
         }
 
-        return redirect('/program')->with('msg',$msg);
+        return redirect()->back()->with('msg',$msg);
     }
 
     public function closingProgram($program_id){
