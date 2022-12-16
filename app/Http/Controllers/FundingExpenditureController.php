@@ -122,7 +122,7 @@ class FundingExpenditureController extends Controller
             'financial_category_id'             => 'required',
             'timses_id'                         => 'required',
             'financial_category_type'           => 'required',
-            'financial_flow_nominal'            => 'required',
+            'financial_flow_nominal'            => 'required|numeric',
             'financial_flow_date'               => 'required',
             'financial_flow_description'        => 'required',
         ]);
@@ -202,7 +202,7 @@ class FundingExpenditureController extends Controller
             'financial_flow_id'                 => 'required',
             'financial_category_id'             => 'required',
             'timses_id'                         => 'required',
-            'financial_flow_nominal'            => 'required',
+            'financial_flow_nominal'            => 'required|numeric',
             'financial_flow_date'               => 'required',
             'financial_flow_description'        => 'required',
         ]);
