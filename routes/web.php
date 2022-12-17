@@ -21,6 +21,7 @@ use App\Http\Controllers\FundingExpenditureController;
 use App\Http\Controllers\FundingExpenditureReportController;
 use App\Http\Controllers\FundingCombineReportController;
 use App\Http\Controllers\RecapitulationReportController;
+use App\Http\Controllers\FundingAcctReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -249,3 +250,10 @@ Route::post('/report-recap/filter',[RecapitulationReportController::class, 'filt
 Route::get('/report-recap/reset-filter',[RecapitulationReportController::class, 'filterResetRecapitulationReport'])->name('filter-reset-report-recap');
 Route::get('/report-recap/print',[RecapitulationReportController::class, 'printLedgerReport'])->name('print-report-recap');
 Route::get('/report-recap/export',[RecapitulationReportController::class, 'exportLedgerReport'])->name('export-report-recap');
+
+//Funding Acct Report
+Route::get('/report-funding',[FundingAcctReportController::class, 'index']);
+Route::post('/report-funding/filter',[FundingAcctReportController::class, 'filterFundingAcctReport'])->name('filter-report-funding');
+Route::get('/report-funding/reset-filter',[FundingAcctReportController::class, 'filterResetFundingAcctReport'])->name('filter-reset-report-funding');
+Route::get('/report-funding/print',[FundingAcctReportController::class, 'printLedgerReport'])->name('print-report-funding');
+Route::get('/report-funding/export',[FundingAcctReportController::class, 'exportLedgerReport'])->name('export-report-funding');

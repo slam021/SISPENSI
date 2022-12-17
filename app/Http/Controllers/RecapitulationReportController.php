@@ -87,8 +87,6 @@ class RecapitulationReportController extends Controller
         ->pluck('candidate_full_name', 'candidate_id');
 
         $last_balance_candidate_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
-        // ->where('financial_flow.last_balance_candidate','!=', null)
-        // ->where('financial_flow.last_balance_timses','!=', null)
         ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
         ->whereYear('financial_flow.financial_flow_date',$year)
         ->orderBy('financial_flow.financial_flow_date', 'DESC')
@@ -96,8 +94,6 @@ class RecapitulationReportController extends Controller
         ->first();
 
         $last_balance_timses_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
-        // ->where('financial_flow.last_balance_candidate','!=', null)
-        // ->where('financial_flow.last_balance_timses','!=', null)
         ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
         ->whereYear('financial_flow.financial_flow_date',$year)
         ->orderBy('financial_flow.financial_flow_date', 'DESC')
@@ -108,8 +104,6 @@ class RecapitulationReportController extends Controller
         ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
         ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
         ->whereYear('financial_flow.financial_flow_date',$year);
-        // ->first();
-
 
         $financial_category_id = Session::get('financial_category_id');
         $candidate_id = Session::get('candidate_id');
@@ -119,19 +113,26 @@ class RecapitulationReportController extends Controller
         if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
             $financialflow   = $financialflow->where('financial_category_id', $financial_category_id);
         }
+
         if($candidate_id||$candidate_id!=null||$candidate_id!=''){
             $financialflow   = $financialflow->where('candidate_id', $candidate_id);
         }
+
         if($timses_id||$timses_id!=null||$timses_id!=''){
             $financialflow   = $financialflow->where('timses_id', $timses_id);
         }
+
         if($financialflow_list||$financialflow_list!=null||$financialflow_list!=''){
             if($financialflow_list == 1){           
                 $financialflow   = $financialflow->where('candidate_id', '!=', null);
             }else{
                 $financialflow   = $financialflow->where('timses_id', '!=', null);
             }
+        }else{
+            $financialflow   = $financialflow->where('candidate_id', '=', null);
+            $financialflow   = $financialflow->where('timses_id', '=', null);
         }
+
         $financialflow   = $financialflow->get();
 
         return view('content.RecapitulationReport_view.ReportRecapitulation', compact('start_month','end_month', 'monthlist', 'year' , 'yearlist', 'year_now', 'listfinancialcategory', 'financial_category_id', 'timses_id', 'candidate_id', 'listcoretimses', 'listcorecandidate', 'financialflow', 'start_date', 'end_date', 'financialflow_list', 'last_balance_candidate_old', 'last_balance_timses_old', 'code'));
@@ -149,9 +150,9 @@ class RecapitulationReportController extends Controller
         $financialflow_list = $request->financialflow_list;
 
         Session::put('timses_id', $timses_id);
+        Session::put('candidate_id', $candidate_id);
         Session::put('financial_category_id', $financial_category_id);
         Session::put('financialflow_list', $financialflow_list);
-        Session::put('candidate_id', $candidate_id);
         Session::put('start_month',$start_month);
         Session::put('end_month',$end_month);
         Session::put('start_date',$start_date);
@@ -234,32 +235,82 @@ class RecapitulationReportController extends Controller
         for($i=($year_now-2); $i<($year_now+2); $i++){
             $yearlist[$i] = $i;
         } 
-    
-        $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
-        // ->join('financial_category', 'financial_flow.financial_category_id', '=', 'financial_category.financial_category_id')
+
+        if(!Session::get('start_date')){
+            $start_date     = date('Y-m-d');
+        }else{
+            $start_date = Session::get('start_date');
+        }
+        if(!Session::get('end_date')){
+            $end_date     = date('Y-m-d');
+        }else{
+            $end_date = Session::get('end_date');
+        }
+
+        $code=[
+            '' => '',
+            '1' => 'Kandidat',
+            '2' => 'Timses',
+        ];
+
+        $listfinancialcategory = FinancialCategory::where('data_state', '=', 0)
+        ->pluck('financial_category_name', 'financial_category_id');
+
+        $listcoretimses = CoreTimses :: where('data_state', 0)
+        ->get()
+        ->pluck('timses_name', 'timses_id');
+
+        $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        ->get()
+        ->pluck('candidate_full_name', 'candidate_id');
+
+        $last_balance_candidate_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
+        ->whereYear('financial_flow.financial_flow_date',$year)
+        ->orderBy('financial_flow.financial_flow_date', 'DESC')
+        ->orderBy('financial_flow.last_balance_candidate', 'DESC')
+        ->first();
+
+        $last_balance_timses_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
+        ->whereYear('financial_flow.financial_flow_date',$year)
+        ->orderBy('financial_flow.financial_flow_date', 'DESC')
+        ->orderBy('financial_flow.last_balance_timses', 'DESC')
+        ->first();
         
-        // ->where('financial_category.data_state', '=', 0)
-        // ->where('financial_flow.financial_category_id', $financial_category_id)
-        // ->where('financial_flow.candidate_id', $candidate_id)
-        // ->where('financial_flow.timses_id', $timses_id)
+        $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
         ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
         ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
         ->whereYear('financial_flow.financial_flow_date',$year);
-        // ->first();
 
         $financial_category_id = Session::get('financial_category_id');
         $candidate_id = Session::get('candidate_id');
         $timses_id = Session::get('timses_id');
+        $financialflow_list = Session::get('financialflow_list');
         
         if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
             $financialflow   = $financialflow->where('financial_category_id', $financial_category_id);
         }
+
         if($candidate_id||$candidate_id!=null||$candidate_id!=''){
             $financialflow   = $financialflow->where('candidate_id', $candidate_id);
         }
+
         if($timses_id||$timses_id!=null||$timses_id!=''){
             $financialflow   = $financialflow->where('timses_id', $timses_id);
         }
+
+        if($financialflow_list||$financialflow_list!=null||$financialflow_list!=''){
+            if($financialflow_list == 1){           
+                $financialflow   = $financialflow->where('candidate_id', '!=', null);
+            }else{
+                $financialflow   = $financialflow->where('timses_id', '!=', null);
+            }
+        }else{
+            $financialflow   = $financialflow->where('candidate_id', '=', null);
+            $financialflow   = $financialflow->where('timses_id', '=', null);
+        }
+
         $financialflow   = $financialflow->get();
 
         //-----------TCPF-----------
@@ -295,22 +346,23 @@ class RecapitulationReportController extends Controller
         ";
         $pdf::writeHTML($tbl, true, false, false, false, '');
 
+        function rupiah($angka){
+            $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
+            return $hasil_rupiah;
+        }
+
         if ($financial_category_id == null ){
             $category_name = '-';
         }else{
             $category_name = $this->getCategoryName($financial_category_id);
         }
 
-        if ($candidate_id == null ){
-            $candidate_name = '-';
+        if ($financialflow_list == 1 ){
+            $code = "Kandidat";
+            $first_saldo = rupiah($last_balance_candidate_old['last_balance_candidate']);
         }else{
-            $candidate_name = $this->getCandidateName($candidate_id);
-        }
-
-        if ($timses_id == null ){
-            $timses_name = '-';
-        }else{
-            $timses_name = $this->getTimsesName($timses_id);
+            $code = "Timses";
+            $first_saldo = rupiah($last_balance_timses_old['last_balance_timses']);
         }
 
         $tbl = "
@@ -323,24 +375,14 @@ class RecapitulationReportController extends Controller
                 <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$category_name."</div></td>
             </tr>
             <tr>
-                <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Kandidate</div></td>
+                <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Kepemilikan</div></td>
                 <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
-                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$candidate_name."</div></td>
-            </tr>
-            <tr>
-                <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Timses</div></td>
-                <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
-                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$timses_name."</div></td>
-            </tr>
-            <tr>
-                <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Posisi Saldo</div></td>
-                <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
-                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\"></div></td>
+                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$code."</div></td>
             </tr>
             <tr>
                 <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Saldo Awal</div></td>
                 <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
-                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\"></div></td>
+                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$first_saldo."</div></td>
             </tr>
         </table>";
         $pdf::writeHTML($tbl, true, false, false, false, '');
@@ -350,35 +392,26 @@ class RecapitulationReportController extends Controller
         $tblStock1 = "
         <table cellspacing=\"0\" cellpadding=\"1\" border=\"1\" width=\"100%\">
             <tr>
-                <td width=\"4%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">No</div></td>
-                <td width=\"10%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Tanggal</div></td>
-                <td width=\"15%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Kandidat</div></td>
-                <td width=\"15%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Timses</div></td>
-                <td width=\"14%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Pemasukan</div></td>
-                <td width=\"14%\" rowspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Pengeluaran </div></td>
-                <td width=\"28%\" colspan=\"2\"><div style=\"text-align: center; font-weight: bold\">Saldo </div></td>
+                <td width=\"5%\"><div style=\"text-align: center; font-weight: bold\">No</div></td>
+                <td width=\"15%\"><div style=\"text-align: center; font-weight: bold\">Tanggal</div></td>
+                <td width=\"20%\"><div style=\"text-align: center; font-weight: bold\">Kepemilikan</div></td>
+                <td width=\"20%\"><div style=\"text-align: center; font-weight: bold\">Pemasukan</div></td>
+                <td width=\"20%\"><div style=\"text-align: center; font-weight: bold\">Pengeluaran </div></td>
+                <td width=\"20%\"><div style=\"text-align: center; font-weight: bold\">Saldo </div></td>
             </tr>
-            
-            <tr>
-                <td width=\"14%\"><div style=\"text-align: center; font-weight: bold\">Pemasukan </div></td>
-                <td width=\"14%\"><div style=\"text-align: center; font-weight: bold\">Pengeluaran </div></td>
-            </tr>
-        
             ";
-        function rupiah($angka){
-            $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
-            return $hasil_rupiah;
-        }
+
+        $saldo_candidate = $last_balance_candidate_old['last_balance_candidate'];
+        $saldo_timses = $last_balance_timses_old['last_balance_timses'];
         $tblStock2 = " ";
         $no = 1;
+
         foreach ($financialflow as $key => $val) {
 
-            if ($val['candidate_id'] == null ){
-                $candidate_name = '-';
-                $timses_name = $this->getTimsesName($val['timses_id']);
+            if ($financialflow_list == 1 ){
+                $kepemilikan = $this->getCandidateName($val['candidate_id']);
             }else{
-                $candidate_name = $this->getCandidateName($val['candidate_id']);
-                $timses_name = '-';
+                $kepemilikan = $this->getTimsesName($val['timses_id']);
             }
 
             if ($val->financial_category_type == 1){
@@ -389,20 +422,47 @@ class RecapitulationReportController extends Controller
                 $expenditure = rupiah($val['financial_flow_nominal']);
             }
 
+            if($val['financial_category_type'] == 1){
+                if($val['candidate_id']){
+                    $saldo_candidate += $val['financial_flow_nominal'];
+                }else{
+                    $saldo_timses += $val['financial_flow_nominal'];
+                }
+            }else{
+                if($val['candidate_id']){
+                    $saldo_candidate -= $val['financial_flow_nominal'];
+                }else{
+                    $saldo_timses -= $val['financial_flow_nominal'];
+                }
+            }
+
+            if($val['candidate_id']){
             $tblStock2 .="
+                        <tr>			
+                            <td style=\"text-align:center\">$no.</td>
+                            <td style=\"text-align:center\">".$val['financial_flow_date']."</td>
+                            <td> ".$kepemilikan."</td>
+                            <td><div style=\"text-align: right;\">".$income."</div></td>
+                            <td><div style=\"text-align: right;\">".$expenditure."</div></td>
+                            <td><div style=\"text-align: right;\">".rupiah($saldo_candidate)."</div></td>
+                        </tr>
+                        
+                    ";
+                $no++;
+            }else{
+                    $tblStock2 .="
                     <tr>			
                         <td style=\"text-align:center\">$no.</td>
                         <td style=\"text-align:center\">".$val['financial_flow_date']."</td>
-                        <td> ".$candidate_name."</td>
-                        <td> ".$timses_name."</td>
+                        <td> ".$kepemilikan."</td>
                         <td><div style=\"text-align: right;\">".$income."</div></td>
                         <td><div style=\"text-align: right;\">".$expenditure."</div></td>
-                        <td><div style=\"text-align: right;\"></div></td>
-                        <td><div style=\"text-align: right;\"></div></td>
+                        <td><div style=\"text-align: right;\">".rupiah($saldo_timses)."</div></td>
                     </tr>
                     
                 ";
             $no++;
+            }
         }
         $tblStock4 = " 
         </table>
@@ -458,32 +518,82 @@ class RecapitulationReportController extends Controller
         for($i=($year_now-2); $i<($year_now+2); $i++){
             $yearlist[$i] = $i;
         } 
-    
-        $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
-        // ->join('financial_category', 'financial_flow.financial_category_id', '=', 'financial_category.financial_category_id')
+
+        if(!Session::get('start_date')){
+            $start_date     = date('Y-m-d');
+        }else{
+            $start_date = Session::get('start_date');
+        }
+        if(!Session::get('end_date')){
+            $end_date     = date('Y-m-d');
+        }else{
+            $end_date = Session::get('end_date');
+        }
+
+        $code=[
+            '' => '',
+            '1' => 'Kandidat',
+            '2' => 'Timses',
+        ];
+
+        $listfinancialcategory = FinancialCategory::where('data_state', '=', 0)
+        ->pluck('financial_category_name', 'financial_category_id');
+
+        $listcoretimses = CoreTimses :: where('data_state', 0)
+        ->get()
+        ->pluck('timses_name', 'timses_id');
+
+        $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        ->get()
+        ->pluck('candidate_full_name', 'candidate_id');
+
+        $last_balance_candidate_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
+        ->whereYear('financial_flow.financial_flow_date',$year)
+        ->orderBy('financial_flow.financial_flow_date', 'DESC')
+        ->orderBy('financial_flow.last_balance_candidate', 'DESC')
+        ->first();
+
+        $last_balance_timses_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
+        ->whereYear('financial_flow.financial_flow_date',$year)
+        ->orderBy('financial_flow.financial_flow_date', 'DESC')
+        ->orderBy('financial_flow.last_balance_timses', 'DESC')
+        ->first();
         
-        // ->where('financial_category.data_state', '=', 0)
-        // ->where('financial_flow.financial_category_id', $financial_category_id)
-        // ->where('financial_flow.candidate_id', $candidate_id)
-        // ->where('financial_flow.timses_id', $timses_id)
+        $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
         ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
         ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
         ->whereYear('financial_flow.financial_flow_date',$year);
-        // ->first();
 
         $financial_category_id = Session::get('financial_category_id');
         $candidate_id = Session::get('candidate_id');
         $timses_id = Session::get('timses_id');
+        $financialflow_list = Session::get('financialflow_list');
         
         if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
             $financialflow   = $financialflow->where('financial_category_id', $financial_category_id);
         }
+
         if($candidate_id||$candidate_id!=null||$candidate_id!=''){
             $financialflow   = $financialflow->where('candidate_id', $candidate_id);
         }
+
         if($timses_id||$timses_id!=null||$timses_id!=''){
             $financialflow   = $financialflow->where('timses_id', $timses_id);
         }
+
+        if($financialflow_list||$financialflow_list!=null||$financialflow_list!=''){
+            if($financialflow_list == 1){           
+                $financialflow   = $financialflow->where('candidate_id', '!=', null);
+            }else{
+                $financialflow   = $financialflow->where('timses_id', '!=', null);
+            }
+        }else{
+            $financialflow   = $financialflow->where('candidate_id', '=', null);
+            $financialflow   = $financialflow->where('timses_id', '=', null);
+        }
+
         $financialflow   = $financialflow->get();
         
         //--------------SpreadsheetPHP--------------
@@ -505,35 +615,23 @@ class RecapitulationReportController extends Controller
             $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(5);
             $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-            $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(40);
+            $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(20);
             $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(20);
             $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(20);
             $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(20);
             $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(20);
-            $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(20);
     
-            $spreadsheet->getActiveSheet()->mergeCells("B1:I1");
-            $spreadsheet->getActiveSheet()->mergeCells("B2:I2");
-
-            $spreadsheet->getActiveSheet()->mergeCells("B8:B9");
-            $spreadsheet->getActiveSheet()->mergeCells("C8:C9");
-            $spreadsheet->getActiveSheet()->mergeCells("D8:D9");
-            $spreadsheet->getActiveSheet()->mergeCells("E8:E9");
-            $spreadsheet->getActiveSheet()->mergeCells("F8:F9");
-            $spreadsheet->getActiveSheet()->mergeCells("G8:G9");
-
+            $spreadsheet->getActiveSheet()->mergeCells("B1:G1");
+            $spreadsheet->getActiveSheet()->mergeCells("B2:G2");
             
-            $spreadsheet->getActiveSheet()->mergeCells("H8:I8");
             $spreadsheet->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $spreadsheet->getActiveSheet()->getStyle('B1')->getFont()->setBold(true)->setSize(16);
             $spreadsheet->getActiveSheet()->getStyle('B2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $spreadsheet->getActiveSheet()->getStyle('B2')->getFont()->setBold(true)->setSize(16);
 
-            $spreadsheet->getActiveSheet()->getStyle('B8:I8')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-            $spreadsheet->getActiveSheet()->getStyle('B9:I9')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-            $spreadsheet->getActiveSheet()->getStyle('B8:I8')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $spreadsheet->getActiveSheet()->getStyle('B9:I9')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $spreadsheet->getActiveSheet()->getStyle('B9:G9')->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $spreadsheet->getActiveSheet()->getStyle('B9:G9')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $spreadsheet->getActiveSheet()->getStyle('B9:G9')->getFont()->setBold(true);
 
             $spreadsheet->getActiveSheet()->mergeCells("B3:C3");
             $spreadsheet->getActiveSheet()->getStyle('B3:D3')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
@@ -555,6 +653,10 @@ class RecapitulationReportController extends Controller
             $spreadsheet->getActiveSheet()->getStyle('B7:D7')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
             $spreadsheet->getActiveSheet()->getStyle('B7:D7')->getFont()->setBold(true);
 
+            function rupiah($angka){
+                $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
+                return $hasil_rupiah;
+            }
 
             if ($financial_category_id == null ){
                 $category_name = '-';
@@ -562,59 +664,43 @@ class RecapitulationReportController extends Controller
                 $category_name = $this->getCategoryName($financial_category_id);
             }
     
-            if ($candidate_id == null ){
-                $candidate_name = '-';
+            if ($financialflow_list == 1 ){
+                $code = "Kandidat";
+                $first_saldo = $last_balance_candidate_old['last_balance_candidate'];
             }else{
-                $candidate_name = $this->getCandidateName($candidate_id);
-            }
-    
-            if ($timses_id == null ){
-                $timses_name = '-';
-            }else{
-                $timses_name = $this->getTimsesName($timses_id);
+                $code = "Timses";
+                $first_saldo = $last_balance_timses_old['last_balance_timses'];
             }
             
             $sheet->setCellValue('B1',"Laporan Rekapitulasi");	
             $sheet->setCellValue('B2',"Periode ".$monthlist[$start_month]." s.d ".$monthlist[$end_month]." ".$year);	
-            $sheet->setCellValue('B3',"Kategori        :");
-            $sheet->setCellValue('D3', $category_name);
-            $sheet->setCellValue('B4',"Kandidat       :");
-            $sheet->setCellValue('D4', $candidate_name);
-            $sheet->setCellValue('B5',"Timses           :");
-            $sheet->setCellValue('D5', $timses_name);
-            $sheet->setCellValue('B6',"Posisi Saldo :");
-            $sheet->setCellValue('D6', "-");
-            $sheet->setCellValue('B7',"Saldo Awal   :");
-            $sheet->setCellValue('D7', "-");
-            $sheet->setCellValue('B8',"No");
-            $sheet->setCellValue('C8',"Tanggal");
-            $sheet->setCellValue('D8',"Kandidat");
-            $sheet->setCellValue('E8',"Timses");
-            $sheet->setCellValue('F8',"Pemasukan");
-            $sheet->setCellValue('G8',"Pengeluaran");
-            $sheet->setCellValue('H8',"Saldo");
+            $sheet->setCellValue('B5',"Kategori");
+            $sheet->setCellValue('D5', $category_name);
+            $sheet->setCellValue('B6',"Kepemilikan");
+            $sheet->setCellValue('D6', $code);
+            $sheet->setCellValue('B7',"Saldo Awal");
+            $sheet->setCellValue('D7', rupiah($first_saldo));
+            $sheet->setCellValue('B9',"No");
+            $sheet->setCellValue('C9',"Tanggal");
+            $sheet->setCellValue('D9',"Kepemilikan");
+            $sheet->setCellValue('E9',"Pemasukan");
+            $sheet->setCellValue('F9',"Pengeluaran");
+            $sheet->setCellValue('G9',"Saldo");
 
-            
-            $sheet->setCellValue('H9',"Pemasukan");
-            $sheet->setCellValue('I9',"Pengeluaran");
-            
-            
             $j=10;
             $no=0;
-            function rupiah($angka){
-                $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
-                return $hasil_rupiah;
-            }
+
+            $saldo_candidate = $last_balance_candidate_old['last_balance_candidate'];
+            $saldo_timses = $last_balance_timses_old['last_balance_timses'];
             
             foreach($financialflow as $key=>$val){
-                if ($val['candidate_id'] == null ){
-                    $candidate_name = '-';
-                    $timses_name = $this->getTimsesName($val['timses_id']);
+                
+                if ($financialflow_list == 1 ){
+                    $kepemilikan = $this->getCandidateName($val['candidate_id']);
                 }else{
-                    $candidate_name = $this->getCandidateName($val['candidate_id']);
-                    $timses_name = '-';
+                    $kepemilikan = $this->getTimsesName($val['timses_id']);
                 }
-
+    
                 if ($val->financial_category_type == 1){
                     $income = rupiah($val['financial_flow_nominal']);
                     $expenditure = '-';
@@ -622,11 +708,25 @@ class RecapitulationReportController extends Controller
                     $income = '-';
                     $expenditure = rupiah($val['financial_flow_nominal']);
                 }
+    
+                if($val['financial_category_type'] == 1){
+                    if($val['candidate_id']){
+                        $saldo_candidate += $val['financial_flow_nominal'];
+                    }else{
+                        $saldo_timses += $val['financial_flow_nominal'];
+                    }
+                }else{
+                    if($val['candidate_id']){
+                        $saldo_candidate -= $val['financial_flow_nominal'];
+                    }else{
+                        $saldo_timses -= $val['financial_flow_nominal'];
+                    }
+                }
 
                 if(is_numeric($key)){
                     
                     $spreadsheet->setActiveSheetIndex(0);
-                    $spreadsheet->getActiveSheet()->getStyle('B'.$j.':I'.$j)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    $spreadsheet->getActiveSheet()->getStyle('B'.$j.':G'.$j)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
                     
                     // $spreadsheet->getActiveSheet()->getStyle('E'.$j.':I'.$j)->getNumberFormat()->setFormatCode('0.00');
 
@@ -636,19 +736,20 @@ class RecapitulationReportController extends Controller
                     $spreadsheet->getActiveSheet()->getStyle('E'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
                     $spreadsheet->getActiveSheet()->getStyle('F'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                     $spreadsheet->getActiveSheet()->getStyle('G'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                    $spreadsheet->getActiveSheet()->getStyle('H'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
-                    $spreadsheet->getActiveSheet()->getStyle('I'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                    // $spreadsheet->getActiveSheet()->getStyle('H'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                    // $spreadsheet->getActiveSheet()->getStyle('I'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
                         $no++;
                         $sheet->setCellValue('B'.$j, $no);
                         $sheet->setCellValue('C'.$j, $val['financial_flow_date']);
-                        $sheet->setCellValue('D'.$j, $candidate_name);
-                        $sheet->setCellValue('E'.$j, $timses_name);
-                        $sheet->setCellValue('F'.$j, $income);
-                        $sheet->setCellValue('G'.$j, $expenditure);
-                        $sheet->setCellValue('H'.$j, rupiah($val['financial_flow_nominal']));
-                        $sheet->setCellValue('I'.$j, rupiah($val['financial_flow_nominal']));
-                        
+                        $sheet->setCellValue('D'.$j, $kepemilikan);
+                        $sheet->setCellValue('E'.$j, $income);
+                        $sheet->setCellValue('F'.$j, $expenditure);
+                        if($val['candidate_id']){
+                            $sheet->setCellValue('G'.$j, rupiah($saldo_candidate));
+                        }else{
+                            $sheet->setCellValue('G'.$j, rupiah($saldo_timses));
+                        }
                         
                     
                 }else{
@@ -657,7 +758,7 @@ class RecapitulationReportController extends Controller
                 $j++;
         
             }
-            $spreadsheet->getActiveSheet()->mergeCells('B'.$j.':I'.$j);
+            $spreadsheet->getActiveSheet()->mergeCells('B'.$j.':G'.$j);
             $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
             $sheet->setCellValue('B'.$j, Auth::user()->name.", ".date('d-m-Y H:i'));
 

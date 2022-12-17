@@ -42,13 +42,12 @@
 @stop
 
 @section('content')
-{{-- <?php
-    $code=[
-        '' => '',
-        '1' => 'Kandidat',
-        '2' => 'Timses',
-    ];
-?> --}}
+<?php
+    function rupiah($angka){
+                        $hasil_rupiah = number_format($angka,2,',','.');
+                        return $hasil_rupiah;
+                    } 
+?>
 {{-- <h3 class="page-title">
     <b>Daftar Buku Besar </b> <small>Kelola Daftar Buku Besar  </small>
 </h3> --}}
@@ -123,22 +122,22 @@
                         </div> --}}
                         <div class = "col-md-6">
                             <div class="form-group form-md-line-input">
-                                <section class="control-label">Kategori
-                                    <span class="required text-danger">
-                                        *
-                                    </span>
-                                </section>
-                                {!! Form::select('financial_category_id', $listfinancialcategory, $financial_category_id, ['class' => 'selection-search-clear select-form', 'id' => 'financial_category_id','' ])!!}
-                            </div>
-                        </div>
-                        <div class = "col-md-6">
-                            <div class="form-group form-md-line-input">
                                 <section class="control-label">Kepemilikan
                                     <span class="required text-danger">
                                         *
                                     </span>
                                 </section>
                                 {!! Form::select('financialflow_list', $code, $financialflow_list, ['class' => 'selection-search-clear select-form', 'id' => 'financialflow_list' ])!!}
+                            </div>
+                        </div>
+                        <div class = "col-md-6">
+                            <div class="form-group form-md-line-input">
+                                <section class="control-label">Kategori
+                                    <span class="required text-danger">
+                                        *
+                                    </span>
+                                </section>
+                                {!! Form::select('financial_category_id', $listfinancialcategory, $financial_category_id, ['class' => 'selection-search-clear select-form', 'id' => 'financial_category_id','' ])!!}
                             </div>
                         </div>
                         {{-- <div class = "col-md-4">
@@ -206,118 +205,89 @@
                         <th style="text-align: center">Saldo Awal</th>
                         <td colspan="3"></td>
 
-                        <?php 
-                        if($financialflow_list == 1){  
-                            if($last_balance_candidate_old['last_balance_candidate'] >= 0){
-                                echo "
-                                    <th style='text-align: right'>".number_format($last_balance_candidate_old['last_balance_candidate'],2,'.',',')."</th>
-                                ";
-                            } else {
-                                echo "
+                        @if($financialflow_list != "" && $financial_category_id != "")
+                            @if($financialflow_list == 1)
+                                @if($last_balance_candidate_old['last_balance_candidate'] >= 0)
+                                    <th style='text-align: right'>{{number_format($last_balance_candidate_old['last_balance_candidate'],2,'.',',')}}</th>
+                                @else 
                                     <th style='text-align: right'>0,00</th>
-                                ";
-                            } 
-                        } else {
-                            if($last_balance_timses_old['last_balance_timses'] >= 0){
-                                echo "
-                                    <th style='text-align: right'>".number_format($last_balance_timses_old['last_balance_timses'],2,'.',',')."</th>
-                                    
-                                ";
-                            } else {
-                                echo "
+                                @endif   
+                            @else
+                                @if($last_balance_timses_old['last_balance_timses'] >= 0)
+                                    <th style='text-align: right'>{{number_format($last_balance_timses_old['last_balance_timses'],2,'.',',')}}</th>
+                                @else
                                     <th style='text-align: right'>0,00</th>
-                                ";
-                            }
-                        }
-                    ?>
+                                @endif
+                            @endif
+                        @else
+                            <th style='text-align: right'>0,00</th>
+                        @endif
                     </tr> 
 
-                <?php 
+                @php
                     $no = 1;
                     $total_nominal_in = 0;
                     $total_nominal_out = 0;
                     $saldo_candidate = $last_balance_candidate_old['last_balance_candidate'];
                     $saldo_timses = $last_balance_timses_old['last_balance_timses'];
-                    $type =[
-                        ''  => '',
-                        '1' => 'Pemasukan',
-                        '2' => 'Pengeluaran',
-                    ];
+                @endphp 
 
-                    function rupiah($angka){
-                        $hasil_rupiah = number_format($angka,2,',','.');
-                        return $hasil_rupiah;
-                    } 
-                ?> 
-                
                 @foreach($financialflow as $key => $val)
-                @php
-                    if($val['financial_category_type'] == 1){
-                        if($val['candidate_id']){
-                            $saldo_candidate += $val['financial_flow_nominal'];
+                    @php
+                        if($val['financial_category_type'] == 1){
+                            if($val['candidate_id']){
+                                $saldo_candidate += $val['financial_flow_nominal'];
+                            }else{
+                                $saldo_timses += $val['financial_flow_nominal'];
+                            }
                         }else{
-                            $saldo_timses += $val['financial_flow_nominal'];
+                            if($val['candidate_id']){
+                                $saldo_candidate -= $val['financial_flow_nominal'];
+                            }else{
+                                $saldo_timses -= $val['financial_flow_nominal'];
+                            }
                         }
-                    }else{
-                        if($val['candidate_id']){
-                            $saldo_candidate -= $val['financial_flow_nominal'];
-                        }else{
-                            $saldo_timses -= $val['financial_flow_nominal'];
-                        }
-                    }
-                @endphp
-                <tr>
-                    <td style='text-align:center'>{{$no}}</td>
-                    <td>{{$val['financial_flow_date']}}</td>
-                    @if($val['candidate_id'])
-                    <td>{{$RR->getCandidateName($val['candidate_id'])}}</td>
-                    @else
-                    <td>{{$RR->getTimsesName($val['timses_id'])}}</td>
-                    @endif
-                    <td></td>
-                    <td>{{$RR->getCategoryName($val['financial_category_id'])}}</td>
-                    @if($val['financial_category_type']==1)
-                        <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
-                    @else
-                        <td style='text-align:right'>0,00</td>
-                    @endif
-
-                    @if($val['financial_category_type']==2)
-                        <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
-                    @else
-                        <td style='text-align:right'>0,00</td>
-                    @endif
-
-                    @if($val['candidate_id'])
-                        <td style='text-align:right'>{{rupiah($saldo_candidate)}}</td>
-                    @else
-                    <td style='text-align:right'>{{rupiah($saldo_timses)}}</td>
-                    @endif
-                    {{-- @if($val['financial_category_type']==1)
+                    @endphp
+                    <tr>
+                        <td style='text-align:center'>{{$no}}</td>
+                        <td>{{$val['financial_flow_date']}}</td>
                         @if($val['candidate_id'])
-                            <td style='text-align:right'>{{rupiah($val['last_balance_candidate'])}}</td>
+                        <td>{{$RR->getCandidateName($val['candidate_id'])}}</td>
                         @else
-                            <td style='text-align:right'>{{rupiah($val['last_balance_timses'])}}</td>
+                        <td>{{$RR->getTimsesName($val['timses_id'])}}</td>
                         @endif
-                    @else 
-                        @if($val['candidate_id'])
-                        <td style='text-align:right'>0,00</td>
+                        <td></td>
+                        <td>{{$RR->getCategoryName($val['financial_category_id'])}}</td>
+                        @if($val['financial_category_type']==1)
+                            <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
                         @else
-                        <td style='text-align:right'>0,00</td>
-                        @endif  
-                    @endif --}}
-                </tr>
-                <?php 
-                    $no++; 
-                    
-                    if($val['financial_category_type'] == 1){
-                        $total_nominal_in += $val['financial_flow_nominal'];
-                    }else{
-                        $total_nominal_out += $val['financial_flow_nominal'];
-                    } 
-                ?>
+                            <td style='text-align:right'>0,00</td>
+                        @endif
+
+                        @if($val['financial_category_type']==2)
+                            <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
+                        @else
+                            <td style='text-align:right'>0,00</td>
+                        @endif
+
+                        @if($val['candidate_id'])
+                            <td style='text-align:right'>{{rupiah($saldo_candidate)}}</td>
+                        @else
+                            <td style='text-align:right'>{{rupiah($saldo_timses)}}</td>
+                        @endif
+                    </tr>
+                    @php 
+                        $no++; 
+                        
+                        if($val['financial_category_type'] == 1){
+                            $total_nominal_in += $val['financial_flow_nominal'];
+                        }else{
+                            $total_nominal_out += $val['financial_flow_nominal'];
+                        } 
+                        $financialflow_array = array();
+                        array_push($financialflow_array, $val['candidate_id']);
+                    @endphp
                 @endforeach
-                    
                     <tr>
                         <td colspan="2"></td>
                         <th style="text-align: center" colspan="3">Total Pemasukan Pengeluaran</th>
@@ -328,10 +298,14 @@
                     <tr>
                         <td colspan="3"></td>
                         <th style="text-align: center">Saldo Akhir</th>
-                        @if($val['candidate_id'])
-                            <th style="text-align: right" colspan="4">{{rupiah($saldo_candidate)}}</th>
+                        @if($financialflow_list != "" || $financial_category_id != "" )
+                            @if($financialflow_array)
+                                <th style="text-align: right" colspan="4">{{rupiah($saldo_candidate)}}</th>
+                            @else
+                                <th style="text-align: right" colspan="4">{{rupiah($saldo_timses)}}</th>
+                            @endif
                         @else
-                            <th style="text-align: right" colspan="4">{{rupiah($saldo_timses)}}</th>
+                            <th style="text-align: right" colspan="4">0,00</th>
                         @endif
                     </tr>
                 </tbody>
