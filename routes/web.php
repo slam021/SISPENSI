@@ -22,6 +22,7 @@ use App\Http\Controllers\FundingExpenditureReportController;
 use App\Http\Controllers\FundingCombineReportController;
 use App\Http\Controllers\RecapitulationReportController;
 use App\Http\Controllers\FundingAcctReportController;
+use App\Http\Controllers\TimsesActivityReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -257,3 +258,10 @@ Route::post('/report-funding/filter',[FundingAcctReportController::class, 'filte
 Route::get('/report-funding/reset-filter',[FundingAcctReportController::class, 'filterResetFundingAcctReport'])->name('filter-reset-report-funding');
 Route::get('/report-funding/print',[FundingAcctReportController::class, 'printLedgerReport'])->name('print-report-funding');
 Route::get('/report-funding/export',[FundingAcctReportController::class, 'exportLedgerReport'])->name('export-report-funding');
+
+//Timses Activity Report
+Route::get('/report-timses-activity',[TimsesActivityReportController::class, 'index']);
+Route::post('/report-timses-activity/filter',[TimsesActivityReportController::class, 'filterTimsesActivityReport'])->name('filter-report-timses-activity');
+Route::get('/report-timses-activity/reset-filter',[TimsesActivityReportController::class, 'filterResetTimsesActivityReport'])->name('filter-reset-report-timses-activity');
+Route::get('/report-timses-activity/print',[TimsesActivityReportController::class, 'printTimsesActivityReport'])->name('print-report-timses-activity');
+Route::get('/report-timses-activity/export',[TimsesActivityReportController::class, 'exportTimsesActivityReport'])->name('export-report-timses-activity');

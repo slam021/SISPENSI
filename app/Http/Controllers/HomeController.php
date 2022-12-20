@@ -10,6 +10,7 @@ use App\Models\CoreCandidate;
 use App\Models\CoreLocation;
 use App\Models\CorePollingStation;
 use App\Models\CoreSupporter;
+use App\Models\CoreTimses;
 
 class HomeController extends Controller
 {
@@ -58,6 +59,10 @@ class HomeController extends Controller
         ->where('data_state', '=', 0)
         ->get();
 
-        return view('home',compact('menus', 'corecandidate', 'corelocation', 'corepollingstation', 'coresupporter'));
+        $coretimses = CoreTimses::select('core_timses.*')
+        ->where('data_state', '=', 0)
+        ->get();
+
+        return view('home',compact('menus', 'corecandidate', 'corelocation', 'corepollingstation', 'coresupporter', 'coretimses'));
     }
 }

@@ -61,7 +61,7 @@ Dashboard
                     </div>
                     <br>
                     <a class="small-box-footer" href="{{url('polling-station')}}">
-                        <b>TPU</b>
+                        <b>TPS</b>
                         <i class='far fa-arrow-alt-circle-right'></i>
                     </a>
                 </div>
@@ -69,14 +69,14 @@ Dashboard
             <div class='col-md-3'>
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3 style="text-align: left; margin-left:10px "><b>{{$coresupporter->count('core_supporter.supporter_id')}}</b></h3>
+                        <h3 style="text-align: left; margin-left:10px "><b>{{$coretimses->count('core_timses.timses_id')}}</b></h3>
                     </div>
                     <div class="icon">
                         <i class="fas fa-users" style='font-size:60px; color:rgb(255, 255, 255); margin-right: 70px'></i>
                     </div>
                     <br>
-                    <a class="small-box-footer" href="{{url('supporter')}}">
-                        <b>Pendukung</b>
+                    <a class="small-box-footer" href="{{url('timses')}}">
+                        <b>Timses</b>
                         <i class='far fa-arrow-alt-circle-right'></i>
                     </a>
                 </div>

@@ -50,7 +50,7 @@
                         <th width="3%" style='text-align:center'>No</th>
                         <th width="10%" style='text-align:center'>Periode</th>
                         <th width="10%" style='text-align:center'>Lokasi</th>
-                        <th width="10%" style='text-align:center'>TPU</th>
+                        <th width="10%" style='text-align:center'>TPS</th>
                         <th width="3%" style='text-align:center'>Aksi</th>
                     </tr>
                 </thead>

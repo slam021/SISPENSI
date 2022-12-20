@@ -118,7 +118,7 @@ Session::forget('start_date');
                 </div>
                 <div class="card-footer text-muted">
                     <div class="form-actions float-right">
-                        <a href="{{ route('filter-reset-report-expenditure') }}" type="button" name="Reset" class="btn bg-yellow btn-sm"><i class="fas fa-sync"></i> Batal</a>
+                        <a href="{{ route('filter-reset-report-expenditure') }}" type="button" name="Reset" class="btn bg-yellow btn-sm"><i class="fas fa-sync"></i> Reset</a>
                         <button type="submit" name="Find" class="btn btn-primary btn-sm" title="Search Data"><i class="fa fa-search"></i> Cari</button>
                     </div>
                 </div>

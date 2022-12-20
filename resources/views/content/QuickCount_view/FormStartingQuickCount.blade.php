@@ -128,7 +128,7 @@
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <a class="text-dark">Nama TPU<a class='red'> *</a></a>                        
+                    <a class="text-dark">Nama TPS<a class='red'> *</a></a>                        
                     <input class="form-control input-bb" type="text" name="polling_station_id" id="polling_station_id" value="{{$quickcount->polling_station_name}}" autocomplete="off" readonly/>
                 </div>
             </div>

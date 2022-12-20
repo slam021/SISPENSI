@@ -9,14 +9,14 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Daftar Data TPU</li>
+        <li class="breadcrumb-item active" aria-current="page">Daftar Data TPS</li>
     </ol>
 </nav>
 @stop
 
 @section('content')
 <h3 class="page-title">
-    <b>Daftar TPU</b>
+    <b>Daftar TPS</b>
 </h3>
 @if(session('msg'))
 <div class="alert alert-success" role="alert">
@@ -27,10 +27,10 @@
 <div class="card border border-dark">
     <div class="card-header bg-dark clearfix">
         <h5 class="mb-0 float-left">
-            Mengelola Data TPU 
+            Mengelola Data TPS 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('polling-station/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Data TPU Baru</button>
+            <button onclick="location.href='{{ url('polling-station/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Data TPS Baru</button>
         </div>
     </div>
 
@@ -40,9 +40,9 @@
                 <thead>
                     <tr>
                         <th width="3%" style='text-align:center'>No</th>
-                        <th width="10%" style='text-align:center'>Lokasi TPU</th>
-                        <th width="10%" style='text-align:center'>Nama TPU</th>
-                        <th width="10%" style='text-align:center'>Alamat TPU</th>
+                        <th width="10%" style='text-align:center'>Lokasi TPS</th>
+                        <th width="10%" style='text-align:center'>Nama TPS</th>
+                        <th width="10%" style='text-align:center'>Alamat TPS</th>
                         <th width="5%" style='text-align:center'>Aksi</th>
                     </tr>
                 </thead>

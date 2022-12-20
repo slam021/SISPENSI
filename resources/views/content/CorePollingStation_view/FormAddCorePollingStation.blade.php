@@ -44,8 +44,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
-        <li class="breadcrumb-item"><a href="{{ url('polling-station') }}">Daftar Data TPU</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Tambah Data TPU</li>
+        <li class="breadcrumb-item"><a href="{{ url('polling-station') }}">Daftar Data TPS</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Tambah Data TPS</li>
     </ol>
 </nav>
 
@@ -79,7 +79,7 @@
     <div class="card border border-dark">
     <div class="card-header border-dark bg-dark">
         <h5 class="mb-0 float-left">
-            Form Tambah Data TPU
+            Form Tambah Data TPS
         </h5>
         <div class="float-right">
             <button onclick="location.href='{{ url('polling-station') }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
@@ -98,20 +98,20 @@
             <div class="row form-group">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <a class="text-dark">Lokasi TPU<a class='red'> *</a></a>
+                        <a class="text-dark">Lokasi TPS<a class='red'> *</a></a>
                         {!! Form::select('location_id', $corelocation, $nullcorelocation, ['class' => 'selection-search-clear select-form', 'id' => 'location_id','' ])!!}
                     </div>
                 </div>
                 <div class="col-md-6"></div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <a class="text-dark">Nama TPU<a class='red'> *</a></a>
+                        <a class="text-dark">Nama TPS<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="text" name="polling_station_name" id="polling_station_name" value="{{old('polling_station_name')}}" onChange="function_elements_add(this.name, this.value);" autocomplete="off" />
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <a class="text-dark">Alamat TPU<a class='red'> *</a></a>
+                        <a class="text-dark">Alamat TPS<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="text" name="polling_station_address" id="polling_station_address" value="{{old('polling_station_address')}}" onChange="function_elements_add(this.name, this.value);" autocomplete="off" />
                     </div>
                 </div>

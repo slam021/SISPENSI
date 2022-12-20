@@ -37,7 +37,8 @@ class RecapitulationReportController extends Controller
         }else{
             $year = Session::get('year');
         }
-
+        // Session::forget('financial_category_id');
+        
         $monthlist = array(
             '01' => 'Januari',
             '02' => 'Februari',

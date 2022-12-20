@@ -92,7 +92,7 @@ class FundingAcctReportController extends Controller
         // ->orderBy('financial_flow.last_balance_candidate', 'DESC')
         ->where('financial_category.financial_category_type', '=', 1)
         ->get();
-
+        
         $category_expenditure = FinancialCategory::where('financial_category.data_state', '=', 0)
         // ->join('financial_flow', 'financial_category.financial_category_id', '=', 'financial_flow.financial_category_id')
         // ->whereMonth('financial_flow.financial_flow_date', $start_month)
@@ -101,20 +101,20 @@ class FundingAcctReportController extends Controller
         // ->orderBy('financial_flow.last_balance_candidate', 'DESC')
         ->where('financial_category.financial_category_type', '=', 2)
         ->get();
-
+        
         $last_balance_timses_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
         ->whereMonth('financial_flow.financial_flow_date', $start_month)
         ->whereYear('financial_flow.financial_flow_date',$year)
         ->orderBy('financial_flow.financial_flow_date', 'DESC')
         ->orderBy('financial_flow.last_balance_timses', 'DESC')
         ->get();
-
+        
         $financialflow_income = FinancialFlow::where('financial_flow.data_state', '=', 0)
         ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
         ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
-        ->whereYear('financial_flow.financial_flow_date',$year)
-        ->where('financial_flow.financial_category_id', $category_income);
-
+        ->whereYear('financial_flow.financial_flow_date',$year);
+        // ->where('financial_flow.financial_category_id', $category_income);
+        
         $financial_category_id = Session::get('financial_category_id');
         $candidate_id = Session::get('candidate_id');
         $timses_id = Session::get('timses_id');
@@ -123,7 +123,7 @@ class FundingAcctReportController extends Controller
         if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
             $financialflow_income   = $financialflow_income->where('financial_category_id', $financial_category_id);
         }
-
+        
         if($financialflow_list||$financialflow_list!=null||$financialflow_list!=''){
             if($financialflow_list == 1){           
                 $financialflow_income   = $financialflow_income->where('candidate_id', '!=', null);
@@ -137,12 +137,13 @@ class FundingAcctReportController extends Controller
 
         $financialflow_income   = $financialflow_income->get();
         
+        // dd($financialflow_income);
         $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
         ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
         ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
-        ->whereYear('financial_flow.financial_flow_date',$year)
-        ->where('financial_flow.financial_category_id', $category_expenditure);
-
+        ->whereYear('financial_flow.financial_flow_date',$year);
+        // ->where('financial_flow.financial_category_id', $category_expenditure);
+        
         $financial_category_id = Session::get('financial_category_id');
         $candidate_id = Session::get('candidate_id');
         $timses_id = Session::get('timses_id');

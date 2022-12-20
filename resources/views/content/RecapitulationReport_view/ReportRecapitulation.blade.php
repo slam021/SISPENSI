@@ -205,7 +205,7 @@
                         <th style="text-align: center">Saldo Awal</th>
                         <td colspan="3"></td>
 
-                        @if($financialflow_list != "" && $financial_category_id != "")
+                        @if($financialflow_list != "" || $financial_category_id != "")
                             @if($financialflow_list == 1)
                                 @if($last_balance_candidate_old['last_balance_candidate'] >= 0)
                                     <th style='text-align: right'>{{number_format($last_balance_candidate_old['last_balance_candidate'],2,'.',',')}}</th>
@@ -298,7 +298,7 @@
                     <tr>
                         <td colspan="3"></td>
                         <th style="text-align: center">Saldo Akhir</th>
-                        @if($financialflow_list != "" || $financial_category_id != "" )
+                        @if($financialflow_list != "" && $financial_category_id != "" )
                             @if($financialflow_array)
                                 <th style="text-align: right" colspan="4">{{rupiah($saldo_candidate)}}</th>
                             @else

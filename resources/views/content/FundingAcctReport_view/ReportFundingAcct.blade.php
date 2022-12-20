@@ -219,7 +219,7 @@
                                 @foreach($financialflow_income as $nominal)
                       
                         
-                                <td style='text-align:right;'>{{$nominal}}</td>
+                                <td style='text-align:right;'>{{rupiah($val[$nominal['financial_flow_nominal']])}}</td>
                 
                               
                             @endforeach
@@ -245,7 +245,7 @@
                         @foreach($financialflow as $nominal)
                       
                         
-                                <td style='text-align:right;'>{{rupiah($val['financial_category_id'][$nominal['financial_flow_nominal']])}}</td>
+                                <td style='text-align:right;'>{{rupiah($nominal['financial_flow_nominal'])}}</td>
                 
                               
                             @endforeach
