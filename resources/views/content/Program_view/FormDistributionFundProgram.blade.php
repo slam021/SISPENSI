@@ -164,7 +164,7 @@ function rupiah($angka){
                         <td>{{rupiah($val['distribution_fund_nominal'])}}</td>
                         <td class="" style='text-align:center'>
                             <a type="button" class="badge badge-warning" href="{{ url('/program/edit-distribution-fund/'.$val['program_id'].'/'.$val['timses_id'].'/'.$val['distribution_fund_id']) }}" title="edit"><i class='far fa-edit'></i> Edit</a>
-                            <a type="button" class="badge bg-lime" href="{{ url('/program/distribution-fund/'.$val['distribution_fund_id']) }}" title="Detail"><i class='fas fa-list-ul'></i> Detail</a>
+                            <a type="button" class="badge bg-lime" href="{{ url('/program/detail-distribution-fund/'.$val['program_id'].'/'.$val['distribution_fund_id']) }}" title="Detail"><i class='fas fa-list-ul'></i> Detail</a>
                         </td>
                     </tr>
 

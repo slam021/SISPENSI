@@ -76,7 +76,7 @@
             Form Edit Penyaluran Dana
         </h5>
         <div class="float-right">
-            <button onclick="location.href='{{ url('program/distribution-fund/'.$programdistributionfund->program_id.'/'.$programdistributionfund->timses_id) }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
+            <button onclick="location.href='{{ url('program/distribution-fund/'.$programdistributionfund->program_id) }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
         </div>
     </div>
 

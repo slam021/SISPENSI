@@ -20,7 +20,7 @@
 </h3>
 @if(session('msg'))
 <div class="alert alert-success" role="alert">
-     <button type="button" class="close" data-dismiss="alert">×</button> 
+    <button type="button" class="close" data-dismiss="alert">×</button> 
     {{session('msg')}}
 </div>
 @endif 
@@ -109,7 +109,7 @@
 
                             }else{
                                 if($val['program_status'] == 0){
-                                    echo "<a type='button' class='badge bg-olive' href='".url('/program/distribution-fund/'.$val['program_id'].'/'.$val['timses_id'])."' title='Penyaluran Dana'><i class='fas fa-money-bill-alt'></i> Penyaluran</a>";
+                                    echo "<a type='button' class='badge bg-olive' href='".url('/program/distribution-fund/'.$val['program_id'])."' title='Penyaluran Dana'><i class='fas fa-money-bill-alt'></i> Penyaluran</a>";
                                 }else{
                                     
                                 }

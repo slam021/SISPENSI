@@ -142,11 +142,12 @@ Route::get('/program/edit/{program_id}', [ProgramController::class, 'editProgram
 Route::post('/program/process-edit', [ProgramController::class, 'processEditProgram'])->name('process-edit-program');
 Route::get('/program/detail/{program_id}', [ProgramController::class, 'detailProgram'])->name('detail-program');
 
-Route::get('/program/distribution-fund/{program_id}/{timses_id}', [ProgramController::class, 'distributionFundProgram'])->name('distribution-fund');
+Route::get('/program/distribution-fund/{program_id}', [ProgramController::class, 'distributionFundProgram'])->name('distribution-fund');
 Route::post('/program/process-distribution-fund', [ProgramController::class, 'processDistributionFundProgram'])->name('process-distribution-fund');
 Route::get('/program/edit-distribution-fund/{program_id}/{timses_id}/{distribution_fund_id}', [ProgramController::class, 'editDistributionFundProgram'])->name('edit-distribution-fund');
 Route::post('/program/process-edit-distribution-fund', [ProgramController::class, 'processEditDistributionFundProgram'])->name('process-edit-distribution-fund');
 Route::get('/program/get-user-akun/{timses_member_id}', [ProgramController::class, 'getUserAkun'])->name('get-user-akun');
+Route::get('/program/detail-distribution-fund/{program_id}/{distribution_fund_id}', [ProgramController::class, 'detailDistributionFundProgram'])->name('detail-distribution-fund');
 
 Route::get('/program/add-program-support/{program_id}', [ProgramController::class, 'addProgramSupport'])->name('add-program-support');
 Route::post('/program/process-add-program-support', [ProgramController::class, 'processAddProgramSupport'])->name('process-add-program-support');
@@ -221,7 +222,6 @@ Route::get('/funding-expenditure-timses/add', [FundingExpenditureController::cla
 Route::post('/funding-expenditure-timses/process-add', [FundingExpenditureController::class, 'processAddFundingExpenditureTimses'])->name('process-add-funding-expenditure-timses');
 Route::get('/funding-expenditure-timses/edit/{financial_flow_id}', [FundingExpenditureController::class, 'editFundingExpenditureTimses'])->name('edit-funding-expenditure-timses');
 Route::post('/funding-expenditure-timses/process-edit', [FundingExpenditureController::class, 'processEditFundingExpenditureTimses'])->name('process-edit-funding-expenditure-timses');
-
 Route::get('/funding-expenditure-timses/delete-funding-expenditure/{financial_flow_id}', [FundingExpenditureController::class, 'deleteFundingExpenditureTimses'])->name('delete-funding-expenditure-timses');
 
 //Report Funding Income
@@ -256,8 +256,8 @@ Route::get('/report-recap/export',[RecapitulationReportController::class, 'expor
 Route::get('/report-funding',[FundingAcctReportController::class, 'index']);
 Route::post('/report-funding/filter',[FundingAcctReportController::class, 'filterFundingAcctReport'])->name('filter-report-funding');
 Route::get('/report-funding/reset-filter',[FundingAcctReportController::class, 'filterResetFundingAcctReport'])->name('filter-reset-report-funding');
-Route::get('/report-funding/print',[FundingAcctReportController::class, 'printLedgerReport'])->name('print-report-funding');
-Route::get('/report-funding/export',[FundingAcctReportController::class, 'exportLedgerReport'])->name('export-report-funding');
+Route::get('/report-funding/print',[FundingAcctReportController::class, 'printFundingAcctReport'])->name('print-report-funding');
+Route::get('/report-funding/export',[FundingAcctReportController::class, 'exportFundingAcctReport'])->name('export-report-funding');
 
 //Timses Activity Report
 Route::get('/report-timses-activity',[TimsesActivityReportController::class, 'index']);

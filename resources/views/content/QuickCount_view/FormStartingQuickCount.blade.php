@@ -177,8 +177,8 @@
                     </div>
                 @endforeach
                 @if(count( $corecandidate ) == 0)
-                <div class="container">  
-                    <p style="padding-left:500px; padding-top: 25px"> Data Kosong</p>
+                <div class="container"  style='text-align:center;''>  
+                    <h6 style='font-weight:bold; padding-top:20px'>Data Kosong</h6>
                 </div> 
                 @endif
             </div>

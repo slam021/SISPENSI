@@ -6,27 +6,6 @@
 
 @section('js')
 <script>
-    $(document).ready(function(){
-        var financial_category_id = {!! json_encode($financial_category_id) !!};
-        
-        if(financial_category_id == null){
-            $("#financial_category_id").select2("val", "0");
-        }
-    });
-    $(document).ready(function(){
-        var candidate_id = {!! json_encode($candidate_id) !!};
-        
-        if(candidate_id == null){
-            $("#candidate_id").select2("val", "0");
-        }
-    });
-    $(document).ready(function(){
-        var timses_id = {!! json_encode($timses_id) !!};
-        
-        if(timses_id == null){
-            $("#timses_id").select2("val", "0");
-        }
-    });
 </script>
 @stop
 
@@ -44,9 +23,9 @@
 @section('content')
 <?php
     function rupiah($angka){
-                        $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
-                        return $hasil_rupiah;
-                    } 
+        $hasil_rupiah = number_format($angka,2,',','.');
+        return $hasil_rupiah;
+    } 
 ?>
 {{-- <h3 class="page-title">
     <b>Daftar Buku Besar </b> <small>Kelola Daftar Buku Besar  </small>
@@ -187,7 +166,7 @@
     <div class="container"> 
     <div class="card-body">
         <div class="table-responsive pt-3">
-            <table id="" style="width:100%" class="table-sm table-bordered table-hover" class="table table-hover table-bordered table-full-width table-responsive-sm">
+            <table id="" style="width:100%" class="table table-bordered table-hover" class="table table-hover table-bordered table-full-width table-responsive-sm">
                 <thead>
                     <tr>
                         <td colspan='2' style='text-align:center;'>
@@ -207,60 +186,59 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    {{-- <tr>
                         <td colspan='2' style='font-weight:bold'>Rincian Pemasukan</td>
-                    </tr>
+                    </tr> --}}
                     <tr>
-                        <td colspan='2' style='font-weight:bold; padding-right:1px'> &emsp;&emsp;Kategori Keuangan</td>
+                        <td colspan='2' style='font-weight:bold; padding-right:1px'>Kategori Pemasukan</td>
                     </tr>
-                    @foreach ($category_income as $val)
-                            <tr>
-                                <td colspan=''>&emsp;&emsp;&emsp;&emsp;{{$val['financial_category_name']}}</td>
-                                @foreach($financialflow_income as $nominal)
-                      
-                        
-                                <td style='text-align:right;'>{{rupiah($val[$nominal['financial_flow_nominal']])}}</td>
-                
-                              
-                            @endforeach
-                            </tr>
-
+                    @php
+                        $total_nominal_income = 0;
+                        $total_nominal_expenditure = 0;
+                        $last_balance_acct = 0;
+                    @endphp
+                    @foreach ($category_income as $key => $val)
+                        <tr>
+                            <td colspan=''>&emsp;&emsp;{{$val['financial_category_name']}}</td>
+                            <td style='text-align:right;'>{{rupiah($RFA->getFinanciaLFlowNominal($val->financial_category_id))}}</td>
+                        </tr>
+                    @php
+                        $total_nominal_income += $RFA->getFinanciaLFlowNominal($val->financial_category_id); 
+                    @endphp
                     @endforeach
                     <tr>
                         <td style='font-weight:bold'>Total Pemasukan</td>
-                        <td style='font-weight:bold; text-align:right;'>0,00</td>
+                        <td style='font-weight:bold; text-align:right;'>{{rupiah($total_nominal_income)}}</td>
                     </tr>
                     <tr>
                         <td colspan='2'></td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <td colspan='2' style='font-weight:bold'>Rincian Pengeluaran</td>
-                    </tr>
+                    </tr> --}}
                     <tr>
-                        <td colspan='2' style='font-weight:bold'>&emsp;&emsp;Kategori Keuangan</td>
+                        <td colspan='2' style='font-weight:bold'>Kategori Pengeluaran</td>
                     </tr>
-                    @foreach ($category_expenditure as $val)
+                    @foreach ($category_expenditure as $key => $val)
                     <tr>
-                        <td>&emsp;&emsp;&emsp;&emsp;{{$val['financial_category_name']}}</td>    
-                        @foreach($financialflow as $nominal)
-                      
-                        
-                                <td style='text-align:right;'>{{rupiah($nominal['financial_flow_nominal'])}}</td>
-                
-                              
-                            @endforeach
+                        <td>&emsp;&emsp;{{$val['financial_category_name']}}</td>    
+                        <td style='text-align:right;'>{{rupiah($RFA->getFinanciaLFlowNominal($val->financial_category_id))}}</td>    
                     </tr>
+                    @php
+                        $total_nominal_expenditure += $RFA->getFinanciaLFlowNominal($val->financial_category_id); 
+                        $last_balance_acct = $total_nominal_income - $total_nominal_expenditure;
+                    @endphp
                     @endforeach
                     <tr>
                         <td style='font-weight:bold'>Total Pengeluaran</td>
-                        <td style='font-weight:bold; text-align:right;'>0,00</td>
+                        <td style='font-weight:bold; text-align:right;'>{{rupiah($total_nominal_expenditure)}}</td>
                     </tr>
                     <tr>
                         <td colspan='2'></td>
                     </tr>
                     <tr>
                         <td style="font-weight:bold; width: 80%">Sisa Saldo</td>
-                        <td style='font-weight:bold; text-align:right;'>0,00</td>
+                        <td style='font-weight:bold; text-align:right;'>{{rupiah($last_balance_acct)}}</td>
                         {{-- <th style="width: 20%; text-align: right">{{ number_format($grand_total_account_amount1 - $grand_total_account_amount2,2,'.',',') }}</th> --}}
                     </tr>
                 </tbody>
@@ -270,8 +248,8 @@
     </div>
     <div class="card-footer text-muted">
         <div class="form-actions float-right">
-            <a class="btn bg-orange btn-sm" href="{{ url('/report-recap/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
-            <a class="btn bg-olive btn-sm" href="{{ url('/report-recap/export') }}"><i class="fa fa-download"></i> Export Data</a>
+            <a class="btn bg-orange btn-sm" href="{{ url('/report-funding/print') }}"><i class="fa fa-file-pdf"></i> Pdf</a>
+            <a class="btn bg-olive btn-sm" href="{{ url('/report-funding/export') }}"><i class="fa fa-download"></i> Export Data</a>
         </div>
     </div>
 </div>

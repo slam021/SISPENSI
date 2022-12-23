@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Program;
 use App\Models\ProgramSupport;
 use App\Models\ProgramDistributionFund;
+use App\Models\ProgramTimsesActivity;
 use App\Models\CoreLocation;
 use App\Models\CorePeriod;
 use App\Models\CoreCandidate;
@@ -234,7 +235,7 @@ class ProgramController extends Controller
         return  $coretimses['timses_name'];
     }
 
-    public function distributionFundProgram($program_id, $timses_id){
+    public function distributionFundProgram($program_id){
         $program = Program::select('program.*', 'core_location.location_name', 'core_period.period_name', 'core_candidate.candidate_full_name', 'core_timses.*')
         ->where('program.data_state','=',0)
         ->join('core_location', 'core_location.location_id', '=', 'program.location_id')
@@ -245,7 +246,7 @@ class ProgramController extends Controller
 
         $membertimses = CoreTimsesMember::where('data_state','=',0)
         ->where('core_timses_member.user_id', '!=', null)
-        ->where('core_timses_member.timses_id', $timses_id)
+        ->where('core_timses_member.timses_id', $program['timses_id'])
         ->pluck('timses_member_name', 'timses_member_id');
         $nullmembertimses = Session::get('timses_member_id');
 
@@ -322,7 +323,7 @@ class ProgramController extends Controller
     
 
     public function editDistributionFundProgram($program_id, $timses_id, $distribution_fund_id){
-
+        
         $membertimses = CoreTimsesMember::where('data_state','=',0)
         ->where('core_timses_member.user_id', '!=', null)
         ->where('core_timses_member.timses_id', $timses_id)
@@ -367,10 +368,10 @@ class ProgramController extends Controller
 
         if($item->save()){
             $msg = 'Edit Penyaluran Dana Berhasil';
-            return redirect('program/distribution-fund/'.$request['program_id'].'/'.$request['timses_id'])->with('msg',$msg);
+            return redirect('program/distribution-fund/'.$request['program_id'])->with('msg',$msg);
         } else {
             $msg = 'Edit Penyaluran Dana Gagal';
-            return redirect('program/distribution-fund/'.$request['program_id'].'/'.$request['timses_id'])->with('msg',$msg);
+            return redirect('program/distribution-fund/'.$request['program_id'])->with('msg',$msg);
 
         }
     }
@@ -382,6 +383,42 @@ class ProgramController extends Controller
     //         $program['program_organizer_photos_ktp'],
     //     );
     // }
+
+    public function detailDistributionFundProgram($program_id, $distribution_fund_id){
+        
+        $program = Program::select('program.*', 'core_location.location_name', 'core_period.period_name', 'core_candidate.candidate_full_name', 'core_timses.*')
+        ->where('program.data_state','=',0)
+        ->join('core_location', 'core_location.location_id', '=', 'program.location_id')
+        ->join('core_period', 'core_period.period_id', '=', 'program.period_id')
+        ->join('core_candidate', 'core_candidate.candidate_id', '=', 'program.candidate_id')
+        ->join('core_timses', 'core_timses.timses_id', '=', 'program.timses_id')
+        ->where('program_id', $program_id)->first();
+
+        $membertimses = CoreTimsesMember::where('data_state','=',0)
+        ->where('core_timses_member.user_id', '!=', null)
+        ->where('core_timses_member.timses_id', $program['timses_id'])
+        ->first();
+
+        
+        $systemuser = User::where('data_state','=',0)
+        ->where('system_user.user_group_id', '=', 27)
+        ->first();
+
+        $programdistributionfund = ProgramDistributionFund::select('core_timses_member.*', 'program_distribution_fund.*')
+        ->where('program_distribution_fund.data_state','=',0)
+        // ->join('system_user', 'system_user.user_id', '=', 'program_distribution_fund.user_id')
+        ->join('core_timses_member', 'core_timses_member.timses_member_id', '=', 'program_distribution_fund.timses_member_id')
+        // ->where('program_distribution_fund.program_id', $program_id)
+        // ->where('program_distribution_fund.timses_id', $timses_id)
+        ->where('program_distribution_fund.distribution_fund_id', $distribution_fund_id)
+        ->first();
+
+        $programtimsesactivity = ProgramTimsesActivity::where('data_state', '=', 0)
+        ->where('program_timses_activity.distribution_fund_id', $distribution_fund_id)
+        ->get();
+
+        return view('content/Program_view/FormDetailDistributionFundProgram', compact('program', 'membertimses', 'programdistributionfund', 'systemuser', 'programtimsesactivity'));
+    }
 
     public function addProgramSupport($program_id){
         $programsupport = ProgramSupport::select('core_supporter.*', 'program_support.*')
@@ -498,7 +535,9 @@ class ProgramController extends Controller
     public function documentationProgram($program_id){
         $documentation = Session::get('data_ducumentation');
 
-        $documentation_file = DocumentationProgram::where('data_state', '=', 0)->get();
+        $documentation_file = DocumentationProgram::where('data_state', '=', 0)
+        ->where('program_documentation.program_id', $program_id)
+        ->get();
 
         return view('content/Program_view/FormDocumentationProgram', compact('documentation', 'documentation_file'));
     }

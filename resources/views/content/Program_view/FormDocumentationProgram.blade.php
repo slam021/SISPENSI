@@ -83,16 +83,22 @@
                 @csrf
                 <div class="card-body">
                     <div class="row form-group">
-                       @foreach($documentation_file as $key => $val)
-                        <div class="col-md-4" style="padding-left: 45px">
-                            <div class="form-group" >
-                                <img class="image" src="{{ url('storage/program_documentation_file/'.$val['program_documentation_file']) }}" width="250px" height="250px">
-                                <br>
-                                <a type="button" style="margin-top: 7px; margin-left: 90px" class="btn bg-blue btn-sm" target="_blank" href="{{ url('/program/download-documentation/'.$val->program_documentation_id) }}" ><i class="fa fa-download"></i> </a>
-                                <a type="button" style="margin-top: 7px;" class="btn bg-danger btn-sm" href="{{ url('/program/delete-documentation/'.$val->program_documentation_id) }}" ><i class="fas fa-trash-alt"></i></a>
+                        @if(count($documentation_file) <= 0)
+                        <div class="container"  style='text-align:center;''>  
+                            <h6 style='font-weight:bold; padding-top:20px'>Dokumentasi Kosong</h6>
+                        </div> 
+                        @else
+                            @foreach($documentation_file as $key => $val)
+                            <div class="col-md-4" style="padding-left: 45px">
+                                <div class="form-group" >
+                                    <img class="image" src="{{ url('storage/program_documentation_file/'.$val['program_documentation_file']) }}" width="250px" height="250px">
+                                    <br>
+                                    <a type="button" style="margin-top: 7px; margin-left: 90px" class="btn bg-blue btn-sm" target="_blank" href="{{ url('/program/download-documentation/'.$val->program_documentation_id) }}" ><i class="fa fa-download"></i> </a>
+                                    <a type="button" style="margin-top: 7px;" class="btn bg-danger btn-sm" href="{{ url('/program/delete-documentation/'.$val->program_documentation_id) }}" ><i class="fas fa-trash-alt"></i></a>
+                                </div>
                             </div>
-                        </div>
-                       @endforeach
+                            @endforeach
+                        @endif
                     </div>
                 </div>
             </form>
