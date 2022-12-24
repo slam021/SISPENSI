@@ -275,7 +275,7 @@ class FundingAcctReportController extends Controller
             <tr>
                 <td><div style=\"text-align: center; font-size:12px\">Periode : ".$monthlist[$start_month]." - ".$monthlist[$end_month] ." ".$year."</div></td>
             </tr>
-            <br>
+            <hr>
             <br>
         </table>
         ";
@@ -284,7 +284,7 @@ class FundingAcctReportController extends Controller
         $tblIncome1 = "
         <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">
             <tr>
-                <td width=\"73%\"><div style=\"text-align: left; font-weight: bold\">Kategori Pemasukan</div></td>
+                <td width=\"100%\" colspan=\"2\"><div style=\"text-align: left; font-weight: bold\">Kategori Pemasukan</div></td>
             </tr>
             
             </table>
@@ -294,10 +294,12 @@ class FundingAcctReportController extends Controller
         $tblIncome2 = "";
         $space_category = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         $space_nominal = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
         function rupiah($angka){
             $hasil_rupiah = number_format($angka,2,',','.');
             return $hasil_rupiah;
         }
+
         foreach ($category_income as $key => $val) {
             $total_income += $this->getFinanciaLFlowNominal($val->financial_category_id);
             $tblIncome2 .= "
@@ -310,11 +312,12 @@ class FundingAcctReportController extends Controller
             ";
         }
         $tblIncome3 ="
-        <br>
+        <hr>
         <tr>
             <td><div style=\"text-align: left; font-weight: bold\">Total Pemasukan</div></td>
             <td style=\"text-align: right; font-weight: bold\">".rupiah($total_income)."</td>
         <tr>
+        <hr>
         ";
         $pdf::writeHTML($tblIncome1.$tblIncome2.$tblIncome3, true, false, false, false, '');
 
@@ -322,7 +325,7 @@ class FundingAcctReportController extends Controller
         $tblExpend1 = "
         <table cellspacing=\"0\" cellpadding=\"0\" border=\"0\">
             <tr>
-                <td width=\"73%\"><div style=\"text-align: left; font-weight: bold\">Kategori Pengeluaran</div></td>
+                <td width=\"100%\" colspan=\"2\"><div style=\"text-align: left; font-weight: bold\">Kategori Pengeluaran</div></td>
             </tr>
             
             </table>
@@ -344,17 +347,18 @@ class FundingAcctReportController extends Controller
             ";
         }
         $tblExpend3 ="
-        <br>
+        <hr>
         <tr>
             <td><div style=\"text-align: left; font-weight: bold\">Total Pengeluaran</div></td>
             <td style=\"text-align: right; font-weight: bold\">".rupiah($total_expenditure)."</td>
         <tr>
+        <hr>
         <br>
         <tr>
             <td><div style=\"text-align: left; font-weight: bold\">Sisa Saldo</div></td>
             <td style=\"text-align: right; font-weight: bold\">".rupiah($total_income - $total_expenditure)."</td>
         <tr>
-        <br>
+        <hr>
         <tr>
             <td style=\"text-align: left; font-style: italic;\">".Auth::user()->name.", ".date('d-m-Y H:i')."</td>
         </tr>";
@@ -362,5 +366,216 @@ class FundingAcctReportController extends Controller
 
         $filename = 'Laporan_Perhitungan_Keuangan'.$start_month.'s.d.'.$end_month.'.pdf';
         $pdf::Output($filename, 'I');
+    }
+
+    public function exportFundingAcctReport(){
+        if(!$start_month = Session::get('start_month')){
+            $start_month = date('m');
+        }else{
+            $start_month = Session::get('start_month');
+        }
+        if(!$end_month = Session::get('end_month')){
+            $end_month = date('m');
+        }else{
+            $end_month = Session::get('end_month');
+        }
+        if(!$year = Session::get('year')){
+            $year = date('Y');
+        }else{
+            $year = Session::get('year');
+        }
+
+        $monthlist = array(
+            '01' => 'Januari',
+            '02' => 'Februari',
+            '03' => 'Maret',
+            '04' => 'April',
+            '05' => 'Mei',
+            '06' => 'Juni',
+            '07' => 'Juli',
+            '08' => 'Agustus',
+            '09' => 'September',
+            '10' => 'Oktober',
+            '11' => 'November',
+            '12' => 'Desember',
+        );
+
+        $year_now 	=	date('Y');
+        for($i=($year_now-2); $i<($year_now+2); $i++){
+            $yearlist[$i] = $i;
+        } 
+
+        if(!Session::get('start_date')){
+            $start_date     = date('Y-m-d');
+        }else{
+            $start_date = Session::get('start_date');
+        }
+        if(!Session::get('end_date')){
+            $end_date     = date('Y-m-d');
+        }else{
+            $end_date = Session::get('end_date');
+        }
+
+        $financialflow_list = Session::get('financialflow_list');
+
+        $code=[
+            '' => '',
+            '1' => 'KANDIDATE',
+            '2' => 'TIMSES',
+        ];
+
+        $category_income = FinancialCategory::where('financial_category.data_state', '=', 0)
+        ->where('financial_category.financial_category_type', '=', 1)
+        ->get();
+
+        $category_expenditure = FinancialCategory::where('financial_category.data_state', '=', 0)
+        ->where('financial_category.financial_category_type', '=', 2)
+        ->get();
+
+        $spreadsheet = new Spreadsheet();
+
+        // if(!empty($sales_invoice || $purchase_invoice || $expenditure)){
+            $spreadsheet->getProperties()->setCreator("SISPENSI")
+                                        ->setLastModifiedBy("SISPENSI")
+                                        ->setTitle("Lap Perhitungan Keuangan")
+                                        ->setSubject("")
+                                        ->setDescription("Lap Perhitungan Keuangan")
+                                        ->setKeywords("Lap, Perhitungan, Keuangan")
+                                        ->setCategory("Lap Perhitungan Keuangan");
+                            
+            $sheet = $spreadsheet->getActiveSheet(0);
+            $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
+            $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
+            $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+            $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(25);
+    
+            $spreadsheet->getActiveSheet()->mergeCells("B1:C1");
+            $spreadsheet->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $spreadsheet->getActiveSheet()->getStyle('B1')->getFont()->setBold(true)->setSize(16);
+            $spreadsheet->getActiveSheet()->mergeCells("B2:C2");
+            $spreadsheet->getActiveSheet()->getStyle('B2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+            $sheet->setCellValue('B1',"LAPORAN PERHITUNGAN KEUANGAN ".$code[$financialflow_list]."");	
+            $sheet->setCellValue('B2', 'Periode '.$monthlist[$start_month]." - ".$monthlist[$end_month] ." ".$year);
+
+            function idr($angka){
+                $hasil_rupiah = number_format($angka,2,',','.');
+                return $hasil_rupiah;
+            }
+            
+            $j = 5;
+            $i = 4;
+            $total_income = 0;
+            $total_expenditure = 0;
+            $space_category = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+            $space_nominal = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+            $spreadsheet->getActiveSheet()->mergeCells("B".$i.":C".$i."");
+            $spreadsheet->getActiveSheet()->getStyle("B".$i.":C".$i)->getFont()->setBold(true);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$i.':C'.$i)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$i)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $spreadsheet->getActiveSheet()->getStyle('C'.$i)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+            $spreadsheet->getActiveSheet()->setCellValue('B'.$i, "Kategori Pemasukan");
+
+            foreach($category_income as $key => $val){
+                if(is_numeric($key)){
+                    
+                    $spreadsheet->setActiveSheetIndex(0);
+                    $spreadsheet->getActiveSheet()->getStyle('B'.$j.':C'.$j)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+                    $spreadsheet->getActiveSheet()->getStyle('C'.$j)->getNumberFormat()->setFormatCode('0.00');
+                    $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                    $spreadsheet->getActiveSheet()->getStyle('C'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+                    
+                    $spreadsheet->getActiveSheet()->setCellValue('B'.($j), "Kategori Pemasukan");
+                    $spreadsheet->getActiveSheet()->setCellValue('B'.$j, "              ". $val['financial_category_name']);
+                    $spreadsheet->getActiveSheet()->setCellValue('C'.$j, idr($this->getFinanciaLFlowNominal($val->financial_category_id)));
+                    
+                    $j++;
+                    $total_income += $this->getFinanciaLFlowNominal($val->financial_category_id);
+                }
+            }
+            $spreadsheet->getActiveSheet()->getStyle("B".$j.":C".$j)->getFont()->setBold(true);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$j.':C'.$j)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $spreadsheet->getActiveSheet()->getStyle('C'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+            $spreadsheet->getActiveSheet()->setCellValue('B'.$j, "Total Pemasukan");
+            $spreadsheet->getActiveSheet()->setCellValue('C'.$j, idr($total_income));
+
+            $spreadsheet->getActiveSheet()->getStyle('B'.$j.':C'.$j)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $j++;
+
+            $ji = $j++;
+            $spreadsheet->getActiveSheet()->mergeCells("B".$ji.":C".$ji."");
+            $spreadsheet->getActiveSheet()->getStyle("B".$ji.":C".$ji)->getFont()->setBold(true);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$ji.':C'.$ji)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$ji)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $spreadsheet->getActiveSheet()->getStyle('C'.$ji)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+            $spreadsheet->getActiveSheet()->setCellValue('B'.$ji, "");
+
+            $jik = $ji + 1;
+            $spreadsheet->getActiveSheet()->mergeCells("B".$jik.":C".$jik."");
+            $spreadsheet->getActiveSheet()->getStyle("B".$jik.":C".$jik)->getFont()->setBold(true);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$jik.':C'.$jik)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            $spreadsheet->getActiveSheet()->getStyle('B'.$jik)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $spreadsheet->getActiveSheet()->getStyle('C'.$jik)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+            $spreadsheet->getActiveSheet()->setCellValue('B'.$jik, "Kategori Pengeluaran");
+
+            $x =  $jik + 1;
+            foreach($category_expenditure as $keyX => $valX){
+                if(is_numeric($key)){
+                    $spreadsheet->setActiveSheetIndex(0);
+                    $spreadsheet->getActiveSheet()->getStyle('B'.$x.':C'.$x)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+            
+                    $spreadsheet->getActiveSheet()->getStyle('B'.$x)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                    $spreadsheet->getActiveSheet()->getStyle('C'.$x)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+                    $spreadsheet->getActiveSheet()->setCellValue('B'.$x, "              ". $valX['financial_category_name']);
+                    $spreadsheet->getActiveSheet()->setCellValue('C'.$x, idr($this->getFinanciaLFlowNominal($valX['financial_category_id'])));
+                $x++;
+
+                $total_expenditure += $this->getFinanciaLFlowNominal($valX['financial_category_id']);
+            }
+        }
+        $spreadsheet->getActiveSheet()->getStyle("B".$x.":C".$x)->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle('B'.$x.':C'.$x)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $spreadsheet->getActiveSheet()->getStyle('B'.$x)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+        $spreadsheet->getActiveSheet()->getStyle('C'.$x)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+        $spreadsheet->getActiveSheet()->setCellValue('B'.$x, "Total Pengeluaran");
+        $spreadsheet->getActiveSheet()->setCellValue('C'.$x, idr($total_expenditure));
+        $x++;
+
+        $xi = $x++;
+        $spreadsheet->getActiveSheet()->mergeCells("B".$xi.":C".$xi."");
+        $spreadsheet->getActiveSheet()->getStyle("B".$xi.":C".$xi)->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle('B'.$xi.':C'.$xi)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $spreadsheet->getActiveSheet()->getStyle('B'.$xi)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+        $spreadsheet->getActiveSheet()->getStyle('C'.$xi)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+        $xik =  $xi + 1;
+        $spreadsheet->getActiveSheet()->getStyle('B'.$xik)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+        $spreadsheet->getActiveSheet()->getStyle('C'.$xik)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+        $spreadsheet->getActiveSheet()->getStyle('B'.$xik.':C'.$xik)->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+        $spreadsheet->getActiveSheet()->getStyle("B".($xik).":C".$xik)->getFont()->setBold(true);	
+
+        $last_balance = $total_income - $total_expenditure;
+
+        $spreadsheet->getActiveSheet()->setCellValue('B'.($xik), "Sisa Saldo");
+        $spreadsheet->getActiveSheet()->setCellValue('C'.($xik),  idr($last_balance));
+        $xik++;
+        $spreadsheet->getActiveSheet()->mergeCells('B'.$xik.':C'.$xik);
+        $spreadsheet->getActiveSheet()->getStyle('B'.$xik)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+        $sheet->setCellValue('B'.$xik, Auth::user()->name.", ".date('d-m-Y H:i'));
+
+            
+            $filename='Laporan_Rugi_Laba_'.$start_month.'_s.d._'.$end_month.'.xls';
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="'.$filename.'"');
+            header('Cache-Control: max-age=0');
+
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xls');
+            $writer->save('php://output');
+    
     }
 }

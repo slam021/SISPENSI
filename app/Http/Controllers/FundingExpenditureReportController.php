@@ -362,6 +362,7 @@ class FundingExpenditureReportController extends Controller
             $j=5;
             $i=6;
             $no=0;
+            
             function rupiah($angka){
                 $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
                 return $hasil_rupiah;
