@@ -5,30 +5,6 @@
 
 @section('js')
 <script>
-    function function_elements_add(name, value){
-		$.ajax({
-				type: "POST",
-				url : "{{route('add-period-elements')}}",
-				data : {
-                    'name'      : name, 
-                    'value'     : value,
-                    '_token'    : '{{csrf_token()}}'
-                },
-				success: function(msg){
-			}
-		});
-	}
-
-    function reset_add(){
-		$.ajax({
-				type: "GET",
-				url : "{{route('add-period-reset')}}",
-				success: function(msg){
-                    location.reload();
-			}
-
-		});
-	}
 </script>
 @stop
 @section('content_header')
@@ -63,12 +39,6 @@
         </div>
     </div>
 
-    {{-- <?php 
-        if (empty($coresection)){
-            $coresection['section_name'] = '';
-        }
-    ?> --}}
-    
     <?php 
         $gender =[
             ''  => '',
@@ -81,17 +51,17 @@
         @csrf
         <div class="card-body">
             <div class="row form-group">
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <div class="form-group">
                         <a class="text-dark">Nama Periode<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="text" name="period_name" id="period_name" value="{{$coreperiod->period_name}}" autocomplete="off" />
-                        <input class="form-control input-bb" type="hidden" name="period_id" id="period_id" value="{{$coreperiod->period_id}}" autocomplete="off" />
                     </div>
-                </div>
+                </div> --}}
                 <div class="col-md-6">
                     <div class="form-group">
                         <a class="text-dark">Tahun Periode<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="text" name="period_year" id="period_year" value="{{$coreperiod->period_year}}" autocomplete="off" />
+                        <input class="form-control input-bb" type="hidden" name="period_id" id="period_id" value="{{$coreperiod->period_id}}" autocomplete="off" />
                     </div>
                 </div>
             </div>

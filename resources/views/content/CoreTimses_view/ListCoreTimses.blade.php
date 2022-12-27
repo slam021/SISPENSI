@@ -1,4 +1,4 @@
-@inject('CoreTimses', 'App\Http\Controllers\CoreTimsesController')
+@inject('CT', 'App\Http\Controllers\CoreTimsesController')
 
 @extends('adminlte::page')
 
@@ -15,22 +15,32 @@
 @stop
 
 @section('content')
-<h3 class="page-title">
+{{-- <h3 class="page-title">
     <b>Daftar Timses</b>
-</h3>
+</h3> --}}
 @if(session('msg'))
 <div class="alert alert-success" role="alert">
     <button type="button" class="close" data-dismiss="alert">×</button> 
     {{session('msg')}}
 </div>
 @endif 
+
+<?php 
+$gender =[
+    ''  => '',
+    '1' => 'Laki-laki',
+    '2' => 'Perempuan',
+];
+
+?>
+
 <div class="card border border-dark">
     <div class="card-header bg-dark clearfix">
         <h5 class="mb-0 float-left">
-            Mengelola Data Timses 
+            Daftar Timses
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('timses/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Timses Baru</button>
+            <button onclick="location.href='{{ url('timses/add-member') }}'" name="add" class="btn btn-sm bg-info" title="Add Data"><i class="fas fa-plus"></i> Tambah Timses</button>
         </div>
     </div>
 
@@ -39,39 +49,52 @@
             <table id="example" class="table table-sm table-striped table-bordered table-hover " style="width:auto">
                 <thead>
                     <tr>
-                        <th width="2%" style='text-align:center'>No</th>
-                        <th width="10%" style='text-align:center'>Nama Timses</th>
-                        <th width="10%" style='text-align:center'>Saldo Akhir</th>
-                        <th width="3%" style='text-align:center'>Aksi</th>
+                        <th width="3%" style='text-align:center'>No</th>
+                        <th width="10%" style='text-align:center'>Nama</th>
+                        <th width="10%" style='text-align:center'>NIK</th>
+                        <th width="10%" style='text-align:center'>Alamat</th>
+                        <th width="10%" style='text-align:center'>No. Telp</th>
+                        <th width="10%" style='text-align:center'>Kelamin</th>
+                        <th width="10%" style='text-align:center'>Akun</th>
+                        <th width="5%" style='text-align:center'>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php 
                         $no = 1; 
-                         function rupiah($angka){
-                            $hasil_rupiah = "Rp. " . number_format($angka,2,',','.');
-                            return $hasil_rupiah;
-                        }
                     ?>
-                    @foreach($coretimses as $key => $val)
+                    @foreach($coretimsesmember as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['timses_name']}}</td>
-                        <td>{{rupiah($val['last_balance'])}}</td>
+                        <td>{{$val['timses_member_name']}}</td>
+                        <td>{{$val['timses_member_nik']}}</td>
+                        <td>{{$val['timses_member_address']}}</td>
+                        <td>{{$val['timses_member_phone']}}</td>
+                        <td>{{$gender[$val['timses_member_gender']]}}</td>
+                        <td>{{$CT->getAkunName($val['user_id'])}}</td>
                         <td class="" style='text-align:center'>
-                            <a type="button" class="badge badge-warning btn-sm" href="{{ url('/timses/edit/'.$val['timses_id'])}}"><i class='fas fa-edit'></i> Edit</a>
-                            <a type="button" class="badge bg-lime" href="{{ url('/timses/detail/'.$val['timses_id'])}}"><i class='fas fa-list-ul'></i> Detail</a>
-                            <a type="button" class="badge bg-indigo" href="{{ url('/timses/add-member/'.$val['timses_id'])}}"><i class='fas fa-users'></i> Anggota</a>
-                            <a type="button" class="badge badge-danger btn-sm" href="{{ url('/timses/delete-timses/'.$val['timses_id']) }}"><i class='far fa-trash-alt'></i> Hapus</a>
+                            <a type="button" class="badge bg-warning" href="{{url('/timses/edit-member/'.$val['timses_member_id']) }}" title='Edit Acara'><i class='fas fa-edit'></i> Edit</a> 
+                            <?php
+                                if($val['user_id'] == null){
+                                    echo "<a type='button' class='badge bg-success' href='".url('/timses/add-account-member/'.$val['timses_member_id'])."' title='Buat Akun'><i class='fas fa-user-circle'></i> Buat Akun</a>";
+                                }else{
+                                    // echo "<button disabled type='button' class='badge bg-info' title='Edit Acara'><i class='fas fa-edit'></i> Buat akun</button>";
+                                }
+                            ?>
+                            <a type="button" class="badge badge-danger" href="{{url('/timses/delete-timses-member/'.$val['timses_member_id']) }}" title="Hapus"><i class='far fa-trash-alt'></i> Hapus</a>
                         </td>
                     </tr>
+
                     <?php $no++; ?>
                     @endforeach
+                    
                 </tbody>
             </table>
-            </div>
         </div>
     </div>
+</div>
+<br>
+<br>
 @stop
 
 @section('footer')

@@ -75,32 +75,35 @@ Route::get('/location/delete-location/{location_id}', [CoreLocationController::c
 
 //Configuration Data Candidate
 Route::get('/candidate', [CoreCandidateController::class, 'index']);
-Route::get('/candidate/add', [CoreCandidateController::class, 'addCoreCandidate'])->name('add-candidate');
-Route::post('/candidate/process-add', [CoreCandidateController::class, 'processAddCoreCandidate'])->name('process-add-candidate');
-Route::post('/candidate/elements-add', [CoreCandidateController::class, 'addElementsCoreCandidate'])->name('add-candidate-elements');
-Route::get('/candidate/reset-add', [CoreCandidateController::class, 'addReset'])->name('add-candidate-reset');
+// Route::post('/candidate/elements-add', [CoreCandidateController::class, 'addElementsCoreCandidate'])->name('add-candidate-elements');
+// Route::get('/candidate/reset-add', [CoreCandidateController::class, 'addReset'])->name('add-candidate-reset');
 Route::get('/candidate/edit/{candidate_id}', [CoreCandidateController::class, 'editCoreCandidate'])->name('edit-candidate');
 Route::post('/candidate/process-edit', [CoreCandidateController::class, 'processEditCoreCandidate'])->name('process-edit-candidate');
-Route::get('/candidate/detail/{candidate_id}', [CoreCandidateController::class, 'detailCoreCandidate'])->name('detail-candidate');
+
+Route::get('/candidate/edit-partai/{candidate_id}', [CoreCandidateController::class, 'editCoreCandidatePartai'])->name('edit-candidate-partai');
+Route::post('/candidate/process-edit-paratai', [CoreCandidateController::class, 'processEditCoreCandidatePartai'])->name('process-edit-candidate-partai');
+
 Route::get('/candidate/download/{candidate_id}', [CoreCandidateController::class, 'downloadCoreCandidatePhotos'])->name('candidate-photos-download');
 Route::get('/candidate/delete-candidate/{candidate_id}', [CoreCandidateController::class, 'deleteCoreCandidate'])->name('delete-candidate');
 
 //Configuration Data Timses
 Route::get('/timses', [CoreTimsesController::class, 'index']);
-Route::get('/timses/add', [CoreTimsesController::class, 'addCoreTimses'])->name('add-timses');
-Route::post('/timses/process-add', [CoreTimsesController::class, 'processAddCoreTimses'])->name('process-add-timses');
+// Route::get('/timses/add', [CoreTimsesController::class, 'addCoreTimses'])->name('add-timses');
+// Route::post('/timses/process-add', [CoreTimsesController::class, 'processAddCoreTimses'])->name('process-add-timses');
 Route::post('/timses/elements-add', [CoreTimsesController::class, 'addElementsCoreTimses'])->name('add-timses-elements');
 Route::get('/timses/reset-add', [CoreTimsesController::class, 'addReset'])->name('add-timses-reset');
-Route::get('/timses/edit/{timses_id}', [CoreTimsesController::class, 'editCoreTimses'])->name('edit-timses');
-Route::post('/timses/process-edit', [CoreTimsesController::class, 'processEditCoreTimses'])->name('process-edit-timses');
-Route::get('/timses/detail/{timses_id}', [CoreTimsesController::class, 'detailCoreTimses'])->name('detail-timses');
-Route::get('/timses/delete-timses/{timses_id}', [CoreTimsesController::class, 'deleteCoreTimses'])->name('delete-timses');
+// Route::get('/timses/edit/{timses_id}', [CoreTimsesController::class, 'editCoreTimses'])->name('edit-timses');
+// Route::post('/timses/process-edit', [CoreTimsesController::class, 'processEditCoreTimses'])->name('process-edit-timses');
+// Route::get('/timses/detail/{timses_id}', [CoreTimsesController::class, 'detailCoreTimses'])->name('detail-timses');
+// Route::get('/timses/delete-timses/{timses_id}', [CoreTimsesController::class, 'deleteCoreTimses'])->name('delete-timses');
 
-Route::get('/timses/add-member/{timses_id}', [CoreTimsesController::class, 'addMemberCoreTimses'])->name('add-timses-member');
+Route::get('/timses/add-member', [CoreTimsesController::class, 'addMemberCoreTimses'])->name('add-timses-member');
 Route::post('/timses/process-add-member', [CoreTimsesController::class, 'processAddMemberCoreTimses'])->name('process-add-timses-member');
-Route::get('/timses/add-account-member/{timses_id}/{timses_member_id}', [CoreTimsesController::class, 'addAccountMemberCoreTimses'])->name('add-timses-member-account');
+Route::get('/timses/edit-member/{timses_member_id}', [CoreTimsesController::class, 'editMemberCoreTimses'])->name('edit-timses-member');
+Route::post('/timses/process-edit-member', [CoreTimsesController::class, 'processEdiMemberCoreTimses'])->name('process-edit-timses-member');
+Route::get('/timses/add-account-member/{timses_member_id}', [CoreTimsesController::class, 'addAccountMemberCoreTimses'])->name('add-timses-member-account');
 Route::post('/timses/process-add-account-member', [CoreTimsesController::class, 'processAddAccountMemberCoreTimses'])->name('process-add-timses-member-account');
-Route::get('/timses/delete-timses-member/{timses_id}/{timses_member_id}', [CoreTimsesController::class, 'deleteMemberCoreTimses'])->name('delete-timses-member');
+Route::get('/timses/delete-timses-member/{timses_member_id}', [CoreTimsesController::class, 'deleteMemberCoreTimses'])->name('delete-timses-member');
 
 //Configuration Data Supporter
 Route::get('/supporter', [CoreSupporterController::class, 'index']);
@@ -184,7 +187,7 @@ Route::post('/financial-category/process-add', [FinancialCategoryController::cla
 Route::post('/financial-category/elements-add', [FinancialCategoryController::class, 'addElementsFinancialCategory'])->name('add-financial-category-elements');
 Route::get('/financial-category/reset-add', [FinancialCategoryController::class, 'addReset'])->name('add-financial-category-reset');
 Route::get('/financial-category/edit/{financial_category_id}', [FinancialCategoryController::class, 'editFinancialCategory'])->name('edit-financial-category');
-Route::post('/financial-category/process-edit', [FinancialCategoryController::class, 'processEditFinancialCategory'])->name('process-edit-period');
+Route::post('/financial-category/process-edit', [FinancialCategoryController::class, 'processEditFinancialCategory'])->name('process-edit-category');
 Route::get('/financial-category/delete-financial-category/{financial_category_id}', [FinancialCategoryController::class, 'deleteFinancialCategory'])->name('delete-financial-category');
 
 //Funding Income -> Financial Flow

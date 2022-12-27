@@ -73,6 +73,11 @@ class FundingAcctReportController extends Controller
         ->get();
         // dd($category_expenditure);
 
+        // $star_date = "2022-09-20"; 
+        // $threemonth = date('Y-m-d', strtotime('+2 year', strtotime($star_date)));
+        // dd($threemonth);
+
+
         return view('content.FundingAcctReport_view.ReportFundingAcct', compact('start_month','end_month', 'monthlist', 'year' , 'yearlist', 'year_now', 'category_income', 'category_expenditure', 'code', 'financialflow_list'));
     }
 

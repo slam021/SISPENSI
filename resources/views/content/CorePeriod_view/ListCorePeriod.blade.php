@@ -39,10 +39,9 @@
             <table id="example" class="table table-sm table-striped table-bordered table-hover " style="width:auto">
                 <thead>
                     <tr>
-                        <th width="3%" style='text-align:center'>No</th>
-                        <th width="15%" style='text-align:center'>Nama Periode</th>
-                        <th width="5%" style='text-align:center'>Tahun</th>
-                        <th width="5%" style='text-align:center'>Aksi</th>
+                        <th width="2%" style='text-align:center'>No</th>
+                        <th width="10%" style='text-align:center'>Tahun</th>
+                        <th width="3%" style='text-align:center'>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,7 +51,6 @@
                     @foreach($coreperiod as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['period_name']}}</td>
                         <td>{{$val['period_year']}}</td>
                         <td class="" style='text-align:center'>
                             <a type="button" class="badge badge-warning" href="{{ url('/period/edit/'.$val['period_id'])}}"><i class='fas fa-edit'></i> Edit</a>

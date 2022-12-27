@@ -5,30 +5,7 @@
 
 @section('js')
 <script>
-    function function_elements_add(name, value){
-		$.ajax({
-				type: "POST",
-				url : "{{route('add-candidate-elements')}}",
-				data : {
-                    'name'      : name, 
-                    'value'     : value,
-                    '_token'    : '{{csrf_token()}}'
-                },
-				success: function(msg){
-			}
-		});
-	}
 
-    function reset_add(){
-		$.ajax({
-				type: "GET",
-				url : "{{route('add-candidate-reset')}}",
-				success: function(msg){
-                    location.reload();
-			}
-
-		});
-	}
 </script>
 @stop
 @section('content_header')
@@ -131,12 +108,12 @@
                         <input class="form-control input-bb" type="date" name="candidate_birth_date" id="candidate_birth_date" value="{{$corecandidate->candidate_birth_date}}" autocomplete="off" />
                     </div>
                 </div>
-                <div class="col-md-3">
+                {{-- <div class="col-md-3">
                     <div class="form-group">
                         <a class="text-dark">Periode<a class='red'> *</a></a>
                         {!! Form::select('period_id', $coreperiod, $corecandidate->period_id, ['class' => 'selection-search-clear select-form', 'id' => 'period_id','' ])!!}
                     </div>
-                </div>
+                </div> --}}
                 {{-- <div class="col-md-3">
                     <div class="form-group">
                         <a class="text-dark">Foto Sekarang<a class='red'> </a></a>

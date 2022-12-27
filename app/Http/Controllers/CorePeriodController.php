@@ -25,28 +25,14 @@ class CorePeriodController extends Controller
         return view('content/CorePeriod_view/FormAddCorePeriod', compact('coreperiod'));
     }
 
-    public function addElementsCorePeriod(Request $request){
-        $data_coreperiod[$request->name] = $request->value;
-
-        $coreperiod = Session::get('data_coreperiod');
-        
-        return redirect('/period/add');
-    }
-
-    public function addReset(){
-        Session::forget('data_coreperiod');
-
-        return redirect('/period/add');
-    }
-
     public function processAddCorePeriod(Request $request){
         $fields = $request->validate([
-            'period_name'           => 'required',
+            // 'period_name'           => 'required',
             'period_year'           => 'required|numeric',
         ]);
 
         $data = array(
-            'period_name'           => $fields['period_name'], 
+            // 'period_name'           => $fields['period_name'], 
             'period_year'           => $fields['period_year'],
             'created_id'            => Auth::id(),
             'created_at'            => date('Y-m-d'),
@@ -54,10 +40,10 @@ class CorePeriodController extends Controller
 
         if(CorePeriod::create($data)){
             $msg = 'Tambah Data Periode Berhasil';
-            return redirect('/period/add')->with('msg',$msg);
+            return redirect('/period')->with('msg',$msg);
         } else {
             $msg = 'Tambah Data Periode Gagal';
-            return redirect('/period/add')->with('msg',$msg);
+            return redirect('/period')->with('msg',$msg);
         }
     }
 
@@ -71,14 +57,13 @@ class CorePeriodController extends Controller
     public function processEditCorePeriod(Request $request){
         $fields = $request->validate([
             'period_id'             => 'required',
-            'period_name'           => 'required',
+            // 'period_name'           => 'required',
             'period_year'           => 'required|numeric',
         ]);
 
         $item  = CorePeriod::findOrFail($fields['period_id']);
-        $item->period_name        = $fields['period_name'];
+        // $item->period_name        = $fields['period_name'];
         $item->period_year        = $fields['period_year'];
-            // $item->photos            = $request['photos'];
 
             if($item->save()){
                 $msg = 'Edit Data Periode Berhasil';

@@ -46,7 +46,6 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
         <li class="breadcrumb-item"><a href="{{ url('timses') }}">Daftar Data Timses</a></li>
-        <li class="breadcrumb-item"><a href="{{ url('timses-member') }}">Daftar Data Anggota Timses </a></li>
         <li class="breadcrumb-item active" aria-current="page">Tambah Akun Anggota Timses</li>
     </ol>
 </nav>
@@ -80,8 +79,7 @@
 @endif
 <?php 
     $systemuser += 1; 
-    $timses_id = Request::segment(3);
-    $timses_member_id = Request::segment(4);
+    $timses_member_id = Request::segment(3);
 ?>
 <div class="card border border-dark">
     <div class="card-header border-dark bg-dark">
@@ -89,7 +87,7 @@
             Form Tambah Akun Anggota
         </h5>
         <div class="float-right">
-            <button onclick="location.href='{{ url('timses/add-member/'.$timses_id) }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
+            <button onclick="location.href='{{ url('timses') }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
         </div>
     </div>
 
@@ -127,7 +125,6 @@
         </div>
     </div>
     </div>
-<input class="form-control input-bb" type="hidden"name="timses_id" id="timses_id" value="{{$timses_id}}" autocomplete="off" readonly/>
 </form>
 
 @stop
