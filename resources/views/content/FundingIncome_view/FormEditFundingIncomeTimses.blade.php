@@ -84,7 +84,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <a class="text-dark">Timses<a class='red'> *</a></a>
-                        {!! Form::select('timses_id', $coretimses, $fundingincome->timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
+                        {!! Form::select('timses_member_id', $coretimsesmember, $fundingincome->timses_member_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!}
                     </div>
                 </div>
                 <div class="col-md-4">

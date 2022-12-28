@@ -19,7 +19,7 @@
     <body style="background-image: url('resources/img/logosimpel/pemilu.png'); background-size: cover; background-repeat: no-repeat; ">
       
         <div class="masthead">
-            <img src="{{asset('resources/img/logosimpel/KPU.png')}}" id="logo" style="width: 80px; height: 80px; position:absolute; top: 5px; left:5px;">
+            {{-- <img src="{{asset('resources/img/logosimpel/KPU.png')}}" id="logo" style="width: 80px; height: 80px; position:absolute; top: 5px; left:5px;"> --}}
             <div class="masthead-content text-white">
                 <div class="container-fluid px-4 px-lg-0">
                     <img src="{{asset('resources/img/logosimpel/logo_sispensi.png')}}" id="logo" style="width: 400px; height: 130px;">

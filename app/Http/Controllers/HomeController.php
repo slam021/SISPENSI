@@ -10,7 +10,7 @@ use App\Models\CoreCandidate;
 use App\Models\CoreLocation;
 use App\Models\CorePollingStation;
 use App\Models\CoreSupporter;
-use App\Models\CoreTimses;
+use App\Models\CoreTimsesMember;
 
 class HomeController extends Controller
 {
@@ -59,10 +59,10 @@ class HomeController extends Controller
         ->where('data_state', '=', 0)
         ->get();
 
-        $coretimses = CoreTimses::select('core_timses.*')
+        $coretimsesmember = CoreTimsesMember::select('core_timses_member.*')
         ->where('data_state', '=', 0)
         ->get();
 
-        return view('home',compact('menus', 'corecandidate', 'corelocation', 'corepollingstation', 'coresupporter', 'coretimses'));
+        return view('home',compact('menus', 'corecandidate', 'corelocation', 'corepollingstation', 'coresupporter', 'coretimsesmember'));
     }
 }

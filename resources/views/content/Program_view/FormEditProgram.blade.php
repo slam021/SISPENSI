@@ -1,3 +1,5 @@
+@inject('Program', 'App\Http\Controllers\ProgramController')
+
 @extends('adminlte::page')
 
 @section('title', 'Sistem Pendukung Eleksi')
@@ -5,30 +7,16 @@
 
 @section('js')
 <script>
-    function function_elements_add(name, value){
-		$.ajax({
-				type: "POST",
-				url : "{{route('add-program-elements')}}",
-				data : {
-                    'name'      : name, 
-                    'value'     : value,
-                    '_token'    : '{{csrf_token()}}'
-                },
-				success: function(msg){
-			}
-		});
-	}
-
-    function reset_add(){
-		$.ajax({
-				type: "GET",
-				url : "{{route('add-program-reset')}}",
-				success: function(msg){
-                    location.reload();
-			}
-
-		});
-	}
+     function disabledTimses(value){
+        var organizer = document.getElementById('program_organizer').value;
+        console.log(organizer);
+        if(organizer == 1){
+            document.getElementById('timses_member_id').disabled = true;
+        }
+        if(organizer == 2){
+            document.getElementById('timses_member_id').disabled = false;
+        }
+    }
 </script>
 @stop
 @section('content_header')
@@ -99,24 +87,25 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <a class="text-dark">Penyelenggara<a class='red'> *</a></a>
-                        {!! Form::select('program_organizer', $organizer, $program->program_organizer, ['class' => 'selection-search-clear select-form', 'id' => 'program_organizer','' ])!!}
+                        {!! Form::select('program_organizer', $organizer, $program->program_organizer, ['class' => 'selection-search-clear select-form', 'id' => 'program_organizer', 'onChange' => 'disabledTimses(this.value);', '' ])!!}
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <a class="text-dark">Timses<a class='red'> *</a></a>
                         @if($program->program_organizer == 1)
-                        <select class="selection-search-clear" name="timses_id" id="timses_id">
-                                <option value="{{$program->timses_id}}"></option>
-                                @foreach($coretimses2 as $key => $val)
-                                <option value="{{$val->timses_id}}">{{$val->timses_name}}</option>
+                        <select class="selection-search-clear" name="timses_member_id" id="timses_member_id">
+                                <option value="{{$program->timses_member_id}}"></option>
+                                @foreach($coretimsesmember2 as $key => $val)
+                                <option value="{{$val->timses_member_id}}">{{$val->timses_member_name}}</option>
                                 @endforeach   
                             </select> 
-                        {{-- {!! Form::select('timses_id', $coretimses, '', ['class' => 'selection-search-clear select-form', 'id' => 'timses_id' ])!!} --}}
+                        {{-- {!! Form::select('timses_member_id', $coretimses, '', ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id' ])!!} --}}
                         @else
-                            {!! Form::select('timses_id', $coretimses, $program->timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
+                            {!! Form::select('timses_member_id', $coretimsesmember, $program->timses_member_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!}
                         @endif
                         <input class="form-control input-bb" type="hidden" name="program_id" id="program_id" value="{{$program->program_id}}" autocomplete="off"/>
+                        {{-- <input class="form-control input-bb" type="text" name="candidate_id" id="candidate_id" value="{{$corecandidate}}" autocomplete="off"/> --}}
                     </div>
                 </div>
             </div>
@@ -137,12 +126,12 @@
                             <input class="form-control input-bb" type="text" name="program_name" id="program_name" value="{{$program->program_name}}" autocomplete="off"/>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         <div class="form-group">
                             <a class="text-dark">Kandidate<a class='red'> *</a></a>
                             {!! Form::select('candidate_id', $corecandidate, $program->candidate_id, ['class' => 'selection-search-clear select-form', 'id' => 'candidate_id','' ])!!}
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-3">
                         <div class="form-group">
                             <a class="text-dark">Deskripsi<a class='red'> *</a></a>
@@ -155,12 +144,12 @@
                             <input class="form-control input-bb" type="date" name="program_date" id="program_date" value="{{$program->program_date}}" autocomplete="off" />
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         <div class="form-group">
                             <a class="text-dark">Lokasi<a class='red'> *</a></a>
                             {!! Form::select('location_id', $corelocation, $program->location_id, ['class' => 'selection-search-clear select-form', 'id' => 'location_id','' ])!!}
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="col-md-3">
                         <div class="form-group">
                             <a class="text-dark">Alamat<a class='red'> *</a></a>
@@ -173,12 +162,12 @@
                             <input class="form-control input-bb" type="text" name="program_fund" id="program_fund" value="{{$program->program_fund}}" autocomplete="off" />
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         <div class="form-group">
                             <a class="text-dark">Periode<a class='red'> </a></a>
                             {!! Form::select('period_id', $coreperiod, $program->period_id, ['class' => 'selection-search-clear select-form', 'id' => 'period_id','' ])!!}
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="card-footer text-muted">

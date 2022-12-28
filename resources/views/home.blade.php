@@ -69,7 +69,7 @@ Dashboard
             <div class='col-md-3'>
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3 style="text-align: left; margin-left:10px "><b>{{$coretimses->count('core_timses.timses_id')}}</b></h3>
+                        <h3 style="text-align: left; margin-left:10px "><b>{{$coretimsesmember->count('core_timses_member.timses_member_id')}}</b></h3>
                     </div>
                     <div class="icon">
                         <i class="fas fa-users" style='font-size:60px; color:rgb(255, 255, 255); margin-right: 70px'></i>
@@ -116,7 +116,7 @@ Dashboard
                     <?php foreach($menus as $menu){
                             if($menu['id_menu']==61){
                     ?>
-                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('chart-of-account')}}'"> <i class="fa fa-angle-right"></i> COA</li>
+                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('chart-of-account')}}'"> <i class="fa fa-angle-right"></i> Laporan</li>
                     <?php   }
                             if($menu['id_menu']==62){
                     ?> 

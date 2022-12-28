@@ -68,7 +68,7 @@
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
                         <td>{{$val['financial_category_name']}}</td>
-                        <td>{{$val['timses_name']}}</td>
+                        <td>{{$val['timses_member_name']}}</td>
                         <td>{{rupiah($val['financial_flow_nominal'])}}</td>
                         <td>{{$val['financial_flow_date']}}</td>
                         <td>{{$val['financial_flow_description']}}</td>

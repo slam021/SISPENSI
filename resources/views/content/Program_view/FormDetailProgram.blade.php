@@ -7,30 +7,6 @@
 
 @section('js')
 <script>
-    function function_elements_add(name, value){
-		$.ajax({
-				type: "POST",
-				url : "{{route('add-candidate-elements')}}",
-				data : {
-                    'name'      : name, 
-                    'value'     : value,
-                    '_token'    : '{{csrf_token()}}'
-                },
-				success: function(msg){
-			}
-		});
-	}
-
-    function reset_add(){
-		$.ajax({
-				type: "GET",
-				url : "{{route('add-candidate-reset')}}",
-				success: function(msg){
-                    location.reload();
-			}
-
-		});
-	}
 </script>
 @stop
 @section('content_header')
@@ -92,7 +68,7 @@
                     <input class="form-control input-bb" type="text" name="program_organizer" id="program_organizer" value="{{$organizer[$program->program_organizer]}}" autocomplete="off" readonly/>
                 </div>
             </div>
-            @if ($program->timses_id == null)
+            @if ($program->timses_member_id == null)
             <div class="col-md-6">
                 <div class="form-group" >
                     <a class="text-dark">Nama Timses<a class='red'> *</a></a>
@@ -103,7 +79,7 @@
             <div class="col-md-6">
                 <div class="form-group" >
                     <a class="text-dark">Nama Timses<a class='red'> *</a></a>
-                    <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="{{$Program->getTimsesName($program->timses_id)}}" autocomplete="off" readonly/>
+                    <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="{{$Program->getTimsesName($program->timses_member_id)}}" autocomplete="off" readonly/>
                 </div>
             </div>
             @endif
@@ -168,13 +144,13 @@
                     <input class="form-control input-bb" type="text" name="program_name" id="program_name" value="{{$program->program_name}}" autocomplete="off" readonly/>
                 </div>
             </div>
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
                 <div class="form-group">
                     <a class="text-dark">Kandidate<a class='red'> *</a></a>
                     <input class="form-control input-bb" type="text" name="candidate_full_name" id="candidate_full_name" value="{{$program->candidate_full_name}}" autocomplete="off" readonly/>
 
                 </div>
-            </div>
+            </div> --}}
             <div class="col-md-3">
                 <div class="form-group">
                     <a class="text-dark">Deskripsi<a class='red'> *</a></a>
@@ -187,12 +163,12 @@
                     <input class="form-control input-bb" type="date" name="program_date" id="program_date" value="{{$program->program_date}}" autocomplete="off" readonly/>
                 </div>
             </div>
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
                 <div class="form-group">
                     <a class="text-dark">Lokasi<a class='red'> *</a></a>
                     <input class="form-control input-bb" type="text" name="location_name" id="location_name" value="{{$program->location_name}}" autocomplete="off" readonly/>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-md-3">
                 <div class="form-group">
                     <a class="text-dark">Alamat<a class='red'> *</a></a>
@@ -205,56 +181,12 @@
                     <input class="form-control input-bb" type="text" name="program_fund" id="program_fund" value="{{rupiah($program->program_fund)}}" autocomplete="off" readonly/>
                 </div>
             </div>
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
                 <div class="form-group">
                     <a class="text-dark">Periode<a class='red'> </a></a>
                     <input class="form-control input-bb" type="text" name="period_name" id="period_name" value="{{$program->period_name}}" autocomplete="off" readonly/>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="card border border-dark" style="margin-bottom: 100px">
-    <div class="card-header border-dark bg-dark">
-        <h5 class="mb-0 float-left">
-            Daftar Pendukung Acara 
-        </h5>
-    </div>
-    <div class="card-body table-responsive">
-        <div class="table-responsive">
-            <table id="example" class="table table-sm table-striped table-bordered table-hover " style="width:auto">
-                <thead>
-                    <tr>
-                        <th width="3%" style='text-align:center'>No</th>
-                        <th width="10%" style='text-align:center'>Nama</th>
-                        <th width="10%" style='text-align:center'>NIK</th>
-                        <th width="10%" style='text-align:center'>Kelamin</th>
-                        <th width="10%" style='text-align:center'>Alamat</th>
-                        {{-- <th width="5%" style='text-align:center'>Aksi</th> --}}
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                        $no = 1; 
-                    ?>
-                    @foreach($programsupport as $key => $val)
-                    <tr>
-                        <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['supporter_full_name']}}</td>
-                        <td>{{$val['supporter_nik']}}</td>
-                        <td>{{$gender[$val['supporter_gender']]}}</td>
-                        <td>{{$val['supporter_address']}}</td>
-                        {{-- <td class="" style='text-align:center'>
-                            <a type="button" class="badge badge-danger" href="{{ url('/program/delete-program-support/'.$val['program_id']) }}" title="Hapus"><i class='far fa-trash-alt'></i> Hapus</a>
-                        </td> --}}
-                    </tr>
-
-                    <?php $no++; ?>
-                    @endforeach
-                    
-                </tbody>
-            </table>
+            </div> --}}
         </div>
     </div>
 </div>
