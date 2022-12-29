@@ -33,14 +33,23 @@ class ProgramController extends Controller
 
     public function index(){
     
-        $program = Program::select('program.*')
-       
-        ->where('program.data_state','=',0)
-        // ->orderBy('program_id', 'ASC')     
-        ->get();
-
+        
         $coretimsesmember = CoreTimsesMember::select('timses_member_id', 'timses_member_name')
-        ->where('data_state', '=', 0)->get();
+        ->where('data_state', '=', 0)
+        ->get()
+        ->pluck('timses_member_name', 'timses_member_id');
+        
+        $program = Program::select('program.*')
+        ->where('program.data_state','=',0);
+        // ->orderBy('program_id', 'ASC')     
+    
+        $timses_member_id = Session::get('timses_member_id');
+
+        if($timses_member_id||$timses_member_id!=null||$timses_member_id!=''){
+            $program   = $program->where('timses_member_id', $timses_member_id);
+        }
+      
+        $program   = $program->get();
        
         // print_r($coretimses); exit;
 
@@ -48,7 +57,31 @@ class ProgramController extends Controller
             1 => 'Laki-laki',
             2 => 'Perempuan',
         );
-        return view('content/Program_view/ListProgram', compact('program', 'programgender', 'coretimsesmember'));
+        return view('content/Program_view/ListProgram', compact('program', 'programgender', 'timses_member_id', 'coretimsesmember'));
+    }
+
+    public function filterProgram(Request $request)
+    {
+        // $start_date=$request->start_date;
+        // $end_date=$request->end_date;
+        $timses_member_id = $request->timses_member_id;
+
+        // dd( $timses_member_id);
+
+        // Session::put('start_date', $start_date);
+        // Session::put('end_date', $end_date);
+        Session::put('timses_member_id', $timses_member_id);
+
+        return redirect('/program');
+    }
+
+    public function filterResetProgram()
+    {
+        // Session::forget('start_date');
+        // Session::forget('end_date');
+        Session::forget('timses_member_id');
+
+        return redirect('/program');
     }
 
     public function addProgram(Request $request){
@@ -61,6 +94,7 @@ class ProgramController extends Controller
         $nullcoretimses  = Session::get('timses_member_id');
         return view('content/Program_view/FormAddProgram', compact('program', 'coretimsesmember', 'nullcoretimses', 'corecandidate'));
     }
+
 
     public function addElementsProgram(Request $request){
         $data_program[$request->name] = $request->value;

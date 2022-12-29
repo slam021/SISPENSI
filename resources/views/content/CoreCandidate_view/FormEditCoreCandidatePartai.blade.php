@@ -19,8 +19,8 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
-        <li class="breadcrumb-item"><a href="{{ url('candidate') }}">Daftar Data Kandidat</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Tambah Data Kandidat</li>
+        <li class="breadcrumb-item"><a href="{{ url('candidate') }}">Data Kandidat</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Data Partai</li>
     </ol>
 </nav>
 
@@ -54,7 +54,7 @@
     <div class="card border border-dark">
     <div class="card-header border-dark bg-dark">
         <h5 class="mb-0 float-left">
-            Form Tambah Data Kandidat
+            Form Edit Data Partai
         </h5>
         <div class="float-right">
             <button onclick="location.href='{{ url('candidate') }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>

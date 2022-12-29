@@ -8,22 +8,13 @@
 @section('js')
 <script>
     $(document).ready(function(){
-        var timses_id = {!! json_encode($timses_id) !!};
+        var timses_member_id = {!! json_encode($timses_member_id) !!};
         
-        if(timses_id == null){
-            $("#timses_id").select2("val", "0");
+        if(timses_member_id == null){
+            $("#timses_member_id").select2("val", "0");
         }
     });
 
-    $(document).ready(function(){
-        var candidate_id = {!! json_encode($candidate_id) !!};
-        
-        if(candidate_id == null){
-            $("#candidate_id").select2("val", "0");
-        }
-    });
-
-    
 </script>
 @stop
 
@@ -92,7 +83,7 @@
                                 <input type="date" class="form-control input-bb" name="end_date" value="{{ $end_date }}">
                             </div>
                         </div>
-                        <div class = "col-md-3">
+                        {{-- <div class = "col-md-3">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Nama Kandidat
                                     <span class="required text-danger">
@@ -101,7 +92,7 @@
                                 </section>
                                 {!! Form::select('candidate_id', $listcorecandidate, $candidate_id, ['class' => 'selection-search-clear select-form', 'id' => 'candidate_id','' ])!!}
                             </div>
-                        </div>
+                        </div> --}}
                         <div class = "col-md-3">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Nama Timses
@@ -109,7 +100,7 @@
                                         *
                                     </span>
                                 </section>
-                                {!! Form::select('timses_id', $listcoretimses, $timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
+                                {!! Form::select('timses_member_id', $coretimsesmember, $timses_member_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!}
                             </div>
                         </div>
                     </div>
@@ -168,7 +159,7 @@
                     @foreach($fundingcombine as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['financial_flow_date']}}</td>
+                        <td>{{date('d/m/Y', strtotime($val['financial_flow_date']))}}</td>
                         <td>{{$ReportFC->getCategoryName($val['financial_category_id'])}}</td>
                         <td>{{$type[$val['financial_category_type']]}}</td>
                         {{-- <td>{{$val['candidate_id']}}</td> --}}
@@ -177,10 +168,10 @@
                         @else
                         <td>{{$ReportFC->getCandidateName($val['candidate_id'])}}</td>
                         @endif
-                        @if($val['timses_id'] == null)
+                        @if($val['timses_member_id'] == null)
                         <td style='text-align:center'>-</td>
                         @else
-                        <td>{{$ReportFC->getTimsesName($val['timses_id'])}}</td>
+                        <td>{{$ReportFC->getTimsesMemberName($val['timses_member_id'])}}</td>
                         @endif
                         <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
                         {{-- <td>{{$val['financial_flow_description']}}</td> --}}

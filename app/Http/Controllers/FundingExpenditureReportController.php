@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\FinancialFlow;
 use App\Models\FinancialCategory;
-use App\Models\CoreTimses;
+use App\Models\CoreTimsesMember;
 use App\Models\CoreCandidate;
 // use App\Models\Program;
 use Elibyy\TCPDF\Facades\TCPDF;
@@ -33,20 +33,15 @@ class FundingExpenditureReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
-        $listcoretimses = CoreTimses :: where('data_state', 0)
+        $coretimsesmember = CoreTimsesMember::select('timses_member_id', 'timses_member_name')
+        ->where('data_state', '=', 0)
         ->get()
-        ->pluck('timses_name', 'timses_id');
+        ->pluck('timses_member_name', 'timses_member_id');
 
-        $listcorecandidate = CoreCandidate :: where('data_state', 0)
-        ->get()
-        ->pluck('candidate_full_name', 'candidate_id');
+        // $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        // ->get()
+        // ->pluck('candidate_full_name', 'candidate_id');
 
-        // $''corecandidate = Session::get('candidate_id');
-        $code = [
-            ''  => '',
-            '1' => 'Kandidat',
-            '2' => 'Timses',
-        ];
         // dd($start_date);
         
         $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
@@ -56,33 +51,32 @@ class FundingExpenditureReportController extends Controller
             // ->where('timses_id', '=', '')
             // ->get();
 
-        $candidate_id = Session::get('candidate_id');
-        $timses_id = Session::get('timses_id');
+        // $candidate_id = Session::get('candidate_id');
+        // if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+        //     $fundingexpenditure   = $fundingexpenditure->where('candidate_id', $candidate_id);
+        // }
 
-        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
-            $fundingexpenditure   = $fundingexpenditure->where('candidate_id', $candidate_id);
-        }
-        if($timses_id||$timses_id!=null||$timses_id!=''){
-            $fundingexpenditure   = $fundingexpenditure->where('timses_id', $timses_id);
+        $timses_member_id = Session::get('timses_member_id');
+
+        if($timses_member_id||$timses_member_id!=null||$timses_member_id!=''){
+            $fundingexpenditure   = $fundingexpenditure->where('timses_member_id', $timses_member_id);
         }
         $fundingexpenditure   = $fundingexpenditure->get();
 
-        return view('content/FundingExpenditureReport_view/ReportFundingExpenditure', compact('fundingexpenditure', 'start_date', 'end_date', 'listcorecandidate', 'listcoretimses', 'candidate_id', 'timses_id', 'code'));
+        return view('content/FundingExpenditureReport_view/ReportFundingExpenditure', compact('fundingexpenditure', 'start_date', 'end_date',  'coretimsesmember', 'timses_member_id'));
     }
 
     public function filterFundingExpenditureReport(Request $request)
     {
         $start_date=$request->start_date;
         $end_date=$request->end_date;
-        $timses_id = $request->timses_id;
-        $candidate_id = $request->candidate_id;
-
-        // dd( $timses_id);
+        $timses_member_id = $request->timses_member_id;
+        // $candidate_id = $request->candidate_id;
 
         Session::put('start_date', $start_date);
         Session::put('end_date', $end_date);
-        Session::put('timses_id', $timses_id);
-        Session::put('candidate_id', $candidate_id);
+        Session::put('timses_member_id', $timses_member_id);
+        // Session::put('candidate_id', $candidate_id);
 
         return redirect('/report-expenditure');
     }
@@ -91,8 +85,8 @@ class FundingExpenditureReportController extends Controller
     {
         Session::forget('start_date');
         Session::forget('end_date');
-        Session::forget('timses_id');
-        Session::forget('candidate_id');
+        Session::forget('timses_member_id');
+        // Session::forget('candidate_id');
 
         return redirect('/report-expenditure');
     }
@@ -102,23 +96,35 @@ class FundingExpenditureReportController extends Controller
         $data = FinancialCategory::where('financial_category_id',$financial_category_id)
         ->first();
 
-        return $data['financial_category_name'];
+        if($data == null){
+            "-";
+        }else{
+            return $data['financial_category_name'];
+        }
     }
 
-    public function getTimsesName($timses_id)
+    public function getTimsesMemberName($timses_member_id)
     {
-        $data = CoreTimses::where('timses_id', $timses_id)
+        $data = CoreTimsesMember::where('timses_member_id', $timses_member_id)
         ->first();
 
-        return $data['timses_name'];
+        if($data == null){
+            "-";
+        }else{
+            return $data['timses_member_name'];
+        }
+
     }
 
     public function getCandidateName($candidate_id)
     {
         $data = CoreCandidate::where('candidate_id',$candidate_id)
         ->first();
-
-        return $data['candidate_full_name'];
+        if($data == null){
+            "-";
+        }else{
+            return $data['candidate_full_name'];
+        }
     }
 
     public function printFundingExpenditureReport()
@@ -134,20 +140,15 @@ class FundingExpenditureReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
-        $listcoretimses = CoreTimses :: where('data_state', 0)
+        $coretimsesmember = CoreTimsesMember::select('timses_member_id', 'timses_member_name')
+        ->where('data_state', '=', 0)
         ->get()
-        ->pluck('timses_name', 'timses_id');
+        ->pluck('timses_member_name', 'timses_member_id');
 
-        $listcorecandidate = CoreCandidate :: where('data_state', 0)
-        ->get()
-        ->pluck('candidate_full_name', 'candidate_id');
+        // $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        // ->get()
+        // ->pluck('candidate_full_name', 'candidate_id');
 
-        // $''corecandidate = Session::get('candidate_id');
-        $code = [
-            ''  => '',
-            '1' => 'Kandidat',
-            '2' => 'Timses',
-        ];
         // dd($start_date);
         
         $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
@@ -157,14 +158,15 @@ class FundingExpenditureReportController extends Controller
             // ->where('timses_id', '=', '')
             // ->get();
 
-        $candidate_id = Session::get('candidate_id');
-        $timses_id = Session::get('timses_id');
+        // $candidate_id = Session::get('candidate_id');
+        // if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+        //     $fundingexpenditure   = $fundingexpenditure->where('candidate_id', $candidate_id);
+        // }
 
-        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
-            $fundingexpenditure   = $fundingexpenditure->where('candidate_id', $candidate_id);
-        }
-        if($timses_id||$timses_id!=null||$timses_id!=''){
-            $fundingexpenditure   = $fundingexpenditure->where('timses_id', $timses_id);
+        $timses_member_id = Session::get('timses_member_id');
+
+        if($timses_member_id||$timses_member_id!=null||$timses_member_id!=''){
+            $fundingexpenditure   = $fundingexpenditure->where('timses_member_id', $timses_member_id);
         }
         $fundingexpenditure   = $fundingexpenditure->get();
 
@@ -229,7 +231,7 @@ class FundingExpenditureReportController extends Controller
                     <td> ".date('d-m-Y', strtotime($val['financial_flow_date']))."</td>
                     <td> ".$this->getCategoryName($val['financial_category_id'])."</td>
                     <td style=\"text-align:center\">".'-'."</td>
-                    <td> ".$this->getTimsesName($val['timses_id'])."</td>
+                    <td> ".$this->getTimsesMemberName($val['timses_member_id'])."</td>
                     <td style=\"text-align:right\"> ".rupiah($val['financial_flow_nominal'])."</td>
                     
                 </tr>
@@ -239,7 +241,7 @@ class FundingExpenditureReportController extends Controller
                 $tblExpen2 .="
                 <tr>			
                     <td style=\"text-align:center\">$no.</td>
-                    <td> ".date('d-m-Y', strtotime($val['financial_flow_date']))."</td>
+                    <td> ".date('d/m/Y', strtotime($val['financial_flow_date']))."</td>
                     <td> ".$this->getCategoryName($val['financial_category_id'])."</td>
                     <td> ".$this->getCandidateName($val['candidate_id'])."</td>
                     <td style=\"text-align:center\">".'-'."</td>
@@ -286,20 +288,15 @@ class FundingExpenditureReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
-        $listcoretimses = CoreTimses :: where('data_state', 0)
+        $coretimsesmember = CoreTimsesMember::select('timses_member_id', 'timses_member_name')
+        ->where('data_state', '=', 0)
         ->get()
-        ->pluck('timses_name', 'timses_id');
+        ->pluck('timses_member_name', 'timses_member_id');
 
-        $listcorecandidate = CoreCandidate :: where('data_state', 0)
-        ->get()
-        ->pluck('candidate_full_name', 'candidate_id');
+        // $listcorecandidate = CoreCandidate :: where('data_state', 0)
+        // ->get()
+        // ->pluck('candidate_full_name', 'candidate_id');
 
-        // $''corecandidate = Session::get('candidate_id');
-        $code = [
-            ''  => '',
-            '1' => 'Kandidat',
-            '2' => 'Timses',
-        ];
         // dd($start_date);
         
         $fundingexpenditure = FinancialFlow::where('data_state', '=', 0)
@@ -309,14 +306,15 @@ class FundingExpenditureReportController extends Controller
             // ->where('timses_id', '=', '')
             // ->get();
 
-        $candidate_id = Session::get('candidate_id');
-        $timses_id = Session::get('timses_id');
+        // $candidate_id = Session::get('candidate_id');
+        // if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+        //     $fundingexpenditure   = $fundingexpenditure->where('candidate_id', $candidate_id);
+        // }
 
-        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
-            $fundingexpenditure   = $fundingexpenditure->where('candidate_id', $candidate_id);
-        }
-        if($timses_id||$timses_id!=null||$timses_id!=''){
-            $fundingexpenditure   = $fundingexpenditure->where('timses_id', $timses_id);
+        $timses_member_id = Session::get('timses_member_id');
+
+        if($timses_member_id||$timses_member_id!=null||$timses_member_id!=''){
+            $fundingexpenditure   = $fundingexpenditure->where('timses_member_id', $timses_member_id);
         }
         $fundingexpenditure   = $fundingexpenditure->get();
 
@@ -387,17 +385,17 @@ class FundingExpenditureReportController extends Controller
 
                     $no++;
                     $sheet->setCellValue('B'.$j, $no);
-                    $sheet->setCellValue('C'.$j, date('d-m-Y', strtotime($val['financial_flow_date'])));
+                    $sheet->setCellValue('C'.$j, date('d/m/Y', strtotime($val['financial_flow_date'])));
                     $sheet->setCellValue('D'.$j, $this->getCategoryName($val['financial_category_id']));
                     if($val['candidate_id'] == null){
                         $sheet->setCellValue('E'.$j, '-');
                     }else{
                         $sheet->setCellValue('E'.$j, $this->getCandidateName($val['candidate_id']));
                     }
-                    if($val['timses_id'] == null){
+                    if($val['timses_member_id'] == null){
                         $sheet->setCellValue('F'.$j, '-');
                     }else{
-                        $sheet->setCellValue('F'.$j, $this->getTimsesName($val['timses_id']));
+                        $sheet->setCellValue('F'.$j, $this->getTimsesMemberName($val['timses_member_id']));
                     }
                     $sheet->setCellValue('G'.$j, rupiah($val['financial_flow_nominal']));
 

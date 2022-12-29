@@ -70,7 +70,7 @@
                         <td>{{$val['financial_category_name']}}</td>
                         <td>{{$val['timses_member_name']}}</td>
                         <td>{{rupiah($val['financial_flow_nominal'])}}</td>
-                        <td>{{$val['financial_flow_date']}}</td>
+                        <td>{{date('d/m/Y', strtotime($val['financial_flow_date']))}}</td>
                         <td>{{$val['financial_flow_description']}}</td>
                         <td class="" style='text-align:center'>
                             <a type="button" class="badge badge-warning btn-sm" href="{{ url('/funding-income-timses/edit/'.$val['financial_flow_id'])}}"><i class='fas fa-edit'></i> Edit</a>

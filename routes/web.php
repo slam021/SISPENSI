@@ -137,6 +137,10 @@ Route::get('/polling-station/delete-polling-station/{polling_station_id}', [Core
 
 //Program
 Route::get('/program', [ProgramController::class, 'index']);
+
+Route::post('/program/filter',[ProgramController::class, 'filterProgram'])->name('filter-program');
+Route::get('/program/filter-reset',[ProgramController::class, 'filterResetProgram'])->name('filter-reset-program');
+
 Route::get('/program/add', [ProgramController::class, 'addProgram'])->name('add-program');
 Route::post('/program/process-add', [ProgramController::class, 'processAddProgram'])->name('process-add-program');
 Route::post('/program/elements-add', [ProgramController::class, 'addElementsProgram'])->name('add-program-elements');
@@ -145,18 +149,18 @@ Route::get('/program/edit/{program_id}', [ProgramController::class, 'editProgram
 Route::post('/program/process-edit', [ProgramController::class, 'processEditProgram'])->name('process-edit-program');
 Route::get('/program/detail/{program_id}', [ProgramController::class, 'detailProgram'])->name('detail-program');
 
-Route::get('/program/distribution-fund/{program_id}', [ProgramController::class, 'distributionFundProgram'])->name('distribution-fund');
-Route::post('/program/process-distribution-fund', [ProgramController::class, 'processDistributionFundProgram'])->name('process-distribution-fund');
-Route::get('/program/edit-distribution-fund/{program_id}/{timses_id}/{distribution_fund_id}', [ProgramController::class, 'editDistributionFundProgram'])->name('edit-distribution-fund');
-Route::post('/program/process-edit-distribution-fund', [ProgramController::class, 'processEditDistributionFundProgram'])->name('process-edit-distribution-fund');
-Route::get('/program/get-user-akun/{timses_member_id}', [ProgramController::class, 'getUserAkun'])->name('get-user-akun');
-Route::get('/program/detail-distribution-fund/{program_id}/{distribution_fund_id}', [ProgramController::class, 'detailDistributionFundProgram'])->name('detail-distribution-fund');
+// Route::get('/program/distribution-fund/{program_id}', [ProgramController::class, 'distributionFundProgram'])->name('distribution-fund');
+// Route::post('/program/process-distribution-fund', [ProgramController::class, 'processDistributionFundProgram'])->name('process-distribution-fund');
+// Route::get('/program/edit-distribution-fund/{program_id}/{timses_id}/{distribution_fund_id}', [ProgramController::class, 'editDistributionFundProgram'])->name('edit-distribution-fund');
+// Route::post('/program/process-edit-distribution-fund', [ProgramController::class, 'processEditDistributionFundProgram'])->name('process-edit-distribution-fund');
+// Route::get('/program/get-user-akun/{timses_member_id}', [ProgramController::class, 'getUserAkun'])->name('get-user-akun');
+// Route::get('/program/detail-distribution-fund/{program_id}/{distribution_fund_id}', [ProgramController::class, 'detailDistributionFundProgram'])->name('detail-distribution-fund');
 
-Route::get('/program/add-program-support/{program_id}', [ProgramController::class, 'addProgramSupport'])->name('add-program-support');
-Route::post('/program/process-add-program-support', [ProgramController::class, 'processAddProgramSupport'])->name('process-add-program-support');
-Route::get('/program/add-supporter-new/{program_support_id}', [ProgramController::class, 'addCoreSupporterNew'])->name('add-supporter-new');
-Route::post('/program/process-add-supporter-new', [ProgramController::class, 'processAddCoreSupporterNew'])->name('process-add-supporter-new');
-Route::get('/program/delete-program-support/{program_support_id}', [ProgramController::class, 'deleteProgramSupport'])->name('delete-program-support');
+// Route::get('/program/add-program-support/{program_id}', [ProgramController::class, 'addProgramSupport'])->name('add-program-support');
+// Route::post('/program/process-add-program-support', [ProgramController::class, 'processAddProgramSupport'])->name('process-add-program-support');
+// Route::get('/program/add-supporter-new/{program_support_id}', [ProgramController::class, 'addCoreSupporterNew'])->name('add-supporter-new');
+// Route::post('/program/process-add-supporter-new', [ProgramController::class, 'processAddCoreSupporterNew'])->name('process-add-supporter-new');
+// Route::get('/program/delete-program-support/{program_support_id}', [ProgramController::class, 'deleteProgramSupport'])->name('delete-program-support');
 
 Route::get('/program/documentation-program/{program_id}', [ProgramController::class, 'documentationProgram'])->name('documentation-program');
 Route::post('/program/process-documentation-program', [ProgramController::class, 'processDocumentationProgram'])->name('process-documentation-program');
