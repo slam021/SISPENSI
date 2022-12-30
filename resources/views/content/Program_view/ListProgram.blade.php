@@ -123,7 +123,7 @@
                         <th width="10%" style='text-align:center'>Nama Acara</th>
                         <th width="10%" style='text-align:center'>Deskripsi</th>
                         {{-- <th width="10%" style='text-align:center'>Lokasi</th> --}}
-                        <th width="10%" style='text-align:center'>Alamat</th>
+                        <th width="10%" style='text-align:center'>Lokasi Acara</th>
                         <th width="10%" style='text-align:center'>Tanggal</th>
                         <th width="10%" style='text-align:center'>Dana</th>
                         {{-- <th width="10%" style='text-align:center'>Periode</th> --}}

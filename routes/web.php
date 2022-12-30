@@ -6,7 +6,7 @@ use App\Http\Controllers\HomeController;
 
 use App\Http\Controllers\SystemUserController;
 use App\Http\Controllers\SystemUserGroupController;
-use App\Http\Controllers\CoreLocationController;
+use App\Http\Controllers\CoreDapilController;
 use App\Http\Controllers\CoreCandidateController;
 use App\Http\Controllers\CoreTimsesController;
 use App\Http\Controllers\CoreSupporterController;
@@ -43,7 +43,7 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-
+//System User
 Route::get('/system-user', [SystemUserController::class, 'index'])->name('system-user');
 Route::get('/system-user/add', [SystemUserController::class, 'addSystemUser'])->name('add-system-user');
 Route::post('/system-user/process-add-system-user', [SystemUserController::class, 'processAddSystemUser'])->name('process-add-system-user');
@@ -51,7 +51,7 @@ Route::get('/system-user/edit/{user_id}', [SystemUserController::class, 'editSys
 Route::post('/system-user/process-edit-system-user', [SystemUserController::class, 'processEditSystemUser'])->name('process-edit-system-user');
 Route::get('/system-user/delete-system-user/{user_id}', [SystemUserController::class, 'deleteSystemUser'])->name('delete-system-user');
 
-
+//System User Gruop
 Route::get('/system-user-group', [SystemUserGroupController::class, 'index'])->name('system-user-group');
 Route::get('/system-user-group/add', [SystemUserGroupController::class, 'addSystemUserGroup'])->name('add-system-user-group');
 Route::post('/system-user-group/process-add-system-user-group', [SystemUserGroupController::class, 'processAddSystemUserGroup'])->name('process-add-system-user-group');
@@ -59,19 +59,23 @@ Route::get('/system-user-group/edit/{user_id}', [SystemUserGroupController::clas
 Route::post('/system-user-group/process-edit-system-user-group', [SystemUserGroupController::class, 'processEditSystemUserGroup'])->name('process-edit-system-user-group');
 Route::get('/system-user-group/delete-system-user-group/{user_id}', [SystemUserGroupController::class, 'deleteSystemUserGroup'])->name('delete-system-user-group');
 
-//Configuration Data Location
-Route::get('/location', [CoreLocationController::class, 'index']);
-Route::get('/location/add', [CoreLocationController::class, 'addCoreLocation'])->name('add-location');
-Route::post('/location/process-add', [CoreLocationController::class, 'processAddCoreLocation'])->name('process-add-location');
-Route::post('/location/elements-add', [CoreLocationController::class, 'addElementsCoreLocation'])->name('add-location-elements');
-Route::get('/location/reset-add', [CoreLocationController::class, 'addReset'])->name('add-location-reset');
-Route::get('/location/location-province', [CoreLocationController::class, 'addReset'])->name('location-provice');
-Route::post('/location/city', [CoreLocationController::class, 'getCoreCity'])->name('location-city');
-Route::post('/location/district', [CoreLocationController::class, 'getCoreDistrict'])->name('location-district');
-Route::post('/location/village', [CoreLocationController::class, 'getCoreVillage'])->name('location-village');
-Route::get('/location/edit/{location_id}', [CoreLocationController::class, 'editCoreLocation'])->name('edit-location');
-Route::post('/location/process-edit/', [CoreLocationController::class, 'processEditCoreLocation'])->name('process-edit-location');
-Route::get('/location/delete-location/{location_id}', [CoreLocationController::class, 'deleteCoreLocation'])->name('delete-location');
+//Configuration Data Dapil
+Route::get('/dapil', [CoreDapilController::class, 'index']);
+Route::get('/dapil/add', [CoreDapilController::class, 'addCoreDapil'])->name('add-dapil');
+Route::post('/dapil/process-add', [CoreDapilController::class, 'processAddCoreDapil'])->name('process-add-dapil');
+Route::post('/dapil/elements-add', [CoreDapilController::class, 'addElementsCoreDapil'])->name('add-dapil-elements');
+Route::get('/dapil/reset-add', [CoreDapilController::class, 'addReset'])->name('add-dapil-reset');
+Route::get('/dapil/edit/{dapil_id}', [CoreDapilController::class, 'editCoredapil'])->name('edit-dapil');
+Route::post('/dapil/process-edit/', [CoreDapilController::class, 'processEditCoreDapil'])->name('process-edit-dapil');
+Route::get('/dapil/delete-dapil/{dapil_id}', [CoreDapilController::class, 'deleteCoreDapil'])->name('delete-dapil');
+
+//Dapil Item
+Route::get('/dapil/add-dapil-item/{dapil_id}', [CoreDapilController::class, 'addCoreDapilItem'])->name('add-dapil-item');
+Route::post('/dapil/process-add-dapil-item', [CoreDapilController::class, 'processAddCoreDapilItem'])->name('process-add-dapil-item');
+Route::get('/dapil/dapil-province', [CoreDapilController::class, 'addReset'])->name('dapil-provice');
+Route::post('/dapil/city', [CoreDapilController::class, 'getCoreCity'])->name('dapil-city');
+Route::post('/dapil/district', [CoreDapilController::class, 'getCoreDistrict'])->name('dapil-district');
+Route::post('/dapil/village', [CoreDapilController::class, 'getCoreVillage'])->name('dapil-village');
 
 //Configuration Data Candidate
 Route::get('/candidate', [CoreCandidateController::class, 'index']);

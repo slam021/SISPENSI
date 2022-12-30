@@ -56,13 +56,13 @@ class FundingAcctReportController extends Controller
             $yearlist[$i] = $i;
         } 
 
-        $financialflow_list = Session::get('financialflow_list');
+        // $financialflow_list = Session::get('financialflow_list');
 
-        $code=[
-            '' => '',
-            '1' => 'Kandidat',
-            '2' => 'Timses',
-        ];
+        // $code=[
+        //     '' => '',
+        //     '1' => 'Kandidat',
+        //     '2' => 'Timses',
+        // ];
 
         $category_income = FinancialCategory::where('financial_category.data_state', '=', 0)
         ->where('financial_category.financial_category_type', '=', 1)
@@ -78,7 +78,7 @@ class FundingAcctReportController extends Controller
         // dd($threemonth);
 
 
-        return view('content.FundingAcctReport_view.ReportFundingAcct', compact('start_month','end_month', 'monthlist', 'year' , 'yearlist', 'year_now', 'category_income', 'category_expenditure', 'code', 'financialflow_list'));
+        return view('content.FundingAcctReport_view.ReportFundingAcct', compact('start_month','end_month', 'monthlist', 'year' , 'yearlist', 'year_now', 'category_income', 'category_expenditure'));
     }
 
     public function filterFundingAcctReport(Request $request){

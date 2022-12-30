@@ -147,22 +147,37 @@ class ProgramController extends Controller
         );
         // dd($data);                  
 
-        // $data_financial_flow = [
-        //     'financial_category_id'          => $request['financial_category_id'],
-        //     'financial_category_type'        => 2,
-        //     'candidate_id'                   => $request['candidate_id'], 
-        //     // 'timses_id'                      => $request['timses_id'], 
-        //     'financial_flow_nominal'         => $request['program_fund'],
-        //     'financial_flow_description'     => $request['program_description'],
-        //     'financial_flow_date'            => $request['program_date'],
-        //     'created_id'                     => Auth::id(),
-        //     'created_at'                     => date('Y-m-d'),
-        // ];
+        if($request->program_organizer == 1){
+            $candidate_id = CoreCandidate::select('candidate_id')
+            ->where('data_state','=',0)->first()->candidate_id;
+
+            $timses_member_id = null;
+            $financial_category_id = 8;
+            $financial_category_type = 2;
+            // dd($candidate_id);
+        }else{
+            $candidate_id = null;
+            $timses_member_id = $request['timses_member_id'];
+            $financial_category_id = 9;
+            $financial_category_type = 1;
+        }
+
+        $data_financial_flow = [
+            'financial_category_id'          => $financial_category_id,
+            'financial_category_type'        => $financial_category_type,
+            'candidate_id'                   => $candidate_id, 
+            'timses_member_id'               => $timses_member_id, 
+            'financial_flow_nominal'         => $request['program_fund'],
+            'financial_flow_description'     => $request['program_description'],
+            'financial_flow_date'            => $request['program_date'],
+            'created_id'                     => Auth::id(),
+            'created_at'                     => date('Y-m-d'),
+        ];
 
         // dd($data);
 
         if(Program::create($data)){
-            // FinancialFlow::create($data_financial_flow);
+            FinancialFlow::create($data_financial_flow);
             $msg = 'Tambah Acara Berhasil';
             return redirect('/program/add')->with('msg',$msg);
         } else {

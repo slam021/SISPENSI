@@ -152,7 +152,7 @@
                     </div> --}}
                     <div class="col-md-3">
                         <div class="form-group">
-                            <a class="text-dark">Alamat<a class='red'> *</a></a>
+                            <a class="text-dark">Lokasi Acara<a class='red'> *</a></a>
                             <input class="form-control input-bb" type="text" name="program_address" id="program_address" value="{{$program->program_address}}" autocomplete="off" />
                         </div>
                     </div>

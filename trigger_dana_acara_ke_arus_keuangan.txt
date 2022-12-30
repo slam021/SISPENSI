@@ -1,0 +1,88 @@
+DELIMITER $$
+
+USE `ciptapro_sispensi`$$
+
+DROP TRIGGER /*!50032 IF EXISTS */ `insert_category_program_in_financial_flow`$$
+
+CREATE
+    /*!50017 DEFINER = 'root'@'localhost' */
+    TRIGGER `insert_category_program_in_financial_flow` BEFORE INSERT ON `program` 
+    FOR EACH ROW BEGIN
+	DECLARE nTimsesMemberID		          INT(10);
+	DECLARE nCandidateID		          INT(10);
+	DECLARE nCategoryIDCandidate                   INT(10);
+	DECLARE nCategoryTypeCandidate                 INT(10);
+	DECLARE nCategoryIDTimses                   INT(10);
+	DECLARE nCategoryTypeTimses                 INT(10);
+	DECLARE nFinancialFlowNominal   	  DECIMAL(20);
+	DECLARE nFinancialFlowDate  	      VARCHAR(10);
+	DECLARE nFinancialFlowDesc  	      VARCHAR(100);
+	DECLARE nOpeningBalanceFinancialFlowTimses     DECIMAL(20);
+	DECLARE nLastBalanceFinancialFlowTimses     DECIMAL(20);
+	DECLARE nOpeningBalanceFinancialFlowCandidate     DECIMAL(20);
+	DECLARE nLastBalanceFinancialFlowCandidate     DECIMAL(20);
+	DECLARE nCreatedID                    INT(10);
+	
+
+	SET nTimsesMemberID             = new.timses_member_id;
+	
+	SET nCandidateID                = new.candidate_id;
+					                    
+	SET nOpeningBalanceFinancialFlowTimses    = (SELECT last_balance_timses FROM financial_flow
+					             ORDER BY last_balance_timses DESC
+					             LIMIT 1);	
+					             			                    
+	IF ( nOpeningBalanceFinancialFlowTimses IS NULL ) THEN
+		SET nOpeningBalanceFinancialFlowTimses = 0;
+	END IF;	
+	
+	SET nOpeningBalanceFinancialFlowCandidate    = (SELECT last_balance_candidate FROM financial_flow
+					             ORDER BY last_balance_candidate DESC
+					             LIMIT 1);	
+					             			                    
+	IF ( nOpeningBalanceFinancialFlowCandidate IS NULL ) THEN
+		SET nOpeningBalanceFinancialFlowCandidate = 0;
+	END IF;	
+	
+	
+	
+	IF (new.program_organizer  = 2) THEN
+	   
+	   SET nCategoryTypeTimses = 1;
+	   SET nCategoryIDTimses   = 9;
+	   SET nLastBalanceFinancialFlowCandidate = NULL;
+	   SET nLastBalanceFinancialFlowTimses = nOpeningBalanceFinancialFlowTimses + new.program_fund;
+	ELSE 
+	   SET nCategoryTypeCandidate = 2;
+	   SET nCategoryIDCandidate   = 8;
+	   SET nLastBalanceFinancialFlowCandidate = nOpeningBalanceFinancialFlowCandidate + new.program_fund;
+	   SET nLastBalanceFinancialFlowTimses = NULL;
+	END IF;
+	
+	SET nFinancialFlowNominal = new.program_fund;
+	
+	SET nFinancialFlowDate = new.program_date;
+	
+	SET nFinancialFlowDesc = new.program_description;
+	
+	SET nCreatedID = new.created_id;
+	
+    
+    IF (new.program_organizer = 2) THEN	
+        	    
+        INSERT INTO financial_flow (timses_member_id, financial_category_id, financial_category_type,
+		    financial_flow_nominal, financial_flow_date, financial_flow_description, last_balance_candidate, last_balance_timses, created_id)
+	        VALUE(new.timses_member_id, nCategoryIDTimses, nCategoryTypeTimses, nFinancialFlowNominal, nFinancialFlowDate,
+	             nFinancialFlowDesc, nLastBalanceFinancialFlowCandidate, nLastBalanceFinancialFlowTimses, nCreatedID);
+    ELSE
+    
+      INSERT INTO financial_flow (candidate_id, financial_category_id, financial_category_type,
+		    financial_flow_nominal, financial_flow_date, financial_flow_description, last_balance_candidate, last_balance_timses, created_id)
+	        VALUE(new.candidate_id, nCategoryIDCandidate, nCategoryTypeCandidate, nFinancialFlowNominal, nFinancialFlowDate,
+	             nFinancialFlowDesc, nLastBalanceFinancialFlowCandidate, nLastBalanceFinancialFlowTimses, nCreatedID);
+    END IF;
+	
+END;
+$$
+
+DELIMITER ;

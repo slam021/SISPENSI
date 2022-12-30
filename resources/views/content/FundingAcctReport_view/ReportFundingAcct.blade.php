@@ -99,7 +99,7 @@
                                 <input type="month" class="form-control input-bb"  id="end_month" name="end_month" value="{{ $end_month }}">
                             </div>
                         </div> --}}
-                        <div class = "col-md-4">
+                        {{-- <div class = "col-md-4">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Kepemilikan
                                     <span class="required text-danger">
@@ -108,7 +108,7 @@
                                 </section>
                                 {!! Form::select('financialflow_list', $code, $financialflow_list, ['class' => 'selection-search-clear select-form', 'id' => 'financialflow_list' ])!!}
                             </div>
-                        </div>
+                        </div> --}}
                         {{-- <div class = "col-md-6">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Kategori
@@ -170,7 +170,7 @@
                 <thead>
                     <tr>
                         <td colspan='2' style='text-align:center;'>
-                            <div style='font-weight:bold'>Laporan Perhitungan Keuangan {{$code[$financialflow_list]}}
+                            <div style='font-weight:bold'>Laporan Perhitungan Keuangan
                             </div>
                         </td>
                     </tr>
