@@ -39,14 +39,14 @@ Dashboard
             <div class='col-md-3'>
                 <div class="small-box bg-primary">
                     <div class="inner">
-                        <h3 style="text-align: left; margin-left:10px "><b>{{$corelocation->count('core_location.location_id') }}</b></h3>
+                        <h3 style="text-align: left; margin-left:10px "><b>{{$coredapil->count('core_dapil.dapil_id') }}</b></h3>
                     </div>
                     <div class="icon">
                         <i class="fas fa-map-marked-alt	" style='font-size:60px; color:rgb(255, 255, 255); margin-right: 70px'></i>
                     </div>
                     <br>
-                    <a class="small-box-footer" href="{{url('location')}}">
-                        <b>Lokasi</b>
+                    <a class="small-box-footer" href="{{url('dapil')}}">
+                        <b>Dapil</b>
                         <i class='far fa-arrow-alt-circle-right'></i>
                     </a>
                 </div>

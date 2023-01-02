@@ -40,7 +40,7 @@
                 <thead>
                     <tr>
                         <th width="2%" style='text-align:center'>No</th>
-                        <th width="5%" style='text-align:center'>Kategori Dapil</th>
+                        <th width="5%" style='text-align:center'>Tingkat Pemilihan</th>
                         <th width="5%" style='text-align:center'>Nama Dapil</th>
                         <th width="3%" style='text-align:center'>Aksi</th>
                     </tr>
@@ -55,7 +55,8 @@
                         <td>{{$val['dapil_name']}}</td>
                         <td class="" style='text-align:center'>
                             <a type="button" class="badge badge-warning btn-sm" href="{{ url('/dapil/edit/'.$val['dapil_id']) }}"><i class='fas fa-edit'></i> Edit</a>
-                            <a type="button" class="badge bg-indigo btn-sm" href="{{ url('/dapil/add-dapil-item/'.$val['dapil_id']) }}"><i class='fas fa-search-location'></i> Daerah Bagian</a>
+                            <a type="button" class="badge bg-lime btn-sm" href="{{ url('/dapil/detail/'.$val['dapil_id']) }}"><i class='fas fa-list'></i> Detail</a>
+                            <a type="button" class="badge bg-indigo btn-sm" href="{{ url('/dapil/add-dapil-item/'.$val['dapil_id']) }}"><i class='fas fa-search-location'></i> Daerah </a>
                             <a type="button" class="badge badge-danger btn-sm" href="{{ url('/dapil/delete-dapil/'.$val['dapil_id']) }}"><i class='far fa-trash-alt'></i> Hapus</a>
                         </td>
                     </tr>

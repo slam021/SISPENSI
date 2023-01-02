@@ -1,0 +1,73 @@
+DELIMITER $$
+
+USE `ciptapro_sispensi`$$
+
+DROP TRIGGER /*!50032 IF EXISTS */ `insert_last_balance_candidate_timses`$$
+
+CREATE
+    /*!50017 DEFINER = 'root'@'localhost' */
+    TRIGGER `insert_last_balance_candidate_timses` AFTER INSERT ON `financial_flow` 
+    FOR EACH ROW BEGIN
+
+    	DECLARE nTimsesMemberID		          INT(10);
+	DECLARE nCandidateID		          INT(10);
+	DECLARE nOpeningBalanceCoreTimses     DECIMAL(20);
+	DECLARE nOpeningBalanceCoreCandidate  DECIMAL(20);
+	DECLARE nLastBalanceCoreTimses        DECIMAL(20);
+	DECLARE nLastBalanceCoreCandidate     DECIMAL(10);
+	DECLARE nFinancialCategoryType        	  INT(10);
+
+	
+	SET nTimsesMemberID                    = (SELECT timses_member_id FROM financial_flow
+				                       WHERE financial_flow_id = new.financial_flow_id);
+	
+	SET nCandidateID                 = (SELECT candidate_id FROM financial_flow
+					                    WHERE financial_flow_id = new.financial_flow_id);
+	
+						
+	SET nOpeningBalanceCoreTimses    = (SELECT last_balance FROM core_timses_member
+				                        WHERE timses_member_id = nTimsesMemberID);
+						
+	SET nOpeningBalanceCoreCandidate = (SELECT last_balance FROM core_candidate
+					                    WHERE candidate_id = nCandidateID);
+	
+	SET nFinancialCategoryType       = (SELECT financial_category_type FROM financial_flow
+						     WHERE financial_flow_id = new.financial_flow_id);
+						
+	/**/										
+	IF ( nOpeningBalanceCoreTimses IS NULL ) THEN
+		SET nOpeningBalanceCoreTimses = 0;
+	END IF;
+	
+	IF ( nOpeningBalanceCoreCandidate IS NULL ) THEN
+		SET nOpeningBalanceCoreCandidate = 0;
+	END IF;
+	
+	/**/
+	IF (nTimsesMemberID) THEN
+    	IF (nFinancialCategoryType = 1) THEN 
+    		SET nLastBalanceCoreTimses = nOpeningBalanceCoreTimses + new.financial_flow_nominal;
+    	ELSE 
+    		SET nLastBalanceCoreTimses = nOpeningBalanceCoreTimses - new.financial_flow_nominal;
+    	END IF;
+	END IF;
+	
+	IF (new.financial_flow_id) THEN
+		IF (nFinancialCategoryType = 1) THEN 
+			SET nLastBalanceCoreCandidate = nOpeningBalanceCoreCandidate + new.financial_flow_nominal;
+		ELSE 
+			SET nLastBalanceCoreCandidate = nOpeningBalanceCoreCandidate - new.financial_flow_nominal;
+		END IF; 
+	END IF;
+	
+	UPDATE core_timses_member
+		SET last_balance = nLastBalanceCoreTimses
+		WHERE timses_member_id = nTimsesMemberID;
+		
+	UPDATE core_candidate
+		SET  last_balance = nLastBalanceCoreCandidate
+		WHERE candidate_id = nCandidateID;
+END;
+$$
+
+DELIMITER ;

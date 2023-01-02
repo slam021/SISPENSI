@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\CoreCandidate;
-use App\Models\CoreLocation;
+use App\Models\CoreDapil;
 use App\Models\CorePollingStation;
 use App\Models\CoreSupporter;
 use App\Models\CoreTimsesMember;
@@ -47,7 +47,7 @@ class HomeController extends Controller
         ->where('data_state', '=', 0)
         ->get();
 
-        $corelocation = CoreLocation::select('core_location.*')
+        $coredapil = CoreDapil::select('core_dapil.*')
         ->where('data_state', '=', 0)
         ->get();
 
@@ -63,6 +63,6 @@ class HomeController extends Controller
         ->where('data_state', '=', 0)
         ->get();
 
-        return view('home',compact('menus', 'corecandidate', 'corelocation', 'corepollingstation', 'coresupporter', 'coretimsesmember'));
+        return view('home',compact('menus', 'corecandidate', 'coredapil', 'corepollingstation', 'coresupporter', 'coretimsesmember'));
     }
 }

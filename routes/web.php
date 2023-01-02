@@ -65,8 +65,9 @@ Route::get('/dapil/add', [CoreDapilController::class, 'addCoreDapil'])->name('ad
 Route::post('/dapil/process-add', [CoreDapilController::class, 'processAddCoreDapil'])->name('process-add-dapil');
 Route::post('/dapil/elements-add', [CoreDapilController::class, 'addElementsCoreDapil'])->name('add-dapil-elements');
 Route::get('/dapil/reset-add', [CoreDapilController::class, 'addReset'])->name('add-dapil-reset');
-Route::get('/dapil/edit/{dapil_id}', [CoreDapilController::class, 'editCoredapil'])->name('edit-dapil');
+Route::get('/dapil/edit/{dapil_id}', [CoreDapilController::class, 'editCoreDapil'])->name('edit-dapil');
 Route::post('/dapil/process-edit/', [CoreDapilController::class, 'processEditCoreDapil'])->name('process-edit-dapil');
+Route::get('/dapil/detail/{dapil_id}', [CoreDapilController::class, 'detailCoreDapil'])->name('detail-dapil');
 Route::get('/dapil/delete-dapil/{dapil_id}', [CoreDapilController::class, 'deleteCoreDapil'])->name('delete-dapil');
 
 //Dapil Item

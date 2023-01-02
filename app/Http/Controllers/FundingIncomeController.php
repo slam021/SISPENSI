@@ -107,7 +107,12 @@ class FundingIncomeController extends Controller
             'created_at'                        => date('Y-m-d'),
         );
 
+        $last_balance_candidate = CoreCandidate::findOrFail($fields['candidate_id']);
+        $last_balance_candidate->last_balance += $fields['financial_flow_nominal'];
+
         if(FinancialFlow::create($data)){
+            $last_balance_candidate->save();
+
             $msg = 'Tambah Pemasukan Keuangan Kandidat Berhasil';
             return redirect('/funding-income-candidate/add')->with('msg',$msg);
         } else {
@@ -128,7 +133,7 @@ class FundingIncomeController extends Controller
 
         $data = array(
             'financial_category_id'             => $fields['financial_category_id'], 
-            'timses_member_id'                  => $request['timses_member_id'], 
+            'timses_member_id'                  => $fields['timses_member_id'], 
             'financial_category_type'           => $fields['financial_category_type'],
             'financial_flow_nominal'            => $fields['financial_flow_nominal'],
             'financial_flow_date'               => $fields['financial_flow_date'],
@@ -139,7 +144,19 @@ class FundingIncomeController extends Controller
 
         // dd($data);
 
+        $candidate_id = CoreCandidate::select('candidate_id')
+            ->where('data_state','=',0)->first()->candidate_id;
+
+        $last_balance_candidate = CoreCandidate::findOrFail($candidate_id);
+        $last_balance_candidate->last_balance += $fields['financial_flow_nominal'];
+
+        $last_balance_timses = CoreTimsesmember::findOrFail($fields['timses_member_id']);
+        $last_balance_timses->last_balance += $fields['financial_flow_nominal'];
+
         if(FinancialFlow::create($data)){
+            $last_balance_candidate->save();
+            $last_balance_timses->save();
+            // dd( $item);
             $msg = 'Tambah Pemasukan Keuangan Timses Berhasil';
             return redirect('/funding-income-timses/add')->with('msg',$msg);
         } else {

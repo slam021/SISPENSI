@@ -60,7 +60,7 @@
             <div class="row form-group">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <a class="text-dark">Kategori Dapil<a class='red'> *</a></a>
+                        <a class="text-dark">Tingkat Pemilihan<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="hidden" name="dapil_id" id="dapil_id" value="{{$coredapil->dapil_id}}"  autocomplete="off" />
                         {!! Form::select('dapil_category_id', $listdapilcategory, $coredapil->dapil_category_id, ['class' => 'selection-search-clear select-form', 'id' => 'dapil_category_id','required' ])!!}
 

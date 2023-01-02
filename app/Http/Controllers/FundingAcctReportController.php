@@ -166,18 +166,18 @@ class FundingAcctReportController extends Controller
         ->where('financial_category_id', $financial_category_id)
         ->get();
     
-        $financialflow_list = Session::get('financialflow_list');
+        // $financialflow_list = Session::get('financialflow_list');
 
-        if($financialflow_list||$financialflow_list!=null||$financialflow_list!=''){
-            if($financialflow_list ==  1){           
-                $data   = $data->where('candidate_id', '!=', null);
-            }else{
-                $data   = $data->where('timses_id', '!=', null);
-            }
-        }else{
-            $data   = $data->where('candidate_id', '=', null);
-            $data   = $data->where('timses_id', '=', null);
-        }
+        // if($financialflow_list||$financialflow_list!=null||$financialflow_list!=''){
+        //     if($financialflow_list ==  1){           
+        //         $data   = $data->where('candidate_id', '!=', null);
+        //     }else{
+        //         $data   = $data->where('timses_id', '!=', null);
+        //     }
+        // }else{
+        //     $data   = $data->where('candidate_id', '=', null);
+        //     $data   = $data->where('timses_id', '=', null);
+        // }
 
         $nominal = 0;
         foreach($data as $val){

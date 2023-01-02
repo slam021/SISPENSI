@@ -71,6 +71,11 @@ class RecapitulationReportController extends Controller
             $end_date = Session::get('end_date');
         }
 
+        $financial_category_id = Session::get('financial_category_id');
+        $candidate_id = Session::get('candidate_id');
+        $timses_member_id = Session::get('timses_member_id');
+        $financialflow_list = Session::get('financialflow_list');
+
         // $code=[
         //     '' => '',
         //     '1' => 'Kandidat',
@@ -89,11 +94,13 @@ class RecapitulationReportController extends Controller
         // ->pluck('candidate_full_name', 'candidate_id');
 
         $last_balance_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        // ->where('financial_flow.financial_category_id', '=', $financial_category_id)
         ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
         ->whereYear('financial_flow.financial_flow_date',$year)
         ->orderBy('financial_flow.financial_flow_date', 'DESC')
         // ->orderBy('financial_flow.last_balance_candidate', 'DESC')
         ->first();
+        //  dd($last_balance_old);
 
         // $last_balance_timses_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
         // ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
@@ -108,14 +115,10 @@ class RecapitulationReportController extends Controller
         ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
         ->whereYear('financial_flow.financial_flow_date',$year);
 
-        $financial_category_id = Session::get('financial_category_id');
-        $candidate_id = Session::get('candidate_id');
-        $timses_member_id = Session::get('timses_member_id');
-        $financialflow_list = Session::get('financialflow_list');
-        
         if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
             $financialflow   = $financialflow->where('financial_category_id', $financial_category_id);
         }
+        // dd($financial_category_id);
 
         // if($candidate_id||$candidate_id!=null||$candidate_id!=''){
         //     $financialflow   = $financialflow->where('candidate_id', $candidate_id);

@@ -192,23 +192,23 @@
                         <th style="text-align: center">Saldo Awal</th>
                         <td colspan="3"></td>
 
-                        @if($financial_category_id != "")
-                                @if($last_balance_old['last_balance_candidate'] == null)
+                        {{-- @if($financial_category_id == null) --}}
+                                @if(empty($last_balance_old))
                                     <th style='text-align: right'>0,00</th>
                                 @else
                                     <th style='text-align: right'>{{rupiah($last_balance_old['last_balance_candidate'])}}</th>
                                 @endif     
-                        @else
+                        {{-- @else
                             <th style='text-align: right'>0,00</th>
-                        @endif
+                        @endif --}}
                     </tr> 
 
                 @php
                     $no = 1;
                     $total_nominal_in = 0;
                     $total_nominal_out = 0;
-                    $saldo_candidate = $last_balance_old['last_balance_candidate'];
-                    $saldo_timses = $last_balance_old['last_balance_timses'];
+                    $saldo_candidate = empty($last_balance_old['last_balance_candidate']) ? 0 : $last_balance_old['last_balance_candidate'];
+                    $saldo_timses = empty($last_balance_old['last_balance_candidate']) ? 0 : $last_balance_old['last_balance_candidate'];
                 @endphp 
 
                 @foreach($financialflow as $key => $val)

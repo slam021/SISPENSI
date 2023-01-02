@@ -38,7 +38,7 @@ class CoreDapilController extends Controller
         $listdapilcategory  = CoreDapilCategory::pluck('dapil_category_name', 'dapil_category_id');
         $nulldapilcategory = Session::get('dapil_category_id');
 
-        return view('content/Coredapil_view/FormAddCoreDapil', compact('coredapil', 'listdapilcategory', 'nulldapilcategory'));
+        return view('content/CoreDapil_view/FormAddCoreDapil', compact('coredapil', 'listdapilcategory', 'nulldapilcategory'));
     }
 
     public function addCoreDapilItem($dapil_id){
@@ -243,6 +243,22 @@ class CoreDapilController extends Controller
             $msg = 'Edit Data Dapil Gagal';
             return redirect('/dapil')->with('msg',$msg);
         }
+    }
+
+    public function detailCoreDapil($dapil_id){
+        $coredapil = CoreDapil::select('core_dapil.*', 'core_dapil_category.*')
+        ->join('core_dapil_category', 'core_dapil_category.dapil_category_id', '=', 'core_dapil.dapil_category_id')
+        ->where('core_dapil.data_state', '=', 0)
+        ->where('core_dapil.dapil_id', $dapil_id)->first();
+// dd( $coredapil);
+        $coredapilitem = CoreDapilItem::where('core_dapil_item.data_state', '=', 0)
+        ->where('core_dapil_item.dapil_id', $dapil_id)
+        ->get();
+
+        $listdapilcategory  = CoreDapilCategory::pluck('dapil_category_name', 'dapil_category_id');
+        $nulldapilcategory = Session::get('dapil_category_id');
+
+        return view('content/CoreDapil_view/FormDetailCoreDapil', compact('coredapil', 'listdapilcategory', 'nulldapilcategory', 'coredapilitem'));
     }
 
     public function processEditCoreDapilItem(Request $request){

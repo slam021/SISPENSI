@@ -108,7 +108,12 @@ class FundingExpenditureController extends Controller
             'created_at'                        => date('Y-m-d'),
         );
 
+        $last_balance_candidate = CoreCandidate::findOrFail($fields['candidate_id']);
+        $last_balance_candidate->last_balance -= $fields['financial_flow_nominal'];
+
         if(FinancialFlow::create($data)){
+            $last_balance_candidate->save();
+
             $msg = 'Tambah Pengeluaran Keuangan Kandidat Berhasil';
             return redirect('/funding-expenditure-candidate/add')->with('msg',$msg);
         } else {
@@ -138,7 +143,19 @@ class FundingExpenditureController extends Controller
             'created_at'                        => date('Y-m-d'),
         );
 
+        $candidate_id = CoreCandidate::select('candidate_id')
+            ->where('data_state','=',0)->first()->candidate_id;
+
+        $last_balance_candidate = CoreCandidate::findOrFail($candidate_id);
+        $last_balance_candidate->last_balance -= $fields['financial_flow_nominal'];
+
+        $last_balance_timses = CoreTimsesmember::findOrFail($fields['timses_member_id']);
+        $last_balance_timses->last_balance -= $fields['financial_flow_nominal'];
+
         if(FinancialFlow::create($data)){
+            $last_balance_candidate->save();
+            $last_balance_timses->save();
+
             $msg = 'Tambah Pengeluaran Keuangan Timses Berhasil';
             return redirect('/funding-expenditure-timses/add')->with('msg',$msg);
         } else {

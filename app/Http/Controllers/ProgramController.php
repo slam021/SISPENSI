@@ -231,7 +231,7 @@ class ProgramController extends Controller
         $item->program_address                  = $fields['program_address'];
         $item->program_date                     = $fields['program_date'];
         $item->program_fund                     = $request['program_fund'];
-        print_r($item);exit;
+        // print_r($item);exit;
 
         if($item->save()){
             $msg = 'Edit Acara Berhasil';

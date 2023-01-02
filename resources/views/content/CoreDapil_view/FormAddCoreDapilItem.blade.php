@@ -2,7 +2,8 @@
 
 @extends('adminlte::page')
 @section('title', 'Sistem Pendukung Eleksi')
-<link rel="icon" href="{{ asset('resources/assets/favicon.ico') }}" />
+<link rel="icon" href="{{ asset('resources/assets/logo_vote.ico') }}" />
+
 @section('js')
 <script>
     function function_elements_add(name, value){
@@ -132,7 +133,7 @@
 <div class="card border border-dark">
     <div class="card-header border-dark bg-dark">
         <h5 class="mb-0 float-left">
-            Tambah Data Daerah Bagian Dapil
+            Tambah Data Bagian Dapil
         </h5>
         <div class="float-right">
             <button onclick="location.href='{{ url('dapil') }}'" name="back" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
@@ -158,7 +159,7 @@
                     <div class="form-group">	
                         <a class="text-dark">Provinsi<a class='red'> </a></a>
                         {!! Form::select('province_id', $province, 0, ['class' => 'selection-search-clear select-form', 'id' => 'province_id','' ])!!}
-                        <input class="form-control input-bb" type="text" name="dapil_id" id="dapil_id" value="{{$dapil_id}}"  autocomplete="off"/>
+                        <input class="form-control input-bb" type="hidden" name="dapil_id" id="dapil_id" value="{{$dapil_id}}"  autocomplete="off"/>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -200,7 +201,7 @@
     <div class="card border border-dark">
         <div class="card-header bg-dark clearfix">
             <h5 class="mb-0 float-left">
-                Mengelola Data Dapil  
+                Mengelola Data Bagian Dapil  
             </h5>
         </div>
     
