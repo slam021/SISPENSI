@@ -39,15 +39,15 @@
     });
 
     $(document).ready(function(){
-        var location_id = {!! json_encode($nullcorelocation) !!};
+        var dapil_id = {!! json_encode($nullcoredapil) !!};
         
-        if(location_id == null){
-            $("#location_id").select2("val", "0");
+        if(dapil_id == null){
+            $("#dapil_id").select2("val", "0");
         }
     });
 
     $(document).ready(function(){
-        var polling_station_id = {!! json_encode($nullcorelocation) !!};
+        var polling_station_id = {!! json_encode($nullcorepollingstation) !!};
         
         if(polling_station_id == null){
             $("#polling_station_id").select2("val", "0");
@@ -114,19 +114,19 @@
             <div class="row form-group">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <a class="text-dark">Nama Periode<a class='red'> *</a></a>
+                        <a class="text-dark">Periode<a class='red'> *</a></a>
                         {!! Form::select('period_id', $coreperiod, $nullcoreperiod, ['class' => 'selection-search-clear select-form', 'id' => 'period_id','' ])!!}
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <a class="text-dark">Nama Lokasi<a class='red'> *</a></a>
-                        {!! Form::select('location_id', $corelocation, $nullcorelocation, ['class' => 'selection-search-clear select-form', 'id' => 'location_id','' ])!!}
+                        <a class="text-dark">Dapil<a class='red'> *</a></a>
+                        {!! Form::select('dapil_id', $coredapil, $nullcoredapil, ['class' => 'selection-search-clear select-form', 'id' => 'dapil_id','' ])!!}
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <a class="text-dark">Nama TPS<a class='red'> *</a></a>
+                        <a class="text-dark">TPS<a class='red'> *</a></a>
                         {!! Form::select('polling_station_id', $corepollingstation, $nullcorepollingstation, ['class' => 'selection-search-clear select-form', 'id' => 'polling_station_id','' ])!!}
                     </div>
                 </div>

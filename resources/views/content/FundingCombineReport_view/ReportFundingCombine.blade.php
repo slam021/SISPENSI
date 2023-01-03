@@ -27,13 +27,11 @@
 </nav>
 @stop
 
-{{-- <?php 
-    $type =[
-        ''  => '',
-        '1' => 'Pemasukan',
-        '2' => 'Pengeluaran',
-    ];
-?> --}}
+@php 
+    Session::forget('start_date'); 
+    Session::forget('end_date');  
+    Session::forget('timses_member_id');  
+@endphp
 
 @section('content')
 {{-- <h3 class="page-title">

@@ -60,16 +60,16 @@ class RecapitulationReportController extends Controller
             $yearlist[$i] = $i;
         } 
 
-        if(!Session::get('start_date')){
-            $start_date     = date('Y-m-d');
-        }else{
-            $start_date = Session::get('start_date');
-        }
-        if(!Session::get('end_date')){
-            $end_date     = date('Y-m-d');
-        }else{
-            $end_date = Session::get('end_date');
-        }
+        // if(!Session::get('start_date')){
+        //     $start_date     = date('Y-m-d');
+        // }else{
+        //     $start_date = Session::get('start_date');
+        // }
+        // if(!Session::get('end_date')){
+        //     $end_date     = date('Y-m-d');
+        // }else{
+        //     $end_date = Session::get('end_date');
+        // }
 
         $financial_category_id = Session::get('financial_category_id');
         $candidate_id = Session::get('candidate_id');
@@ -93,10 +93,18 @@ class RecapitulationReportController extends Controller
         // ->get()
         // ->pluck('candidate_full_name', 'candidate_id');
 
+        if($start_month == 1){
+            $last_balance_month = 12;
+            $last_balance_year = $year-1;
+        }else{
+            $last_balance_month = $start_month-1;
+            $last_balance_year = $year;
+        }
+
         $last_balance_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
         // ->where('financial_flow.financial_category_id', '=', $financial_category_id)
-        ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
-        ->whereYear('financial_flow.financial_flow_date',$year)
+        ->whereMonth('financial_flow.financial_flow_date', $last_balance_month)
+        ->whereYear('financial_flow.financial_flow_date', $last_balance_year)
         ->orderBy('financial_flow.financial_flow_date', 'DESC')
         // ->orderBy('financial_flow.last_balance_candidate', 'DESC')
         ->first();
@@ -141,7 +149,7 @@ class RecapitulationReportController extends Controller
 
         $financialflow   = $financialflow->get();
 
-        return view('content.RecapitulationReport_view.ReportRecapitulation', compact('start_month','end_month', 'monthlist', 'year' , 'yearlist', 'year_now', 'listfinancialcategory', 'financial_category_id', 'financialflow', 'start_date', 'end_date', 'last_balance_old'));
+        return view('content.RecapitulationReport_view.ReportRecapitulation', compact('start_month','end_month', 'monthlist', 'year' , 'yearlist', 'year_now', 'listfinancialcategory', 'financial_category_id', 'financialflow', 'last_balance_old'));
     }
 
     public function filterRecapitulationReport(Request $request){
@@ -192,7 +200,6 @@ class RecapitulationReportController extends Controller
         }else{
             return $data['financial_category_name'];
         }
-  
     }
 
     public function getTimsesName($timses_member_id){
@@ -217,7 +224,7 @@ class RecapitulationReportController extends Controller
         }
     }
 
-    public function printLedgerReport()
+    public function printRecapitulationReport()
     {
         if(!$start_month = Session::get('start_month')){
             $start_month = date('m');
@@ -234,7 +241,8 @@ class RecapitulationReportController extends Controller
         }else{
             $year = Session::get('year');
         }
-
+        // Session::forget('financial_category_id');
+        
         $monthlist = array(
             '01' => 'Januari',
             '02' => 'Februari',
@@ -255,81 +263,37 @@ class RecapitulationReportController extends Controller
             $yearlist[$i] = $i;
         } 
 
-        if(!Session::get('start_date')){
-            $start_date     = date('Y-m-d');
-        }else{
-            $start_date = Session::get('start_date');
-        }
-        if(!Session::get('end_date')){
-            $end_date     = date('Y-m-d');
-        }else{
-            $end_date = Session::get('end_date');
-        }
-
-        // $code=[
-        //     '' => '',
-        //     '1' => 'Kandidat',
-        //     '2' => 'Timses',
-        // ];
+        $financial_category_id = Session::get('financial_category_id');
+        $candidate_id = Session::get('candidate_id');
+        $timses_member_id = Session::get('timses_member_id');
+        $financialflow_list = Session::get('financialflow_list');
 
         $listfinancialcategory = FinancialCategory::where('data_state', '=', 0)
         ->pluck('financial_category_name', 'financial_category_id');
 
-        $listcoretimses = CoreTimses :: where('data_state', 0)
-        ->get()
-        ->pluck('timses_name', 'timses_id');
+        if($start_month == 1){
+            $last_balance_month = 12;
+            $last_balance_year = $year-1;
+        }else{
+            $last_balance_month = $start_month-1;
+            $last_balance_year = $year;
+        }
 
-        $listcorecandidate = CoreCandidate :: where('data_state', 0)
-        ->get()
-        ->pluck('candidate_full_name', 'candidate_id');
-
-        $last_balance_candidate_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
-        ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
-        ->whereYear('financial_flow.financial_flow_date',$year)
+        $last_balance_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        ->whereMonth('financial_flow.financial_flow_date', $last_balance_month)
+        ->whereYear('financial_flow.financial_flow_date', $last_balance_year)
         ->orderBy('financial_flow.financial_flow_date', 'DESC')
-        ->orderBy('financial_flow.last_balance_candidate', 'DESC')
         ->first();
-
-        $last_balance_timses_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
-        ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
-        ->whereYear('financial_flow.financial_flow_date',$year)
-        ->orderBy('financial_flow.financial_flow_date', 'DESC')
-        ->orderBy('financial_flow.last_balance_timses', 'DESC')
-        ->first();
-        
+    
         $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
         ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
         ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
         ->whereYear('financial_flow.financial_flow_date',$year);
 
-        $financial_category_id = Session::get('financial_category_id');
-        // $candidate_id = Session::get('candidate_id');
-        // $timses_id = Session::get('timses_id');
-        // $financialflow_list = Session::get('financialflow_list');
-        
         if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
             $financialflow   = $financialflow->where('financial_category_id', $financial_category_id);
         }
-
-        // if($candidate_id||$candidate_id!=null||$candidate_id!=''){
-        //     $financialflow   = $financialflow->where('candidate_id', $candidate_id);
-        // }
-
-        // if($timses_id||$timses_id!=null||$timses_id!=''){
-        //     $financialflow   = $financialflow->where('timses_id', $timses_id);
-        // }
-
-        // if($financialflow_list||$financialflow_list!=null||$financialflow_list!=''){
-        //     if($financialflow_list == 1){           
-        //         $financialflow   = $financialflow->where('candidate_id', '!=', null);
-        //     }else{
-        //         $financialflow   = $financialflow->where('timses_id', '!=', null);
-        //     }
-        // }else{
-        //     $financialflow   = $financialflow->where('candidate_id', '=', null);
-        //     $financialflow   = $financialflow->where('timses_id', '=', null);
-        // }
-
+        
         $financialflow   = $financialflow->get();
 
         //-----------TCPF-----------
@@ -376,13 +340,7 @@ class RecapitulationReportController extends Controller
             $category_name = $this->getCategoryName($financial_category_id);
         }
 
-        if ($financialflow_list == 1 ){
-            $code = "Kandidat";
-            $first_saldo = rupiah($last_balance_candidate_old['last_balance_candidate']);
-        }else{
-            $code = "Timses";
-            $first_saldo = rupiah($last_balance_timses_old['last_balance_timses']);
-        }
+        $first_saldo = rupiah($last_balance_old['last_balance_candidate']);
 
         $tbl = "
         <br>
@@ -394,11 +352,6 @@ class RecapitulationReportController extends Controller
                 <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$category_name."</div></td>
             </tr>
             <tr>
-                <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Kepemilikan</div></td>
-                <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
-                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$code."</div></td>
-            </tr>
-            <tr>
                 <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Saldo Awal</div></td>
                 <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
                 <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$first_saldo."</div></td>
@@ -406,7 +359,6 @@ class RecapitulationReportController extends Controller
         </table>";
         $pdf::writeHTML($tbl, true, false, false, false, '');
         
-
         $no = 1;
         $tblStock1 = "
         <table cellspacing=\"0\" cellpadding=\"1\" border=\"1\" width=\"100%\">
@@ -420,17 +372,17 @@ class RecapitulationReportController extends Controller
             </tr>
             ";
 
-        $saldo_candidate = $last_balance_candidate_old['last_balance_candidate'];
-        $saldo_timses = $last_balance_timses_old['last_balance_timses'];
+        $saldo_candidate = $last_balance_old['last_balance_candidate'];
+
         $tblStock2 = " ";
         $no = 1;
 
         foreach ($financialflow as $key => $val) {
 
-            if ($financialflow_list == 1 ){
+            if ($val['candidate_id']){
                 $kepemilikan = $this->getCandidateName($val['candidate_id']);
             }else{
-                $kepemilikan = $this->getTimsesName($val['timses_id']);
+                $kepemilikan = $this->getTimsesName($val['timses_member_id']);
             }
 
             if ($val->financial_category_type == 1){
@@ -442,20 +394,11 @@ class RecapitulationReportController extends Controller
             }
 
             if($val['financial_category_type'] == 1){
-                if($val['candidate_id']){
-                    $saldo_candidate += $val['financial_flow_nominal'];
-                }else{
-                    $saldo_timses += $val['financial_flow_nominal'];
-                }
+                $saldo_candidate += $val['financial_flow_nominal'];
             }else{
-                if($val['candidate_id']){
-                    $saldo_candidate -= $val['financial_flow_nominal'];
-                }else{
-                    $saldo_timses -= $val['financial_flow_nominal'];
-                }
+                $saldo_candidate -= $val['financial_flow_nominal'];
             }
 
-            if($val['candidate_id']){
             $tblStock2 .="
                         <tr>			
                             <td style=\"text-align:center\">$no.</td>
@@ -467,21 +410,6 @@ class RecapitulationReportController extends Controller
                         </tr>
                         
                     ";
-                $no++;
-            }else{
-                    $tblStock2 .="
-                    <tr>			
-                        <td style=\"text-align:center\">$no.</td>
-                        <td style=\"text-align:center\">".$val['financial_flow_date']."</td>
-                        <td> ".$kepemilikan."</td>
-                        <td><div style=\"text-align: right;\">".$income."</div></td>
-                        <td><div style=\"text-align: right;\">".$expenditure."</div></td>
-                        <td><div style=\"text-align: right;\">".rupiah($saldo_timses)."</div></td>
-                    </tr>
-                    
-                ";
-            $no++;
-            }
         }
         $tblStock4 = " 
         </table>
@@ -493,14 +421,13 @@ class RecapitulationReportController extends Controller
 
         $pdf::writeHTML($tblStock1.$tblStock2.$tblStock4, true, false, false, false, '');
 
-
         $filename = 'Lap_Rekapitulasi_.pdf';
         $pdf::Output($filename, 'I');
 
         return redirect('/ledger');
     }
 
-    public function exportLedgerReport()
+    public function exportRecapitulationReport()
     {
         if(!$start_month = Session::get('start_month')){
             $start_month = date('m');
@@ -517,7 +444,8 @@ class RecapitulationReportController extends Controller
         }else{
             $year = Session::get('year');
         }
-
+        // Session::forget('financial_category_id');
+        
         $monthlist = array(
             '01' => 'Januari',
             '02' => 'Februari',
@@ -538,81 +466,37 @@ class RecapitulationReportController extends Controller
             $yearlist[$i] = $i;
         } 
 
-        if(!Session::get('start_date')){
-            $start_date     = date('Y-m-d');
-        }else{
-            $start_date = Session::get('start_date');
-        }
-        if(!Session::get('end_date')){
-            $end_date     = date('Y-m-d');
-        }else{
-            $end_date = Session::get('end_date');
-        }
-
-        $code=[
-            '' => '',
-            '1' => 'Kandidat',
-            '2' => 'Timses',
-        ];
+        $financial_category_id = Session::get('financial_category_id');
+        $candidate_id = Session::get('candidate_id');
+        $timses_member_id = Session::get('timses_member_id');
+        $financialflow_list = Session::get('financialflow_list');
 
         $listfinancialcategory = FinancialCategory::where('data_state', '=', 0)
         ->pluck('financial_category_name', 'financial_category_id');
 
-        $listcoretimses = CoreTimses :: where('data_state', 0)
-        ->get()
-        ->pluck('timses_name', 'timses_id');
+        if($start_month == 1){
+            $last_balance_month = 12;
+            $last_balance_year = $year-1;
+        }else{
+            $last_balance_month = $start_month-1;
+            $last_balance_year = $year;
+        }
 
-        $listcorecandidate = CoreCandidate :: where('data_state', 0)
-        ->get()
-        ->pluck('candidate_full_name', 'candidate_id');
-
-        $last_balance_candidate_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
-        ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
-        ->whereYear('financial_flow.financial_flow_date',$year)
+        $last_balance_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
+        ->whereMonth('financial_flow.financial_flow_date', $last_balance_month)
+        ->whereYear('financial_flow.financial_flow_date', $last_balance_year)
         ->orderBy('financial_flow.financial_flow_date', 'DESC')
-        ->orderBy('financial_flow.last_balance_candidate', 'DESC')
         ->first();
-
-        $last_balance_timses_old = FinancialFlow::where('financial_flow.data_state', '=', 0)
-        ->whereMonth('financial_flow.financial_flow_date', $start_month-1)
-        ->whereYear('financial_flow.financial_flow_date',$year)
-        ->orderBy('financial_flow.financial_flow_date', 'DESC')
-        ->orderBy('financial_flow.last_balance_timses', 'DESC')
-        ->first();
-        
+    
         $financialflow = FinancialFlow::where('financial_flow.data_state', '=', 0)
         ->whereMonth('financial_flow.financial_flow_date','>=',$start_month)
         ->whereMonth('financial_flow.financial_flow_date','<=',$end_month)
         ->whereYear('financial_flow.financial_flow_date',$year);
 
-        $financial_category_id = Session::get('financial_category_id');
-        $candidate_id = Session::get('candidate_id');
-        $timses_id = Session::get('timses_id');
-        $financialflow_list = Session::get('financialflow_list');
-        
         if($financial_category_id||$financial_category_id!=null||$financial_category_id!=''){
             $financialflow   = $financialflow->where('financial_category_id', $financial_category_id);
         }
-
-        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
-            $financialflow   = $financialflow->where('candidate_id', $candidate_id);
-        }
-
-        if($timses_id||$timses_id!=null||$timses_id!=''){
-            $financialflow   = $financialflow->where('timses_id', $timses_id);
-        }
-
-        if($financialflow_list||$financialflow_list!=null||$financialflow_list!=''){
-            if($financialflow_list == 1){           
-                $financialflow   = $financialflow->where('candidate_id', '!=', null);
-            }else{
-                $financialflow   = $financialflow->where('timses_id', '!=', null);
-            }
-        }else{
-            $financialflow   = $financialflow->where('candidate_id', '=', null);
-            $financialflow   = $financialflow->where('timses_id', '=', null);
-        }
-
+        
         $financialflow   = $financialflow->get();
         
         //--------------SpreadsheetPHP--------------
@@ -683,20 +567,13 @@ class RecapitulationReportController extends Controller
                 $category_name = $this->getCategoryName($financial_category_id);
             }
     
-            if ($financialflow_list == 1 ){
-                $code = "Kandidat";
-                $first_saldo = $last_balance_candidate_old['last_balance_candidate'];
-            }else{
-                $code = "Timses";
-                $first_saldo = $last_balance_timses_old['last_balance_timses'];
-            }
+            $first_saldo = $last_balance_old['last_balance_candidate'];
+
             
             $sheet->setCellValue('B1',"Laporan Rekapitulasi");	
             $sheet->setCellValue('B2',"Periode ".$monthlist[$start_month]." s.d ".$monthlist[$end_month]." ".$year);	
-            $sheet->setCellValue('B5',"Kategori");
-            $sheet->setCellValue('D5', $category_name);
-            $sheet->setCellValue('B6',"Kepemilikan");
-            $sheet->setCellValue('D6', $code);
+            $sheet->setCellValue('B6',"Kategori");
+            $sheet->setCellValue('D6', $category_name);
             $sheet->setCellValue('B7',"Saldo Awal");
             $sheet->setCellValue('D7', rupiah($first_saldo));
             $sheet->setCellValue('B9',"No");
@@ -709,15 +586,14 @@ class RecapitulationReportController extends Controller
             $j=10;
             $no=0;
 
-            $saldo_candidate = $last_balance_candidate_old['last_balance_candidate'];
-            $saldo_timses = $last_balance_timses_old['last_balance_timses'];
+            $saldo_candidate = $last_balance_old['last_balance_candidate'];
             
             foreach($financialflow as $key=>$val){
                 
-                if ($financialflow_list == 1 ){
+                if ($val['candidate_id']){
                     $kepemilikan = $this->getCandidateName($val['candidate_id']);
                 }else{
-                    $kepemilikan = $this->getTimsesName($val['timses_id']);
+                    $kepemilikan = $this->getTimsesName($val['timses_member_id']);
                 }
     
                 if ($val->financial_category_type == 1){
@@ -729,17 +605,9 @@ class RecapitulationReportController extends Controller
                 }
     
                 if($val['financial_category_type'] == 1){
-                    if($val['candidate_id']){
-                        $saldo_candidate += $val['financial_flow_nominal'];
-                    }else{
-                        $saldo_timses += $val['financial_flow_nominal'];
-                    }
+                    $saldo_candidate += $val['financial_flow_nominal'];
                 }else{
-                    if($val['candidate_id']){
-                        $saldo_candidate -= $val['financial_flow_nominal'];
-                    }else{
-                        $saldo_timses -= $val['financial_flow_nominal'];
-                    }
+                    $saldo_candidate -= $val['financial_flow_nominal'];
                 }
 
                 if(is_numeric($key)){
@@ -752,7 +620,7 @@ class RecapitulationReportController extends Controller
                     $spreadsheet->getActiveSheet()->getStyle('B'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                     $spreadsheet->getActiveSheet()->getStyle('C'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
                     $spreadsheet->getActiveSheet()->getStyle('D'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
-                    $spreadsheet->getActiveSheet()->getStyle('E'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+                    $spreadsheet->getActiveSheet()->getStyle('E'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                     $spreadsheet->getActiveSheet()->getStyle('F'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                     $spreadsheet->getActiveSheet()->getStyle('G'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
                     // $spreadsheet->getActiveSheet()->getStyle('H'.$j)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
@@ -764,13 +632,8 @@ class RecapitulationReportController extends Controller
                         $sheet->setCellValue('D'.$j, $kepemilikan);
                         $sheet->setCellValue('E'.$j, $income);
                         $sheet->setCellValue('F'.$j, $expenditure);
-                        if($val['candidate_id']){
-                            $sheet->setCellValue('G'.$j, rupiah($saldo_candidate));
-                        }else{
-                            $sheet->setCellValue('G'.$j, rupiah($saldo_timses));
-                        }
-                        
-                    
+                        $sheet->setCellValue('G'.$j, rupiah($saldo_candidate));
+
                 }else{
                     continue;
                 }

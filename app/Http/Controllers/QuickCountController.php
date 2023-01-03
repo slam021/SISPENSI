@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\QuickCount;
 use App\Models\CorePeriod;
-use App\Models\CoreLocation;
+use App\Models\CoreDapil;
 use App\Models\CorePollingStation;
 use App\Models\CoreCandidate;
 
@@ -20,9 +20,9 @@ class QuickCountController extends Controller
     }
 
     public function index(){
-        $quickcount = QuickCount::select('quick_count.*', 'core_period.*', 'core_location.*', 'core_polling_station.*')
+        $quickcount = QuickCount::select('quick_count.*', 'core_period.*', 'core_dapil.*', 'core_polling_station.*')
         ->join('core_period', 'core_period.period_id', '=', 'quick_count.period_id')
-        ->join('core_location', 'core_location.location_id', '=', 'quick_count.location_id')
+        ->join('core_dapil', 'core_dapil.dapil_id', '=', 'quick_count.dapil_id')
         ->join('core_polling_station', 'core_polling_station.polling_station_id', '=', 'quick_count.polling_station_id')
         ->where('quick_count.data_state','=',0)
         ->get();
@@ -33,16 +33,16 @@ class QuickCountController extends Controller
     public function addQuickCount(Request $request){
         $quickcount       = Session::get('data_quickcount');
 
-        $coreperiod       = CorePeriod::where('data_state', '=', 0)->pluck('period_name', 'period_id');
+        $coreperiod       = CorePeriod::where('data_state', '=', 0)->pluck('period_year', 'period_id');
         $nullcoreperiod   = Session::get('period_id');
 
-        $corelocation     = CoreLocation::where('data_state', '=', 0)->pluck('location_name', 'location_id');
-        $nullcorelocation = Session::get('location_id');
+        $coredapil     = CoreDapil::where('data_state', '=', 0)->pluck('dapil_name', 'dapil_id');
+        $nullcoredapil = Session::get('dapil_id');
 
         $corepollingstation     = CorePollingStation::where('data_state', '=', 0)->pluck('polling_station_name', 'polling_station_id');
         $nullcorepollingstation = Session::get('polling_station_id');
 
-        return view('content/QuickCount_view/FormAddQuickCount', compact('quickcount', 'coreperiod', 'nullcoreperiod', 'corelocation', 'nullcorelocation', 'corepollingstation', 'nullcorepollingstation'));
+        return view('content/QuickCount_view/FormAddQuickCount', compact('quickcount', 'coreperiod', 'nullcoreperiod', 'coredapil', 'nullcoredapil', 'corepollingstation', 'nullcorepollingstation'));
     }
 
     public function addElementsQuickCount(Request $request){
@@ -62,13 +62,13 @@ class QuickCountController extends Controller
     public function processAddQuickCount(Request $request){
         $fields = $request->validate([
             'period_id'           => 'required',
-            'location_id'         => 'required',
+            'dapil_id'         => 'required',
             'polling_station_id'  => 'required',
         ]);
 
         $data = array(
             'period_id'           => $fields['period_id'], 
-            'location_id'         => $fields['location_id'],
+            'dapil_id'         => $fields['dapil_id'],
             'polling_station_id'  => $fields['polling_station_id'],
             'created_id'          => Auth::id(),
             'created_at'          => date('Y-m-d'),
@@ -84,35 +84,35 @@ class QuickCountController extends Controller
     }
 
     public function editQuickCount($quick_count_id){
-        $quickcount = QuickCount::select('quick_count.*', 'core_period.*', 'core_location.*', 'core_polling_station.*')
+        $quickcount = QuickCount::select('quick_count.*', 'core_period.*', 'core_dapil.*', 'core_polling_station.*')
             ->join('core_period', 'core_period.period_id', '=', 'quick_count.period_id')
-            ->join('core_location', 'core_location.location_id', '=', 'quick_count.location_id')
+            ->join('core_dapil', 'core_dapil.dapil_id', '=', 'quick_count.dapil_id')
             ->join('core_polling_station', 'core_polling_station.polling_station_id', '=', 'quick_count.polling_station_id')
             ->where('quick_count.data_state','=',0)
             ->where('quick_count_id', $quick_count_id)->first();
         // $quickcount = QuickCount::where('data_state','=',0)->where('quick_count_id', $quick_count_id)->first();
             // print_r($quickcount); exit;
-            $coreperiod       = CorePeriod::where('data_state', '=', 0)->pluck('period_name', 'period_id');
+            $coreperiod       = CorePeriod::where('data_state', '=', 0)->pluck('period_year', 'period_id');
 
-            $corelocation     = CoreLocation::where('data_state', '=', 0)->pluck('location_name', 'location_id');
+            $coredapil     = CoreDapil::where('data_state', '=', 0)->pluck('dapil_name', 'dapil_id');
     
             $corepollingstation     = CorePollingStation::where('data_state', '=', 0)->pluck('polling_station_name', 'polling_station_id');
     
 
-            return view('content/QuickCount_view/FormEditQuickCount', compact('quickcount','coreperiod', 'corelocation', 'corepollingstation'));
+            return view('content/QuickCount_view/FormEditQuickCount', compact('quickcount','coreperiod', 'coredapil', 'corepollingstation'));
     }
 
     public function processEditQuickCount(Request $request){
         $fields = $request->validate([
             'quick_count_id'      => 'required',
             'period_id'           => 'required',
-            'location_id'         => 'required',
+            'dapil_id'         => 'required',
             'polling_station_id'  => 'required',
         ]);
 
         $item  = QuickCount::findOrFail($fields['quick_count_id']);
         $item->period_id          = $fields['period_id'];
-        $item->location_id        = $fields['location_id'];
+        $item->dapil_id        = $fields['dapil_id'];
         $item->polling_station_id        = $fields['polling_station_id'];
             // $item->photos            = $request['photos'];
 
@@ -141,22 +141,23 @@ class QuickCountController extends Controller
     }
 
     public function startingQuickCount($quick_count_id, $period_id){   
-        $quickcount = QuickCount::select('quick_count.*', 'core_period.*', 'core_location.*', 'core_polling_station.*')
+        $quickcount = QuickCount::select('quick_count.*', 'core_period.*', 'core_dapil.*', 'core_polling_station.*')
             ->join('core_period', 'core_period.period_id', '=', 'quick_count.period_id')
-            ->join('core_location', 'core_location.location_id', '=', 'quick_count.location_id')
+            ->join('core_dapil', 'core_dapil.dapil_id', '=', 'quick_count.dapil_id')
             ->join('core_polling_station', 'core_polling_station.polling_station_id', '=', 'quick_count.polling_station_id')
             ->where('quick_count.data_state','=',0)
             ->where('core_period.data_state','=',0)
-            ->where('core_location.data_state','=',0)
+            ->where('core_dapil.data_state','=',0)
             ->where('core_polling_station.data_state','=',0)
             ->where('quick_count_id', $quick_count_id)->first();
 
-        $corecandidate = CoreCandidate::select('quick_count.*', 'core_candidate.*')
-            ->join('quick_count', 'quick_count.period_id', '=', 'core_candidate.period_id')
-            ->where('quick_count.data_state','=',0)
+        $corecandidate = CoreCandidate::select('core_candidate.*')
+            // ->join('quick_count', 'quick_count.period_id', '=', 'core_candidate.period_id')
+            // ->where('quick_count.data_state','=',0)
             ->where('core_candidate.data_state','=',0)
             // ->where('core_candidate.candidate_id', $candidate_id)->get()
-            ->where('core_candidate.period_id', $period_id)->get();
+            // ->where('core_candidate.period_id', $period_id)
+            ->get();
 
             // print_r($corecandidate); exit;
         return view('content/QuickCount_view/FormStartingQuickCount', compact('quickcount', 'corecandidate'));

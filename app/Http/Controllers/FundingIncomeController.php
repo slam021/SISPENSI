@@ -150,7 +150,7 @@ class FundingIncomeController extends Controller
         $last_balance_candidate = CoreCandidate::findOrFail($candidate_id);
         $last_balance_candidate->last_balance += $fields['financial_flow_nominal'];
 
-        $last_balance_timses = CoreTimsesmember::findOrFail($fields['timses_member_id']);
+        $last_balance_timses = CoreTimsesMember::findOrFail($fields['timses_member_id']);
         $last_balance_timses->last_balance += $fields['financial_flow_nominal'];
 
         if(FinancialFlow::create($data)){

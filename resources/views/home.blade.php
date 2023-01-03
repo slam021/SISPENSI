@@ -95,9 +95,14 @@ Dashboard
                     ?>
                         <li class="list-group-item main-menu-item" onClick="location.href='{{url('program')}}'"> <i class="fa fa-angle-right"></i> List Acara</li>         
                     <?php   }
-                        if($menu['id_menu']==5){
+                        if($menu['id_menu']==53){
                     ?> 
-                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('quick-count')}}'"> <i class="fa fa-angle-right"></i> List Quick Count</li>  
+                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('period')}}'"> <i class="fa fa-angle-right"></i> List Periode</li>  
+                    <?php 
+                            }
+                        if($menu['id_menu']==33){
+                    ?> 
+                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('financial-category')}}'"> <i class="fa fa-angle-right"></i> List Kategori Keuangan</li>  
                     <?php 
                             }
                         } 
@@ -109,26 +114,28 @@ Dashboard
             <div class='col-md-6'>
                 <div class="card" style="height: 250px;">
                     <div class="card-header bg-secondary">
-                    Accounting
+                    Laporan
                     </div>
                     <div class="card-body">
                     <ul class="list-group">
                     <?php foreach($menus as $menu){
-                            if($menu['id_menu']==61){
+                            if($menu['id_menu']==43){
                     ?>
-                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('chart-of-account')}}'"> <i class="fa fa-angle-right"></i> Laporan</li>
+                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-combine')}}'"> <i class="fa fa-angle-right"></i> Laporan Pemasukan & Pengeluaran</li>
                     <?php   }
-                            if($menu['id_menu']==62){
+                            if($menu['id_menu']==46){
                     ?> 
-                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('ledger')}}'"> <i class="fa fa-angle-right"></i> Buku Besar</li>      
+                         <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-funding')}}'"> <i class="fa fa-angle-right"></i> Laporan Perhitungan Keuangan</li>      
                     <?php   }
-                            if($menu['id_menu']==63){
+                            if($menu['id_menu']==44){
                     ?> 
-                            <li class="list-group-item main-menu-item" onClick="location.href='{{url('general-journalr')}}'"> <i class="fa fa-angle-right"></i> Jurnal Umum</li>  
-                    <?php 
+                            <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-recap')}}'"> <i class="fa fa-angle-right"></i> Laporan Rekapitulasi</li>  
+                    <?php   }
+                            if($menu['id_menu']==45){
+                    
                             }
                         } 
-                    ?>                        
+                      ?>                                
                     </ul>
                 </div>
                 </div>

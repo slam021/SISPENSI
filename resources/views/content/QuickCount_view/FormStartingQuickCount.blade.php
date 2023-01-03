@@ -115,20 +115,20 @@
         <div class="row form-group">
             <div class="col-md-4">
                 <div class="form-group">
-                    <a class="text-dark">Nama Periode<a class='red'> *</a></a>
+                    <a class="text-dark">Periode<a class='red'> *</a></a>
                     <input class="form-control input-bb" type="hidden" name="quick_count_id" id="quick_count_id" value="{{$quickcount->quick_count_id}}" autocomplete="off" />
-                    <input class="form-control input-bb" type="text" name="period_id" id="period_id" value="{{$quickcount->period_name}}" autocomplete="off" readonly/>
+                    <input class="form-control input-bb" type="text" name="period_id" id="period_id" value="{{$quickcount->period_year}}" autocomplete="off" readonly/>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <a class="text-dark">Nama Lokasi<a class='red'> *</a></a>                        
-                    <input class="form-control input-bb" type="text" name="location_id" id="location_id" value="{{$quickcount->location_name}}" autocomplete="off" readonly/>
+                    <a class="text-dark">Dapil<a class='red'> *</a></a>                        
+                    <input class="form-control input-bb" type="text" name="dapil_id" id="dapil_id" value="{{$quickcount->dapil_name}}" autocomplete="off" readonly/>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <a class="text-dark">Nama TPS<a class='red'> *</a></a>                        
+                    <a class="text-dark">TPS<a class='red'> *</a></a>                        
                     <input class="form-control input-bb" type="text" name="polling_station_id" id="polling_station_id" value="{{$quickcount->polling_station_name}}" autocomplete="off" readonly/>
                 </div>
             </div>

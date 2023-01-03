@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\FinancialFlow;
 use App\Models\ProgramTimsesActivity;
 use App\Models\FinancialCategory;
-use App\Models\CoreTimses;
+use App\Models\Program;
 use App\Models\CoreCandidate;
 use App\Models\CoreTimsesMember;
 use Elibyy\TCPDF\Facades\TCPDF;
@@ -37,22 +37,25 @@ class TimsesActivityReportController extends Controller
         ->get()
         ->pluck('timses_member_name', 'timses_member_id');
         
-        $programtimsesactivity = ProgramTimsesActivity::where('data_state', '=', 0)
-        ->where('timses_activity_date','>=',$start_date)
-        ->where('timses_activity_date','<=',$end_date);
+        $programtimsesactivity = FinancialFlow::where('data_state', '=', 0)
+        ->where('financial_category_id', '=', 8)
+        ->where('financial_category_type', '=', 2)
+        ->where('program_id', '!=', 0)
+        ->where('financial_flow_date','>=',$start_date)
+        ->where('financial_flow_date','<=',$end_date);
 
-        $candidate_id = Session::get('candidate_id');
+        // $candidate_id = Session::get('candidate_id');
         $timses_member_id = Session::get('timses_member_id');
 
-        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
-            $programtimsesactivity   = $programtimsesactivity->where('candidate_id', $candidate_id);
-        }
+        // if($candidate_id||$candidate_id!=null||$candidate_id!=''){
+        //     $programtimsesactivity   = $programtimsesactivity->where('candidate_id', $candidate_id);
+        // }
         if($timses_member_id||$timses_member_id!=null||$timses_member_id!=''){
             $programtimsesactivity   = $programtimsesactivity->where('timses_member_id', $timses_member_id);
         }
         $programtimsesactivity   = $programtimsesactivity->get();
 
-        return view('content/TimsesActivityReport_view/ReportTimsesActivity', compact('programtimsesactivity', 'start_date', 'end_date', 'listcoretimsesmember', 'candidate_id', 'timses_member_id'));
+        return view('content/TimsesActivityReport_view/ReportTimsesActivity', compact('programtimsesactivity', 'start_date', 'end_date', 'listcoretimsesmember', 'timses_member_id'));
     }
 
     public function filterTimsesActivityReport(Request $request)
@@ -67,7 +70,7 @@ class TimsesActivityReportController extends Controller
         Session::put('start_date', $start_date);
         Session::put('end_date', $end_date);
         Session::put('timses_member_id', $timses_member_id);
-        Session::put('candidate_id', $candidate_id);
+        // Session::put('candidate_id', $candidate_id);
 
         return redirect('/report-timses-activity');
     }
@@ -77,7 +80,7 @@ class TimsesActivityReportController extends Controller
         Session::forget('start_date');
         Session::forget('end_date');
         Session::forget('timses_member_id');
-        Session::forget('candidate_id');
+        // Session::forget('candidate_id');
 
         return redirect('/report-timses-activity');
     }
@@ -87,7 +90,27 @@ class TimsesActivityReportController extends Controller
         $data = FinancialCategory::where('financial_category_id',$financial_category_id)
         ->first();
 
-        return $data['financial_category_name'];
+        if($data == null){
+            "-";
+        }else{
+
+            return $data['financial_category_name'];
+        }
+    }
+
+    public function getProgramName($program_id)
+    {
+        $data = Program::where('program_id',$program_id)
+    
+        ->first();
+
+        if($data == null){
+            "-";
+        }else{
+
+            return $data['program_name'];
+        }
+
     }
 
     public function getTimsesMemberName($timses_member_id)
@@ -95,7 +118,13 @@ class TimsesActivityReportController extends Controller
         $data = CoreTimsesMember::where('timses_member_id', $timses_member_id)
         ->first();
 
-        return $data['timses_member_name'];
+        if($data == null){
+            "-";
+        }else{
+            
+            return $data['timses_member_name'];
+        }
+
     }
 
     public function getCandidateName($candidate_id)
@@ -103,7 +132,13 @@ class TimsesActivityReportController extends Controller
         $data = CoreCandidate::where('candidate_id',$candidate_id)
         ->first();
 
-        return $data['candidate_full_name'];
+        if($data == null){
+            "-";
+        }else{
+            
+            return $data['candidate_full_name'];
+        }
+
     }
 
     public function printTimsesActivityReport()

@@ -84,7 +84,7 @@
             <div class="row form-group">
                 <div class="col-md-4">
                     <div class="form-group">
-                        <a class="text-dark">Nama Periode<a class='red'> *</a></a>
+                        <a class="text-dark">Periode<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="hidden" name="quick_count_id" id="quick_count_id" value="{{$quickcount->quick_count_id}}" autocomplete="off" />
 
                         {!! Form::select('period_id', $coreperiod, $quickcount->period_id, ['class' => 'selection-search-clear select-form', 'id' => 'period_id','' ])!!}
@@ -92,13 +92,13 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <a class="text-dark">Nama Lokasi<a class='red'> *</a></a>
-                        {!! Form::select('location_id', $corelocation, $quickcount->location_id, ['class' => 'selection-search-clear select-form', 'id' => 'location_id','' ])!!}
+                        <a class="text-dark">Dapil<a class='red'> *</a></a>
+                        {!! Form::select('dapil_id', $coredapil, $quickcount->dapil_id, ['class' => 'selection-search-clear select-form', 'id' => 'dapil_id','' ])!!}
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <a class="text-dark">Nama TPU<a class='red'> *</a></a>
+                        <a class="text-dark">TPS<a class='red'> *</a></a>
                         {!! Form::select('polling_station_id', $corepollingstation, $quickcount->polling_station_id, ['class' => 'selection-search-clear select-form', 'id' => 'polling_station_id','' ])!!}
                     </div>
                 </div>

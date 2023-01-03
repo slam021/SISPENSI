@@ -17,6 +17,13 @@
 </script>
 @stop
 
+@php 
+    Session::forget('start_month'); 
+    Session::forget('end_month');  
+    Session::forget('year');  
+    Session::forget('financial_category_id');  
+@endphp
+
 @section('content_header')
     
 <nav aria-label="breadcrumb">
@@ -214,27 +221,28 @@
                 @foreach($financialflow as $key => $val)
                     @php
                         if($val['financial_category_type'] == 1){
-                            if($val['candidate_id']){
+                            // if($val['candidate_id']){
                                 $saldo_candidate += $val['financial_flow_nominal'];
-                            }else{
-                                $saldo_timses += $val['financial_flow_nominal'];
-                            }
+                            // }else{
+                            //     $saldo_timses += $val['financial_flow_nominal'];
+                            // }
                         }else{
-                            if($val['candidate_id']){
+                            // if($val['candidate_id']){
                                 $saldo_candidate -= $val['financial_flow_nominal'];
-                            }else{
-                                $saldo_timses -= $val['financial_flow_nominal'];
-                            }
+                            // }else{
+                            //     $saldo_timses -= $val['financial_flow_nominal'];
+                            // }
                         }
                     @endphp
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
                         <td>{{$val['financial_flow_date']}}</td>
                         @if($val['candidate_id'])
-                        <td>{{$RR->getCandidateName($val['candidate_id'])}}</td>
+                            <td>{{$RR->getCandidateName($val['candidate_id'])}}</td>
                         @else
-                        <td>{{$RR->getTimsesName($val['timses_member_id'])}}</td>
+                            <td>{{$RR->getTimsesName($val['timses_member_id'])}}</td>
                         @endif
+                        
                         <td></td>
                         <td>{{$RR->getCategoryName($val['financial_category_id'])}}</td>
                         @if($val['financial_category_type']==1)
@@ -249,11 +257,11 @@
                             <td style='text-align:right'>0,00</td>
                         @endif
 
-                        @if($val['candidate_id'])
+                        {{-- @if($val['candidate_id']) --}}
                             <td style='text-align:right'>{{rupiah($saldo_candidate)}}</td>
-                        @else
+                        {{-- @else
                             <td style='text-align:right'>{{rupiah($saldo_timses)}}</td>
-                        @endif
+                        @endif --}}
                     </tr>
                     @php 
                         $no++; 
@@ -282,15 +290,15 @@
                     <tr>
                         <td colspan="3"></td>
                         <th style="text-align: center">Saldo Akhir</th>
-                        @if($financial_category_id != "" )
+                        {{-- @if($financial_category_id != "" ) --}}
+                        <th style="text-align: right" colspan="4">{{rupiah($saldo_candidate)}}</th>
                             {{-- @if($financialflow_list == 1)
-                                <th style="text-align: right" colspan="4">{{rupiah($saldo_candidate)}}</th>
                             @elseif($financialflow_list == 2)
                                 <th style="text-align: right" colspan="4">{{rupiah($saldo_timses)}}</th>
                             @endif --}}
-                        @else
+                        {{-- @else
                             <th style="text-align: right" colspan="4">0,00</th>
-                        @endif
+                        @endif --}}
                     </tr>
                 </tbody>
             </table>

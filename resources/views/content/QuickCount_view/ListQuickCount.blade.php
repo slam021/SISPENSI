@@ -49,7 +49,7 @@
                     <tr>
                         <th width="3%" style='text-align:center'>No</th>
                         <th width="10%" style='text-align:center'>Periode</th>
-                        <th width="10%" style='text-align:center'>Lokasi</th>
+                        <th width="10%" style='text-align:center'>Dapil</th>
                         <th width="10%" style='text-align:center'>TPS</th>
                         <th width="3%" style='text-align:center'>Aksi</th>
                     </tr>
@@ -62,8 +62,8 @@
                     
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['period_name']}}</td>
-                        <td>{{$val['location_name']}}</td>
+                        <td>{{$val['period_year']}}</td>
+                        <td>{{$val['dapil_name']}}</td>
                         <td>{{$val['polling_station_name']}}</td>
                         <td class="" style='text-align:left'>
                             <?php

@@ -152,19 +152,17 @@ class ProgramController extends Controller
             ->where('data_state','=',0)->first()->candidate_id;
 
             $timses_member_id = null;
-            $financial_category_id = 8;
-            $financial_category_type = 2;
-            // dd($candidate_id);
         }else{
             $candidate_id = null;
             $timses_member_id = $request['timses_member_id'];
-            $financial_category_id = 9;
-            $financial_category_type = 1;
         }
 
+        $program_id = Program::orderBy('program_id', 'DESC')->first()->program_id;
+  
         $data_financial_flow = [
-            'financial_category_id'          => $financial_category_id,
-            'financial_category_type'        => $financial_category_type,
+            'program_id'                     => $program_id + 1,
+            'financial_category_id'          => 8,
+            'financial_category_type'        => 2,
             'candidate_id'                   => $candidate_id, 
             'timses_member_id'               => $timses_member_id, 
             'financial_flow_nominal'         => $request['program_fund'],
@@ -176,8 +174,35 @@ class ProgramController extends Controller
 
         // dd($data);
 
+        // $core_candidate_id = CoreCandidate::select('candidate_id')
+        // ->where('data_state','=',0)->first()->candidate_id;
+        if($request->program_organizer == 1){
+            $candidate_id = CoreCandidate::select('candidate_id')
+            ->where('data_state','=',0)->first()->candidate_id;
+
+            $last_balance_candidate = CoreCandidate::findOrFail($candidate_id);
+            $last_balance_candidate->last_balance -= $request['program_fund'];
+            $last_balance_candidate->save();
+
+        }else{
+            $candidate_id = CoreCandidate::select('candidate_id')
+            ->where('data_state','=',0)->first()->candidate_id;
+
+            $timses_member_id = $request['timses_member_id'];
+
+            $last_balance_candidate = CoreCandidate::findOrFail($candidate_id);
+            $last_balance_candidate->last_balance -= $request['program_fund'];
+            $last_balance_candidate->save();
+
+            $last_balance_timses = CoreTimsesMember::findOrFail($request['timses_member_id']);
+            $last_balance_timses->last_balance -= $request['program_fund'];
+            $last_balance_timses->save();
+        }
+       
+
         if(Program::create($data)){
             FinancialFlow::create($data_financial_flow);
+
             $msg = 'Tambah Acara Berhasil';
             return redirect('/program/add')->with('msg',$msg);
         } else {

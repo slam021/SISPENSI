@@ -14,19 +14,12 @@
             $("#timses_member_id").select2("val", "0");
         }
     });
-
-    $(document).ready(function(){
-        var candidate_id = {!! json_encode($candidate_id) !!};
-        
-        if(candidate_id == null){
-            $("#candidate_id").select2("val", "0");
-        }
-    });
 </script>
-Session::forget('start_date');
-        Session::forget('end_date');
-        Session::forget('timses_id');
-        Session::forget('candidate_id');
+@php
+    Session::forget('start_date');
+    Session::forget('end_date');
+    Session::forget('timses_member_id');
+@endphp
 @stop
 
 @section('js')
@@ -106,7 +99,7 @@ Session::forget('start_date');
                         </div> --}}
                         <div class = "col-md-4">
                             <div class="form-group form-md-line-input">
-                                <section class="control-label">Nama Anggota Timses
+                                <section class="control-label">Nama Timses
                                     <span class="required text-danger">
                                         *
                                     </span>
@@ -142,7 +135,7 @@ Session::forget('start_date');
                     <tr>
                         <th width="2%" style='text-align:center'>No</th>
                         <th width="7%" style='text-align:center'>Tanggal</th>
-                        <th width="10%" style='text-align:center'>Nama Anggota Timses</th>
+                        <th width="10%" style='text-align:center'>Nama Timses</th>
                         <th width="10%" style='text-align:center'>Nama Kegiatan</th>
                         <th width="10%" style='text-align:center'>Dana</th>
                         <th width="10%" style='text-align:center'>Deskripsi</th>
@@ -162,12 +155,12 @@ Session::forget('start_date');
                     @foreach($programtimsesactivity as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['timses_activity_date']}}</td>
+                        <td>{{$val['financial_flow_date']}}</td>
                         <td>{{$RTA->getTimsesMemberName($val['timses_member_id'])}}</td>
                         {{-- <td>{{$ReportFX->getCategoryName($val['financial_category_id'])}}</td> --}}
-                        <td>{{$val['timses_activity_name']}}</td>
-                        <td style='text-align:right'>{{rupiah($val['timses_activity_fund'])}}</td>
-                        <td>{{$val['timses_activity_description']}}</td>
+                        <td>{{$RTA->getProgramName($val['program_id'])}}</td>
+                        <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
+                        <td>{{$val['financial_flow_description']}}</td>
                         {{-- <td>{{$val['financial_flow_description']}}</td> --}}
                         {{-- <td class="" style='text-align:center'>
                             <a type="button" class="badge badge-warning btn-sm" href="{{ url('/funding-income-timses/edit/'.$val['financial_flow_id'])}}"><i class='fas fa-edit'></i> Edit</a>

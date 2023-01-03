@@ -21,12 +21,17 @@
 @stop
 
 @section('content')
-<?php
+@php
     function rupiah($angka){
         $hasil_rupiah = number_format($angka,2,',','.');
         return $hasil_rupiah;
     } 
-?>
+
+    Session::forget('start_month'); 
+    Session::forget('end_month');  
+    Session::forget('year');  
+    Session::forget('financial_category_id');  
+@endphp
 {{-- <h3 class="page-title">
     <b>Daftar Buku Besar </b> <small>Kelola Daftar Buku Besar  </small>
 </h3> --}}
