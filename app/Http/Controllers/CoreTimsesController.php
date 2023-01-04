@@ -24,7 +24,9 @@ class CoreTimsesController extends Controller
     }
 
     public function index(){
-        $coretimsesmember = CoreTimsesMember::where('core_timses_member.data_state','=',0)->get();
+        $coretimsesmember = CoreTimsesMember::where('core_timses_member.data_state','=',0)
+        ->orderBy('core_timses_member.timses_member_name', 'ASC')
+        ->get();
 // dd($coretimsesmember);
 
         return view('content/CoreTimses_view/ListCoreTimses', compact('coretimsesmember'));

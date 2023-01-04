@@ -30,6 +30,27 @@
 		});
 	}
 
+    function toRp(angka){
+        var rev     = parseInt(angka, 10).toString().split('').reverse().join('');
+        var rev2    = '';
+        for(var i = 0; i < rev.length; i++){
+            rev2  += rev[i];
+            if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
+                rev2 += '.';
+            }
+        }
+        return rev2.split('').reverse().join('') + ',00';
+    }
+    
+    function rupiahSave(value){
+        var rupiah_save = document.getElementById("financial_flow_nominal");
+        var rupiah_view = document.getElementById("financial_flow_nominal_view");
+        if(rupiah_view){
+            document.getElementById('financial_flow_nominal').value = rupiah_view.value;
+            document.getElementById('financial_flow_nominal_view').value =  toRp(rupiah_view.value);
+        }
+    }
+
     $(document).ready(function(){
         var financial_category_id = {!! json_encode($nullfinancialcategory) !!};
         
@@ -119,7 +140,8 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <a class="text-dark">Nominal<a class='red'> *</a></a>
-                        <input class="form-control input-bb" type="text" name="financial_flow_nominal" id="financial_flow_nominal" value="{{old('financial_flow_nominal')}}" autocomplete="off" />
+                        <input class="form-control input-bb" type="text" name="financial_flow_nominal_view" id="financial_flow_nominal_view" value="{{old('financial_flow_nominal_view')}}" autocomplete="off" onchange="rupiahSave();" />
+                        <input class="form-control input-bb" type="hidden" name="financial_flow_nominal" id="financial_flow_nominal" value="{{old('financial_flow_nominal')}}" autocomplete="off" />
                     </div>
                 </div>
                 <div class="col-md-4">

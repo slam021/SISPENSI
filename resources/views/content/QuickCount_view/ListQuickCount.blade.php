@@ -38,7 +38,7 @@
             Mengelola Quick Count 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('quick-count/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Quick Count Baru</button>
+            <button onclick="location.href='{{ url('quick-count/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Quick Count</button>
         </div>
     </div>
 

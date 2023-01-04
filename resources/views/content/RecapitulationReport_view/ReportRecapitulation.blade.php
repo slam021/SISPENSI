@@ -17,12 +17,12 @@
 </script>
 @stop
 
-@php 
+{{-- @php 
     Session::forget('start_month'); 
     Session::forget('end_month');  
     Session::forget('year');  
     Session::forget('financial_category_id');  
-@endphp
+@endphp --}}
 
 @section('content_header')
     

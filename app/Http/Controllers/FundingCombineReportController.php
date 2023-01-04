@@ -273,7 +273,7 @@ class FundingCombineReportController extends Controller
         </tr>
         <tr>
             <td width=\"64%\" style=\"text-align:left; font-style: italic;\"></td>
-            <td width=\"20%\" style=\"text-align:right; font-weight: bold;\">".'Sisa Saldo:'."</td>
+            <td width=\"20%\" style=\"text-align:right; font-weight: bold;\">".'Saldo Akhir:'."</td>
             <td width=\"17%\" style=\"text-align:right; font-weight: bold;\">".rupiah($balance)."</td>
         </tr>
         </table>
@@ -455,7 +455,7 @@ class FundingCombineReportController extends Controller
             // $spreadsheet->getActiveSheet()->getStyle('B'.$j.':G'.$j)->getFill()->getStartColor()->setRGB('FFFF00');
             $sheet->setCellValue('B'.$j, "Total Pemasukan : ". rupiah($total_income));
             $sheet->setCellValue('B'.$k, "Total Pengeluaran : ". rupiah($total_expenditure));
-            $sheet->setCellValue('B'.$l, "Sisa saldo : ". rupiah($balance));
+            $sheet->setCellValue('B'.$l, "Saldo Akhir : ". rupiah($balance));
             $sheet->setCellValue('B'.$m, Auth::user()->name.", ".date('d-m-Y H:i'));
 
             $filename='Laporan_Pemasukan & Pengeluaran.xls';

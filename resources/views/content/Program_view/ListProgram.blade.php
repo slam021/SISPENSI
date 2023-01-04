@@ -107,7 +107,7 @@
             Daftar Acara 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('program/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Acara Baru</button>
+            <button onclick="location.href='{{ url('program/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Acara</button>
         </div>
     </div>
 
@@ -167,14 +167,14 @@
                         <td class="" style='text-align:left'>
                             <?php
                                 if($val['program_status'] == 0){
-                                    echo "<a type='button' class='badge badge-warning' href='".url('/program/edit/'.$val['program_id'])."' title='Edit Acara'><i class='fas fa-edit'></i> Edit</a>";
+                                    echo "<a type='button' class='badge bg-warning' href='".url('/program/edit/'.$val['program_id'])."' title='Edit Acara'><i class='fas fa-edit'></i> Edit</a>";
                                 }else{
                                     
                                 }
                             ?>
                             <a type="button" class="badge bg-lime" href="{{ url('/program/detail/'.$val['program_id'])}}" title="Detail Acara"><i class='fas fa-list-ul'></i> Detail</a>
-                            <a type="button" class="badge bg-blue" href="{{ url('/program/documentation-program/'.$val['program_id'])}}" title="Dokumentasi Acara"><i class='far fa-image'></i> Dokumentasi</a>
-                            <a type="button" class="badge badge-danger" href="{{ url('/program/delete-program/'.$val['program_id']) }}" title="Hapus Acara"><i class='far fa-trash-alt'></i> Hapus</a>
+                            <a type="button" class="badge bg-indigo" href="{{ url('/program/documentation-program/'.$val['program_id'])}}" title="Dokumentasi Acara"><i class='far fa-image'></i> Dokumentasi</a>
+                            <a type="button" class="badge bg-danger" href="{{ url('/program/delete-program/'.$val['program_id']) }}" title="Hapus Acara"><i class='far fa-trash-alt'></i> Hapus</a>
                         </td>
                     </tr>
 

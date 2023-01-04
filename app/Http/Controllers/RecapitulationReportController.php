@@ -340,7 +340,11 @@ class RecapitulationReportController extends Controller
             $category_name = $this->getCategoryName($financial_category_id);
         }
 
-        $first_saldo = rupiah($last_balance_old['last_balance_candidate']);
+        if($last_balance_old == null){
+            $first_saldo = 0;
+        }else{
+            $first_saldo = $last_balance_old['last_balance_candidate'];
+        }
 
         $tbl = "
         <br>
@@ -354,7 +358,7 @@ class RecapitulationReportController extends Controller
             <tr>
                 <td width=\"20%\"><div style=\"text-align: lef=ft; font-size:12px;font-weight: bold\">Saldo Awal</div></td>
                 <td width=\"5%\"><div style=\"text-align: center; font-size:12px; font-weight: bold\">:</div></td>
-                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".$first_saldo."</div></td>
+                <td width=\"65%\"><div style=\"text-align: left; font-size:12px; font-weight: bold\">".rupiah($first_saldo)."</div></td>
             </tr>
         </table>";
         $pdf::writeHTML($tbl, true, false, false, false, '');
@@ -372,7 +376,11 @@ class RecapitulationReportController extends Controller
             </tr>
             ";
 
-        $saldo_candidate = $last_balance_old['last_balance_candidate'];
+            if($last_balance_old == null){
+                $saldo_candidate = 0;
+            }else{
+                $saldo_candidate = $last_balance_old['last_balance_candidate'];
+            }
 
         $tblStock2 = " ";
         $no = 1;
@@ -566,10 +574,13 @@ class RecapitulationReportController extends Controller
             }else{
                 $category_name = $this->getCategoryName($financial_category_id);
             }
-    
-            $first_saldo = $last_balance_old['last_balance_candidate'];
 
-            
+            if($last_balance_old == null){
+                $first_saldo = 0;
+            }else{
+                $first_saldo = $last_balance_old['last_balance_candidate'];
+            }
+    
             $sheet->setCellValue('B1',"Laporan Rekapitulasi");	
             $sheet->setCellValue('B2',"Periode ".$monthlist[$start_month]." s.d ".$monthlist[$end_month]." ".$year);	
             $sheet->setCellValue('B6',"Kategori");
@@ -586,7 +597,11 @@ class RecapitulationReportController extends Controller
             $j=10;
             $no=0;
 
-            $saldo_candidate = $last_balance_old['last_balance_candidate'];
+            if($last_balance_old == null){
+                $saldo_candidate = 0;
+            }else{
+                $saldo_candidate = $last_balance_old['last_balance_candidate'];
+            }
             
             foreach($financialflow as $key=>$val){
                 

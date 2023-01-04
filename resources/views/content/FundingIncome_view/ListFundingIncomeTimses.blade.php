@@ -38,7 +38,7 @@
             Mengelola Data Pemasukan Keuangan 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('funding-income-timses/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Pemasukan Keuangan Baru</button>
+            <button onclick="location.href='{{ url('funding-income-timses/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Pemasukan Keuangan</button>
         </div>
     </div>
 
@@ -48,10 +48,10 @@
                 <thead>
                     <tr>
                         <th width="2%" style='text-align:center'>No</th>
+                        <th width="10%" style='text-align:center'>Tanggal</th>
                         <th width="10%" style='text-align:center'>Kategori Pemasukan</th>
                         <th width="10%" style='text-align:center'>Timses</th>
                         <th width="10%" style='text-align:center'>Nominal</th>
-                        <th width="10%" style='text-align:center'>Tanggal</th>
                         <th width="10%" style='text-align:center'>Keterangan</th>
                         <th width="3%" style='text-align:center'>Aksi</th>
                     </tr>
@@ -67,10 +67,10 @@
                     @foreach($fundingincome as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
+                        <td>{{date('d/m/Y', strtotime($val['financial_flow_date']))}}</td>
                         <td>{{$val['financial_category_name']}}</td>
                         <td>{{$val['timses_member_name']}}</td>
-                        <td>{{rupiah($val['financial_flow_nominal'])}}</td>
-                        <td>{{date('d/m/Y', strtotime($val['financial_flow_date']))}}</td>
+                        <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
                         <td>{{$val['financial_flow_description']}}</td>
                         <td class="" style='text-align:center'>
                             <a type="button" class="badge badge-warning btn-sm" href="{{ url('/funding-income-timses/edit/'.$val['financial_flow_id'])}}"><i class='fas fa-edit'></i> Edit</a>

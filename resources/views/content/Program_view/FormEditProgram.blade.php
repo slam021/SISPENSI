@@ -1,4 +1,4 @@
-@inject('Program', 'App\Http\Controllers\ProgramController')
+divdiv@inject('Program', 'App\Http\Controllers\ProgramController')
 
 @extends('adminlte::page')
 
@@ -15,6 +15,27 @@
         }
         if(organizer == 2){
             document.getElementById('timses_member_id').disabled = false;
+        }
+    }
+
+    function toRp(angka){
+        var rev     = parseInt(angka, 10).toString().split('').reverse().join('');
+        var rev2    = '';
+        for(var i = 0; i < rev.length; i++){
+            rev2  += rev[i];
+            if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
+                rev2 += '.';
+            }
+        }
+        return rev2.split('').reverse().join('') + ',00';
+    }
+    
+    function rupiahSave(value){
+        var rupiah_save = document.getElementById("program_fund");
+        var rupiah_view = document.getElementById("program_fund_view");
+        if(rupiah_view){
+            document.getElementById('program_fund').value = rupiah_view.value;
+            document.getElementById('program_fund_view').value =  toRp(rupiah_view.value);
         }
     }
 </script>
@@ -144,6 +165,13 @@
                             <input class="form-control input-bb" type="date" name="program_date" id="program_date" value="{{$program->program_date}}" autocomplete="off" />
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <a class="text-dark">Dana<a class='red'> *</a></a>
+                            <input class="form-control input-bb" type="text" name="program_fund_view" id="program_fund_view" value="{{$program->program_fund}}" autocomplete="off" onChange="rupiahSave();"/>
+                            <input class="form-control input-bb" type="hidden" name="program_fund" id="program_fund" value="{{$program->program_fund}}" autocomplete="off" />
+                        </div>
+                    </div>
                     {{-- <div class="col-md-3">
                         <div class="form-group">
                             <a class="text-dark">Lokasi<a class='red'> *</a></a>
@@ -154,12 +182,6 @@
                         <div class="form-group">
                             <a class="text-dark">Lokasi Acara<a class='red'> *</a></a>
                             <input class="form-control input-bb" type="text" name="program_address" id="program_address" value="{{$program->program_address}}" autocomplete="off" />
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <a class="text-dark">Dana<a class='red'> *</a></a>
-                            <input class="form-control input-bb" type="text" name="program_fund" id="program_fund" value="{{$program->program_fund}}" autocomplete="off" />
                         </div>
                     </div>
                     {{-- <div class="col-md-3">

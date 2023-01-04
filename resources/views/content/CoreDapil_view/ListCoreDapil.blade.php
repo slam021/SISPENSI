@@ -30,7 +30,7 @@
             Mengelola Data Dapil 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('dapil/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Data Dapil Baru</button>
+            <button onclick="location.href='{{ url('dapil/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Data Dapil</button>
         </div>
     </div>
 

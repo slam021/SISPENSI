@@ -26,11 +26,11 @@
 </nav>
 @stop
 
-@php 
+{{-- @php 
     Session::forget('start_date'); 
     Session::forget('end_date');  
     Session::forget('timses_member_id');  
-@endphp
+@endphp --}}
 
 @section('content')
 {{-- <h3 class="page-title">

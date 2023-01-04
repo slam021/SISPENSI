@@ -360,7 +360,7 @@ class FundingAcctReportController extends Controller
         <hr>
         <br>
         <tr>
-            <td><div style=\"text-align: left; font-weight: bold\">Sisa Saldo</div></td>
+            <td><div style=\"text-align: left; font-weight: bold\">Saldo Akhir</div></td>
             <td style=\"text-align: right; font-weight: bold\">".rupiah($total_income - $total_expenditure)."</td>
         <tr>
         <hr>
@@ -566,7 +566,7 @@ class FundingAcctReportController extends Controller
 
         $last_balance = $total_income - $total_expenditure;
 
-        $spreadsheet->getActiveSheet()->setCellValue('B'.($xik), "Sisa Saldo");
+        $spreadsheet->getActiveSheet()->setCellValue('B'.($xik), "Saldo Akhir");
         $spreadsheet->getActiveSheet()->setCellValue('C'.($xik),  idr($last_balance));
         $xik++;
         $spreadsheet->getActiveSheet()->mergeCells('B'.$xik.':C'.$xik);

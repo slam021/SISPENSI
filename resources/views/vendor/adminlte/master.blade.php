@@ -15,7 +15,7 @@
     {{-- Title --}}
     <title>
         @yield('title_prefix', config('adminlte.title_prefix', ''))
-        @yield('title', config('adminlte.title', 'KAROTA KING'))
+        @yield('title', config('adminlte.title', 'SISPENSI'))
         @yield('title_postfix', config('adminlte.title_postfix', ''))
     </title>
 

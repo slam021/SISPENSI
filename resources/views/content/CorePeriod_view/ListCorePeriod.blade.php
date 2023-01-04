@@ -30,7 +30,7 @@
             Mengelola Data Periode 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('period/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Data Periode Baru</button>
+            <button onclick="location.href='{{ url('period/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Data Periode</button>
         </div>
     </div>
 

@@ -72,7 +72,7 @@
         <div class="card-footer text-muted">
             <div class="form-actions float-right">
                 <button type="reset" name="Reset" class="btn btn-sm btn-danger" onClick="window.location.reload();"><i class="fa fa-times"></i> Batal</button>
-                <button type="submit" name="Save" class="btn btn-sm btn-primary" title="Save"><i class="fa fa-check"></i> Simpan</button>
+                <button type="submit" name="Save" class="btn btn-sm btn-success" title="Save"><i class="fa fa-check"></i> Simpan</button>
             </div>
         </div>
     </div>

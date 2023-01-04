@@ -34,19 +34,19 @@
         Daftar
     </h5>
     <div class="form-actions float-right">
-        <button onclick="location.href='{{ url('system-user-group/add') }}'" name="Find" class="btn btn-sm btn-info" title="Add Data"><i class="fa fa-plus"></i> Tambah System User Group Baru</button>
+        <button onclick="location.href='{{ url('system-user-group/add') }}'" name="Find" class="btn btn-sm btn-info" title="Add Data"><i class="fa fa-plus"></i> Tambah System User Group</button>
     </div>
-  </div>
+</div>
 
-    <div class="card-body">
-        <div class="table-responsive">
-            <table id="example" style="width:100%" class="table table-striped table-bordered table-hover table-full-width">
+<div class="card-body table-responsive">
+    <div class="table-responsive">
+        <table id="example" class="table table-sm table-striped table-bordered table-hover " style="width:auto">
                 <thead>
                     <tr>
                         <th width="2%" style='text-align:center'>User Group ID</th>
                         <th width="10%" style='text-align:center'>Nama</th>
-                        <th width="20%" style='text-align:center'>User Group Level</th>
-                        <th width="10%" style='text-align:center'>Aksi</th>
+                        <th width="10%" style='text-align:center'>User Group Level</th>
+                        <th width="2%" style='text-align:center'>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -55,9 +55,9 @@
                         <td style='text-align:center'>{{$usergroup['user_group_id']}}</td>
                         <td>{{$usergroup['user_group_name']}}</td>
                         <td>{{$usergroup['user_group_level']}}</td>
-                        <td class="">
-                            <a type="button" class="btn btn-outline-warning btn-sm" href="{{ url('/system-user-group/edit/'.$usergroup['user_group_id']) }}">Edit</a>
-                            <a type="button" class="btn btn-outline-danger btn-sm" href="{{ url('/system-user-group/delete-system-user-group/'.$usergroup['user_group_id']) }}">Hapus</a>
+                        <td class="" style='text-align:center'>
+                            <a type="button" class="badge bg-warning " href="{{ url('/system-user-group/edit/'.$usergroup['user_group_id']) }}"><i class='fas fa-edit'></i> Edit</a>
+                            <a type="button" class="badge bg-danger btn-sm" href="{{ url('/system-user-group/delete-system-user-group/'.$usergroup['user_group_id']) }}"><i class='far fa-trash-alt'></i> Hapus</a>
                         </td>
                     </tr>
                     @endforeach

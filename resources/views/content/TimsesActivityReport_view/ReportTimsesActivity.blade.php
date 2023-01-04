@@ -15,11 +15,11 @@
         }
     });
 </script>
-@php
+{{-- @php
     Session::forget('start_date');
     Session::forget('end_date');
     Session::forget('timses_member_id');
-@endphp
+@endphp --}}
 @stop
 
 @section('js')
@@ -155,7 +155,7 @@
                     @foreach($programtimsesactivity as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['financial_flow_date']}}</td>
+                        <td>{{date('d/m/Y', strtotime($val['financial_flow_date']))}}</td>
                         <td>{{$RTA->getTimsesMemberName($val['timses_member_id'])}}</td>
                         {{-- <td>{{$ReportFX->getCategoryName($val['financial_category_id'])}}</td> --}}
                         <td>{{$RTA->getProgramName($val['program_id'])}}</td>

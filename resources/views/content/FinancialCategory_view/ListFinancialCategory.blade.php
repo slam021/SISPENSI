@@ -38,7 +38,7 @@
             Mengelola Data Kategori Keuangan 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('financial-category/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Kategori Keuangan Baru</button>
+            <button onclick="location.href='{{ url('financial-category/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Kategori Keuangan</button>
         </div>
     </div>
 

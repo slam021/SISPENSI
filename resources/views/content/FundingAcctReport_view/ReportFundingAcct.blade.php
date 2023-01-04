@@ -27,10 +27,10 @@
         return $hasil_rupiah;
     } 
 
-    Session::forget('start_month'); 
-    Session::forget('end_month');  
-    Session::forget('year');  
-    Session::forget('financial_category_id');  
+    // Session::forget('start_month'); 
+    // Session::forget('end_month');  
+    // Session::forget('year');  
+    // Session::forget('financial_category_id');  
 @endphp
 {{-- <h3 class="page-title">
     <b>Daftar Buku Besar </b> <small>Kelola Daftar Buku Besar  </small>
@@ -242,7 +242,7 @@
                         <td colspan='2'></td>
                     </tr>
                     <tr>
-                        <td style="font-weight:bold; width: 80%">Sisa Saldo</td>
+                        <td style="font-weight:bold; width: 80%">Saldo Akhir</td>
                         <td style='font-weight:bold; text-align:right;'>{{rupiah($last_balance_acct)}}</td>
                         {{-- <th style="width: 20%; text-align: right">{{ number_format($grand_total_account_amount1 - $grand_total_account_amount2,2,'.',',') }}</th> --}}
                     </tr>

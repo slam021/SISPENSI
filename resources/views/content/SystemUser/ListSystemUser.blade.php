@@ -34,18 +34,18 @@
         Daftar
     </h5>
     <div class="form-actions float-right">
-        <button onclick="location.href='{{ url('system-user/add') }}'" name="Find" class="btn btn-sm btn-info" title="Add Data"><i class="fa fa-plus"></i> Tambah System User Baru</button>
+        <button onclick="location.href='{{ url('system-user/add') }}'" name="Find" class="btn btn-sm btn-info" title="Add Data"><i class="fa fa-plus"></i> Tambah System User </button>
     </div>
-  </div>
+</div>
 
-    <div class="card-body">
-        <div class="table-responsive">
-            <table id="example" style="width:100%" class="table table-striped table-bordered table-hover table-full-width">
+<div class="card-body table-responsive">
+    <div class="table-responsive">
+        <table id="example" class="table table-sm table-striped table-bordered table-hover " style="width:auto">
                 <thead>
                     <tr>
                         <th width="2%" style='text-align:center'>User ID</th>
                         <th width="10%" style='text-align:center'>Nama</th>
-                        <th width="10%" style='text-align:center'>User Group</th>
+                        <th width="5%" style='text-align:center'>User Group</th>
                         <th width="2%" style='text-align:center'>Aksi</th>
                     </tr>
                 </thead>

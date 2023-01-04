@@ -41,6 +41,7 @@ class TimsesActivityReportController extends Controller
         ->where('financial_category_id', '=', 8)
         ->where('financial_category_type', '=', 2)
         ->where('program_id', '!=', 0)
+        ->where('timses_member_id', '!=', 0)
         ->where('financial_flow_date','>=',$start_date)
         ->where('financial_flow_date','<=',$end_date);
 
@@ -158,16 +159,16 @@ class TimsesActivityReportController extends Controller
         ->get()
         ->pluck('timses_member_name', 'timses_member_id');
         
-        $programtimsesactivity = ProgramTimsesActivity::where('data_state', '=', 0)
-        ->where('timses_activity_date','>=',$start_date)
-        ->where('timses_activity_date','<=',$end_date);
+        $programtimsesactivity = FinancialFlow::where('data_state', '=', 0)
+        ->where('financial_category_id', '=', 8)
+        ->where('financial_category_type', '=', 2)
+        ->where('program_id', '!=', 0)
+        ->where('timses_member_id', '!=', 0)
+        ->where('financial_flow_date','>=',$start_date)
+        ->where('financial_flow_date','<=',$end_date);
 
-        $candidate_id = Session::get('candidate_id');
         $timses_member_id = Session::get('timses_member_id');
 
-        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
-            $programtimsesactivity   = $programtimsesactivity->where('candidate_id', $candidate_id);
-        }
         if($timses_member_id||$timses_member_id!=null||$timses_member_id!=''){
             $programtimsesactivity   = $programtimsesactivity->where('timses_member_id', $timses_member_id);
         }
@@ -231,16 +232,16 @@ class TimsesActivityReportController extends Controller
                 $tblTA2 .="
                 <tr>			
                     <td style=\"text-align:center\">$no.</td>
-                    <td> ".date('d-m-Y', strtotime($val['timses_activity_date']))."</td>
+                    <td> ".date('d/m/Y', strtotime($val['financial_flow_date']))."</td>
                     <td> ".$this->getTimsesMemberName($val['timses_member_id'])."</td>
-                    <td> ".$val['timses_activity_name']."</td>
-                    <td> ".$val['timses_activity_description']."</td>
-                    <td style=\"text-align:right\"> ".rupiah($val['timses_activity_fund'])."</td>
+                    <td> ".$this->getProgramName($val['program_id'])."</td>
+                    <td> ".$val['financial_flow_description']."</td>
+                    <td style=\"text-align:right\"> ".rupiah($val['financial_flow_nominal'])."</td>
                     
                 </tr>
                 ";
                 $no++;
-            $total_nominal += $val['timses_activity_fund'];
+            $total_nominal += $val['financial_flow_nominal'];
         }
         // dd($total_nominal);
 
@@ -278,16 +279,16 @@ class TimsesActivityReportController extends Controller
         ->get()
         ->pluck('timses_member_name', 'timses_member_id');
         
-        $programtimsesactivity = ProgramTimsesActivity::where('data_state', '=', 0)
-        ->where('timses_activity_date','>=',$start_date)
-        ->where('timses_activity_date','<=',$end_date);
+        $programtimsesactivity = FinancialFlow::where('data_state', '=', 0)
+        ->where('financial_category_id', '=', 8)
+        ->where('financial_category_type', '=', 2)
+        ->where('program_id', '!=', 0)
+        ->where('timses_member_id', '!=', 0)
+        ->where('financial_flow_date','>=',$start_date)
+        ->where('financial_flow_date','<=',$end_date);
 
-        $candidate_id = Session::get('candidate_id');
         $timses_member_id = Session::get('timses_member_id');
 
-        if($candidate_id||$candidate_id!=null||$candidate_id!=''){
-            $programtimsesactivity   = $programtimsesactivity->where('candidate_id', $candidate_id);
-        }
         if($timses_member_id||$timses_member_id!=null||$timses_member_id!=''){
             $programtimsesactivity   = $programtimsesactivity->where('timses_member_id', $timses_member_id);
         }
@@ -296,13 +297,13 @@ class TimsesActivityReportController extends Controller
         $spreadsheet = new Spreadsheet();
 
         if(count($programtimsesactivity)>=0){
-            $spreadsheet->getProperties()->setCreator("IBS CJDW")
-                                        ->setLastModifiedBy("IBS CJDW")
-                                        ->setTitle("Voucher Report")
+            $spreadsheet->getProperties()->setCreator("Lap Kegiatan Timses")
+                                        ->setLastModifiedBy("Lap Kegiatan Timses")
+                                        ->setTitle("Lap Kegiatan Timses")
                                         ->setSubject("")
-                                        ->setDescription("Voucher Report")
+                                        ->setDescription("Lap Kegiatan Timses")
                                         ->setKeywords("Voucher, Report")
-                                        ->setCategory("Voucher Report");
+                                        ->setCategory("Lap Kegiatan Timses");
                                         
             $sheet = $spreadsheet->getActiveSheet(0);
             $spreadsheet->getActiveSheet()->getPageSetup()->setFitToWidth(1);
@@ -359,13 +360,13 @@ class TimsesActivityReportController extends Controller
 
                     $no++;
                     $sheet->setCellValue('B'.$j, $no);
-                    $sheet->setCellValue('C'.$j, date('d-m-Y', strtotime($val['timses_activity_date'])));
+                    $sheet->setCellValue('C'.$j, date('d/m/Y', strtotime($val['financial_flow_date'])));
                     $sheet->setCellValue('D'.$j, $this->getTimsesMemberName($val['timses_member_id']));
-                    $sheet->setCellValue('E'.$j, $val['timses_activity_name']);
-                    $sheet->setCellValue('F'.$j, $val['timses_activity_description']);
-                    $sheet->setCellValue('G'.$j, rupiah($val['timses_activity_fund']));
+                    $sheet->setCellValue('E'.$j, $this->getProgramName($val['program_id']));
+                    $sheet->setCellValue('F'.$j, $val['financial_flow_description']);
+                    $sheet->setCellValue('G'.$j, rupiah($val['financial_flow_nominal']));
 
-                    $total_nominal += $val['timses_activity_fund'];
+                    $total_nominal += $val['financial_flow_nominal'];
                 
                 }
                 $j++;
@@ -388,7 +389,7 @@ class TimsesActivityReportController extends Controller
             
 
 
-            $filename='Laporan_Kegiatan Timses.xls';
+            $filename='Laporan_Kegiatan_Timses.xls';
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             header('Content-Disposition: attachment;filename="'.$filename.'"');
             header('Cache-Control: max-age=0');

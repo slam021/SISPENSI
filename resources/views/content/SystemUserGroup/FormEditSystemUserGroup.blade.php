@@ -78,8 +78,8 @@
                     <h5 class="form-section"><b>Privilage Menu<a class='red'> *</a></b></h5>
                 </div>
                 <div class="col-md-2" style="padding-left: 3%;">
-                    <a onclick="check_all()" name="Find" class="btn btn-sm btn-info" title="Back"> Check All</a>
-                    <a onclick="uncheck_all()" name="Find" class="btn btn-sm btn-info" title="Back"> UnCheck All</a>
+                    <a onclick="check_all()" name="Find" class="btn btn-sm btn-primary" title="Back"> Check All</a>
+                    <a onclick="uncheck_all()" name="Find" class="btn btn-sm btn-primary" title="Back"> UnCheck All</a>
                 </div>
             </div>
             <hr style="margin:0;">
@@ -115,8 +115,8 @@
         </div>
         <div class="card-footer text-muted">
             <div class="form-actions float-right">
-                <button type="reset" name="Reset" class="btn btn-danger" onClick="window.location.reload();"><i class="fa fa-times"></i> Batal</button>
-                <button type="submit" name="Save" class="btn btn-primary" title="Save"><i class="fa fa-check"></i> Simpan</button>
+                <button type="reset" name="Reset" class="btn btn-danger btn-sm" onClick="window.location.reload();"><i class="fa fa-times"></i> Batal</button>
+                <button type="submit" name="Save" class="btn btn-success btn-sm" title="Save"><i class="fa fa-check"></i> Simpan</button>
             </div>
         </div>
     </div>

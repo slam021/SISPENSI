@@ -112,61 +112,62 @@ $gender =[
     @endforeach
 </div>
 
-        <div class="card border border-dark">
-            <div class="card-header border-dark bg-dark">
-                <h5 class="mb-0 float-left">
-                    Data Partai     
-                </h5>
-                <div class="float-right">
-                    <button onclick="location.href='{{url('candidate/edit-partai/'.$val->candidate_id)}}'" name="Find" class="btn btn-sm btn-warning" title="Back"><i class="	fas fa-edit"></i>  Edit Partai</button>
-                </div>
-            </div>
-        @foreach($corecandidatepartai as $key => $partai)
-            <form method="post" action="{{route('process-edit-candidate-partai')}}" enctype="multipart/form-data">
-                @csrf
-                <div class="card-body">
-                    <div class="row form-group">
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <a class="text-dark">Nama Partai<a class='red'> </a></a>
-                                <input class="form-control input-bb" type="text" name="partai_name" id="partai_name" value="{{$partai->partai_name}}" autocomplete="off" readonly/>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <a class="text-dark">Nomor Partai<a class='red'> </a></a>
-                                <input class="form-control input-bb" type="text" name="partai_number" id="partai_number" value="{{$partai->partai_number}}" autocomplete="off" readonly/>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <a class="text-dark">Nomor Kandidat<a class='red'> </a></a>
-                                <input class="form-control input-bb" type="text" name="candidate_number" id="candidate_number" value="{{$partai->candidate_number}}" autocomplete="off" readonly/>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <a class="text-dark">Periode<a class='red'> </a></a>
-                                <input class="form-control input-bb" type="text" name="period_id" id="period_id" value="{{$partai->period_year}}" autocomplete="off" readonly/>
-                            </div>
-                        </div>
+<div class="card border border-dark">
+    <div class="card-header border-dark bg-dark">
+        <h5 class="mb-0 float-left">
+            Data Partai     
+        </h5>
+        <div class="float-right">
+            <button onclick="location.href='{{url('candidate/edit-partai/'.$val->candidate_id)}}'" name="Find" class="btn btn-sm btn-warning" title="Back"><i class="	fas fa-edit"></i>  Edit Partai</button>
+        </div>
+    </div>
+    @foreach($corecandidatepartai as $key => $partai)
+    <form method="post" action="{{route('process-edit-candidate-partai')}}" enctype="multipart/form-data">
+        @csrf
+        <div class="card-body">
+            <div class="row form-group">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <a class="text-dark">Nama Partai<a class='red'> </a></a>
+                        <input class="form-control input-bb" type="text" name="partai_name" id="partai_name" value="{{$partai->partai_name}}" autocomplete="off" readonly/>
                     </div>
                 </div>
-                {{-- <div class="card-footer text-muted">
-                    <div class="form-actions float-right">
-                        <button type="reset" name="Reset" class="btn btn-danger btn-sm" onClick="reset_add();"><i class="fa fa-times"></i> Batal</button>
-                        <button type="submit" name="Save" class="btn btn-success btn-sm" title="Save"><i class="fa fa-check"></i> Simpan</button>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <a class="text-dark">Nomor Partai<a class='red'> </a></a>
+                        <input class="form-control input-bb" type="text" name="partai_number" id="partai_number" value="{{$partai->partai_number}}" autocomplete="off" readonly/>
                     </div>
-                </div> --}}
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <a class="text-dark">Nomor Kandidat<a class='red'> </a></a>
+                        <input class="form-control input-bb" type="text" name="candidate_number" id="candidate_number" value="{{$partai->candidate_number}}" autocomplete="off" readonly/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <a class="text-dark">Periode<a class='red'> </a></a>
+                        <input class="form-control input-bb" type="text" name="period_id" id="period_id" value="{{$partai->period_year}}" autocomplete="off" readonly/>
+                    </div>
+                </div>
             </div>
+        </div>
+        {{-- <div class="card-footer text-muted">
+            <div class="form-actions float-right">
+                <button type="reset" name="Reset" class="btn btn-danger btn-sm" onClick="reset_add();"><i class="fa fa-times"></i> Batal</button>
+                <button type="submit" name="Save" class="btn btn-success btn-sm" title="Save"><i class="fa fa-check"></i> Simpan</button>
             </div>
+        </div> --}}
         {{-- <input class="form-control input-bb" type="hidden"name="timses_id" id="timses_id" value="{{$timses_id}}" autocomplete="off" readonly/> --}}
-        </form>
-        @endforeach
+    </form>
+    @endforeach
 </div>
 <br>
 <br>
 <br>
+
+
+
 @stop
 
 @section('footer')

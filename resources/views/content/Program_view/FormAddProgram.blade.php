@@ -6,6 +6,28 @@
 @section('js')
 <script>
 
+    function toRp(angka){
+        var rev     = parseInt(angka, 10).toString().split('').reverse().join('');
+        var rev2    = '';
+        for(var i = 0; i < rev.length; i++){
+            rev2  += rev[i];
+            if((i + 1) % 3 === 0 && i !== (rev.length - 1)){
+                rev2 += '.';
+            }
+        }
+        return rev2.split('').reverse().join('') + ',00';
+    }
+    
+    function rupiahSave(value){
+        var rupiah_save = document.getElementById("program_fund");
+        var rupiah_view = document.getElementById("program_fund_view");
+        if(rupiah_view){
+            document.getElementById('program_fund').value = rupiah_view.value;
+            document.getElementById('program_fund_view').value =  toRp(rupiah_view.value);
+        }
+    }
+    
+
     function disabledTimses(value){
         var organizer = document.getElementById('program_organizer').value;
         console.log(organizer);
@@ -136,6 +158,13 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
+                                <a class="text-dark">Dana<a class='red'> *</a></a>
+                                <input class="form-control input-bb" type="text" name="program_fund_view" id="program_fund_view" value="{{old('program_fund_view')}}" onChange="rupiahSave();" autocomplete="off" />
+                                <input class="form-control input-bb" type="hidden" name="program_fund" id="program_fund" value="{{old('program_fund')}}"  autocomplete="off" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
                                 <a class="text-dark">Tanggal<a class='red'> *</a></a>
                                 <input class="form-control input-bb" type="date" name="program_date" id="program_date" value="{{old('program_date')}}"  autocomplete="off" />
                             </div>
@@ -150,12 +179,6 @@
                             <div class="form-group">
                                 <a class="text-dark">Lokasi Acara<a class='red'> *</a></a>
                                 <input class="form-control input-bb" type="text" name="program_address" id="program_address" value="{{old('program_address')}}"  autocomplete="off" />
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <a class="text-dark">Dana<a class='red'> *</a></a>
-                                <input class="form-control input-bb" type="text" name="program_fund" id="program_fund" value="{{old('program_fund')}}"  autocomplete="off" />
                             </div>
                         </div>
                         {{-- <div class="col-md-3">
