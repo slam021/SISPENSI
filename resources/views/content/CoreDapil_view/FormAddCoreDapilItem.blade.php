@@ -155,14 +155,14 @@
                     </div>
                 </div>
                 <div class="col-md-6"></div> --}}
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">	
                         <a class="text-dark">Provinsi<a class='red'> </a></a>
                         {!! Form::select('province_id', $province, 0, ['class' => 'selection-search-clear select-form', 'id' => 'province_id','' ])!!}
                         <input class="form-control input-bb" type="hidden" name="dapil_id" id="dapil_id" value="{{$dapil_id}}"  autocomplete="off"/>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <a class="text-dark">Kabupaten/Kota<a class='red'> </a></a>
                         <select class="selection-search-clear" name="city_id" id="city_id" style="width: 100% !important" >
@@ -170,7 +170,7 @@
                         {{-- <input class="form-control input-bb" type="hidden" name="city_id" id="city_id" value="{{$coredapil['city_id']}}"  autocomplete="off"/> --}}
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <a class="text-dark">Kecamatan<a class='red'> </a></a>
                         <select class="selection-search-clear" name="kecamatan_id" id="kecamatan_id" style="width: 100% !important" >
@@ -179,7 +179,7 @@
                         {{-- {!! Form::select('', $districts, '', ['class' => 'selection-search-clear select-form', 'id' => 'kecamatan_id']) !!} --}}
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="form-group">
                         <a class="text-dark">Kelurahan/Desa<a class='red'> </a></a>
                         <select class="selection-search-clear" name="kelurahan_id" id="kelurahan_id" style="width: 100% !important" >

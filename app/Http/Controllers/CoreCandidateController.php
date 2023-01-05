@@ -24,7 +24,12 @@ class CoreCandidateController extends Controller
         $corecandidatepartai = CoreCandidatePartai::where('core_candidate_partai.data_state','=',0)
         ->join('core_period', 'core_period.period_id', '=', 'core_candidate_partai.period_id')
         ->orderBy('partai_id', 'DESC')->take(1)->get();
-        // dd($corecandidatepartai);
+        dd($corecandidatepartai);
+
+        $oneyear = "20-09-2022";
+        $until = date('d-m-Y', strtotime('+1 year', strtotime($oneyear)));
+        dd($until);
+        // print_r($until); exit;
         return view('content/CoreCandidate_view/ListCoreCandidate', compact('corecandidate', 'corecandidatepartai'));
     }
 
@@ -59,19 +64,19 @@ class CoreCandidateController extends Controller
     }
 
     public function processEditCoreCandidate(Request $request){
-        $fields = $request->validate([
-            'candidate_id'                  => 'required',
-            'candidate_full_name'           => 'required',
-            'candidate_nick_name'           => 'required',
-            'candidate_address'             => 'required',
-            'candidate_gender'              => 'required',
-            'candidate_birth_place'         => 'required',
-            'candidate_birth_date'          => 'required',
+        // $fields = $request->validate([
+        //     'candidate_id'                  => 'required',
+        //     'candidate_full_name'           => 'required',
+        //     'candidate_nick_name'           => 'required',
+        //     'candidate_address'             => 'required',
+        //     'candidate_gender'              => 'required',
+        //     'candidate_birth_place'         => 'required',
+        //     'candidate_birth_date'          => 'required',
             // 'period_id'                     => 'required',
             // 'photos'              => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+        // ]);
 
-        $item  = CoreCandidate::findOrFail($fields['candidate_id']);
+        $item  = CoreCandidate::findOrFail($request['candidate_id']);
         // print_r($item['candidate_photos']); exit;
 
         if ($request->hasFile('candidate_photos')) {
@@ -82,15 +87,15 @@ class CoreCandidateController extends Controller
 
             Storage::delete('public/candidate_photos/'. $item->candidate_photos);
             
-            $item->candidate_full_name         = $fields['candidate_full_name'];
-            $item->candidate_nick_name         = $fields['candidate_nick_name'];
+            $item->candidate_full_name         = $request['candidate_full_name'];
+            $item->candidate_nick_name         = $request['candidate_nick_name'];
             $item->candidate_nik               = $request['candidate_nik'];
-            $item->candidate_address           = $fields['candidate_address'];
-            $item->candidate_gender            = $fields['candidate_gender'];
+            $item->candidate_address           = $request['candidate_address'];
+            $item->candidate_gender            = $request['candidate_gender'];
             $item->candidate_phone_number      = $request['candidate_phone_number'];
-            $item->candidate_birth_place       = $fields['candidate_birth_place'];
-            $item->candidate_birth_date        = $fields['candidate_birth_date'];
-            // $item->period_id                   = $fields['period_id'];
+            $item->candidate_birth_place       = $request['candidate_birth_place'];
+            $item->candidate_birth_date        = $request['candidate_birth_date'];
+            // $item->period_id                   = $request['period_id'];
             $item->candidate_photos            = $candidatephotosnew;
 
             if($item->save()){
@@ -101,14 +106,14 @@ class CoreCandidateController extends Controller
                 return redirect('/candidate')->with('msg',$msg);
             }
         }else{ 
-            $item->candidate_full_name         = $fields['candidate_full_name'];
-            $item->candidate_nick_name         = $fields['candidate_nick_name'];
+            $item->candidate_full_name         = $request['candidate_full_name'];
+            $item->candidate_nick_name         = $request['candidate_nick_name'];
             $item->candidate_nik               = $request['candidate_nik'];
-            $item->candidate_address           = $fields['candidate_address'];
-            $item->candidate_gender            = $fields['candidate_gender'];
+            $item->candidate_address           = $request['candidate_address'];
+            $item->candidate_gender            = $request['candidate_gender'];
             $item->candidate_phone_number      = $request['candidate_phone_number'];
-            $item->candidate_birth_place       = $fields['candidate_birth_place'];
-            $item->candidate_birth_date        = $fields['candidate_birth_date'];
+            $item->candidate_birth_place       = $request['candidate_birth_place'];
+            $item->candidate_birth_date        = $request['candidate_birth_date'];
             // $item->period_id                   = $fields['period_id'];
     
             if($item->save()){

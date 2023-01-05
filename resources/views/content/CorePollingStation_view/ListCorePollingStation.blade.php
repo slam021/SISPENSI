@@ -40,7 +40,7 @@
                 <thead>
                     <tr>
                         <th width="3%" style='text-align:center'>No</th>
-                        <th width="10%" style='text-align:center'>Lokasi TPS</th>
+                        <th width="10%" style='text-align:center'>Dapil</th>
                         <th width="10%" style='text-align:center'>Nama TPS</th>
                         <th width="10%" style='text-align:center'>Alamat TPS</th>
                         <th width="5%" style='text-align:center'>Aksi</th>
@@ -53,7 +53,7 @@
                     @foreach($corepollingstation as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['location_name']}}</td>
+                        <td>{{$val['dapil_name']}}</td>
                         <td>{{$val['polling_station_name']}}</td>
                         <td>{{$val['polling_station_address']}}</td>
                         <td class="" style='text-align:center'>

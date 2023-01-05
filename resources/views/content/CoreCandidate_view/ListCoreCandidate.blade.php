@@ -23,9 +23,9 @@ $gender =[
 ?>
 
 @section('content')
-{{-- <h3 class="page-title">
-    <b>Daftar Kandidat</b>
-</h3> --}}
+<h3 class="page-title">
+    <b>Profil Kandidat</b>
+</h3>
 @if(session('msg'))
 <div class="alert alert-success" role="alert">
      <button type="button" class="close" data-dismiss="alert">×</button> 

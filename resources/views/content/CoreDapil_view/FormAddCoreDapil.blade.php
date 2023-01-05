@@ -83,7 +83,7 @@
         </div>
         <div class="card-footer text-muted">
             <div class="form-actions float-right">
-                <button type="reset" name="Reset" class="btn btn-danger btn-sm" onClick="reset_add();"><i class="fa fa-times"></i> Batal</button>
+                <button type="reset" name="Reset" class="btn btn-danger btn-sm" value="reset"><i class="fa fa-times"></i> Batal</button>
                 <button type="submit" name="Save" class="btn btn-success btn-sm" title="Save"><i class="fa fa-check"></i> Simpan</button>
             </div>
         </div>

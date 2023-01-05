@@ -66,21 +66,20 @@
         @csrf
         <div class="card-body">
             <div class="row form-group">
-               <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <a class="text-dark">Lokasi TPS<a class='red'> *</a></a>
-                        {!! Form::select('location_id', $corelocation, $corepollingstation->location_id, ['class' => 'selection-search-clear select-form', 'id' => 'location_id','' ])!!}
+                        <a class="text-dark">Dapil<a class='red'> *</a></a>
+                        {!! Form::select('dapil_id', $coredapil, $corepollingstation->dapil_id, ['class' => 'selection-search-clear select-form', 'id' => 'dapil_id','' ])!!}
                         <input class="form-control input-bb" type="hidden" name="polling_station_id" id="polling_station_id" value="{{$corepollingstation->polling_station_id}}" autocomplete="off" />
                     </div>
                 </div>
-                <div class="col-md-6"></div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <a class="text-dark">Nama TPS<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="text" name="polling_station_name" id="polling_station_name" value="{{$corepollingstation->polling_station_name}}" autocomplete="off" />
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <a class="text-dark">Alamat TPS<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="text" name="polling_station_address" id="polling_station_address" value="{{$corepollingstation->polling_station_address}}" autocomplete="off" />

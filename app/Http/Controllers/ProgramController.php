@@ -33,43 +33,54 @@ class ProgramController extends Controller
 
     public function index(){
     
-        
+        if(!Session::get('start_date')){
+            $start_date     = date('Y-m-d');
+        }else{
+            $start_date = Session::get('start_date');
+        }
+        if(!Session::get('end_date')){
+            $end_date     = date('Y-m-d');
+        }else{
+            $end_date = Session::get('end_date');
+        } 
+
         $coretimsesmember = CoreTimsesMember::select('timses_member_id', 'timses_member_name')
         ->where('data_state', '=', 0)
+        ->orderBy('timses_member_name', 'ASC')
         ->get()
         ->pluck('timses_member_name', 'timses_member_id');
         
         $program = Program::select('program.*')
-        ->where('program.data_state','=',0);
-        // ->orderBy('program_id', 'ASC')     
+        ->where('program.data_state','=',0)
+        ->where('program_date','>=',$start_date)
+        ->where('program_date','<=',$end_date);    
     
         $timses_member_id = Session::get('timses_member_id');
 
         if($timses_member_id||$timses_member_id!=null||$timses_member_id!=''){
             $program   = $program->where('timses_member_id', $timses_member_id);
         }
-      
-        $program   = $program->get();
-       
+    
+        $program   = $program->get();   
         // print_r($coretimses); exit;
 
         $programgender =array(
             1 => 'Laki-laki',
             2 => 'Perempuan',
         );
-        return view('content/Program_view/ListProgram', compact('program', 'programgender', 'timses_member_id', 'coretimsesmember'));
+        return view('content/Program_view/ListProgram', compact('program', 'programgender', 'timses_member_id', 'coretimsesmember', 'start_date', 'end_date'));
     }
 
     public function filterProgram(Request $request)
     {
-        // $start_date=$request->start_date;
-        // $end_date=$request->end_date;
+        $start_date=$request->start_date;
+        $end_date=$request->end_date;
         $timses_member_id = $request->timses_member_id;
 
         // dd( $timses_member_id);
 
-        // Session::put('start_date', $start_date);
-        // Session::put('end_date', $end_date);
+        Session::put('start_date', $start_date);
+        Session::put('end_date', $end_date);
         Session::put('timses_member_id', $timses_member_id);
 
         return redirect('/program');
@@ -77,8 +88,8 @@ class ProgramController extends Controller
 
     public function filterResetProgram()
     {
-        // Session::forget('start_date');
-        // Session::forget('end_date');
+        Session::forget('start_date');
+        Session::forget('end_date');
         Session::forget('timses_member_id');
 
         return redirect('/program');
@@ -90,7 +101,10 @@ class ProgramController extends Controller
         $corecandidate = CoreCandidate::where('candidate_id', '=', 1)
         ->where('data_state','=',0)->get();
 
-        $coretimsesmember = CoreTimsesMember::where('data_state', '=', 0)->pluck('timses_member_name', 'timses_member_id');
+        $coretimsesmember = CoreTimsesMember::where('data_state', '=', 0)
+        ->orderBy('timses_member_name', 'ASC')
+        ->pluck('timses_member_name', 'timses_member_id');
+        
         $nullcoretimses  = Session::get('timses_member_id');
         return view('content/Program_view/FormAddProgram', compact('program', 'coretimsesmember', 'nullcoretimses', 'corecandidate'));
     }

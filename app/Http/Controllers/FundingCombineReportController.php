@@ -36,6 +36,7 @@ class FundingCombineReportController extends Controller
         
         $coretimsesmember = CoreTimsesMember::select('timses_member_id', 'timses_member_name')
         ->where('data_state', '=', 0)
+        ->orderBy('timses_member_name', 'ASC')
         ->get()
         ->pluck('timses_member_name', 'timses_member_id');
 

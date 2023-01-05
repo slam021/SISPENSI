@@ -59,7 +59,7 @@
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
                 <div class = "row">
-                    {{-- <div class = "col-md-3">
+                    <div class = "col-md-3">
                         <div class="form-group form-md-line-input">
                             <section class="control-label">Tanggal Mulai
                                 <span class="required text-danger">
@@ -79,7 +79,7 @@
                             </section>
                             <input type="date" class="form-control input-bb" name="end_date" value="{{ $end_date }}">
                         </div>
-                    </div> --}}
+                    </div>
                     <div class = "col-md-3">
                         <div class="form-group form-md-line-input">
                             <section class="control-label">Nama Timses

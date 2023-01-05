@@ -34,6 +34,7 @@ class TimsesActivityReportController extends Controller
         }
 
         $listcoretimsesmember = CoreTimsesMember :: where('data_state', 0)
+        ->orderBy('timses_member_name', 'ASC')
         ->get()
         ->pluck('timses_member_name', 'timses_member_id');
         

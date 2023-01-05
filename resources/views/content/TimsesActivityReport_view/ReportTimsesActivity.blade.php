@@ -64,7 +64,7 @@
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
                     <div class = "row">
-                        <div class = "col-md-4">
+                        <div class = "col-md-3">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Tanggal Mulai
                                     <span class="required text-danger">
@@ -77,7 +77,7 @@
                             </div>
                         </div>
     
-                        <div class = "col-md-4">
+                        <div class = "col-md-3">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Tanggal Akhir
                                     <span class="required text-danger">
@@ -97,7 +97,7 @@
                                 {!! Form::select('candidate_id', $listcorecandidate, $candidate_id, ['class' => 'selection-search-clear select-form', 'id' => 'candidate_id','' ])!!}
                             </div>
                         </div> --}}
-                        <div class = "col-md-4">
+                        <div class = "col-md-3">
                             <div class="form-group form-md-line-input">
                                 <section class="control-label">Nama Timses
                                     <span class="required text-danger">
