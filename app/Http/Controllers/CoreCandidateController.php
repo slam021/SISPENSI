@@ -24,10 +24,10 @@ class CoreCandidateController extends Controller
         $corecandidatepartai = CoreCandidatePartai::where('core_candidate_partai.data_state','=',0)
         ->join('core_period', 'core_period.period_id', '=', 'core_candidate_partai.period_id')
         ->orderBy('partai_id', 'DESC')->take(1)->get();
-        dd($corecandidatepartai);
+        // dd($corecandidatepartai);
 
         $oneyear = "20-09-2022";
-        $until = date('d-m-Y', strtotime('+1 year', strtotime($oneyear)));
+        $until = date('d-m-Y', strtotime('+6 month', strtotime($oneyear)));
         dd($until);
         // print_r($until); exit;
         return view('content/CoreCandidate_view/ListCoreCandidate', compact('corecandidate', 'corecandidatepartai'));

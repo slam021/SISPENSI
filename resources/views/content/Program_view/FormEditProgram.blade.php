@@ -1,4 +1,4 @@
-divdiv@inject('Program', 'App\Http\Controllers\ProgramController')
+@inject('Program', 'App\Http\Controllers\ProgramController')
 
 @extends('adminlte::page')
 
@@ -87,12 +87,6 @@ divdiv@inject('Program', 'App\Http\Controllers\ProgramController')
             <button onclick="location.href='{{ url('program') }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
         </div>
     </div>
-
-    {{-- <?php 
-        if (empty($coresection)){
-            $coresection['section_name'] = '';
-        }
-    ?> --}}
     
     <?php 
         $organizer =[

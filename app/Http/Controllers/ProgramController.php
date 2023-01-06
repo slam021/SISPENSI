@@ -172,7 +172,7 @@ class ProgramController extends Controller
         }
 
         $program_id = Program::orderBy('program_id', 'DESC')->first()->program_id;
-  
+
         $data_financial_flow = [
             'program_id'                     => $program_id + 1,
             'financial_category_id'          => 8,
@@ -233,7 +233,10 @@ class ProgramController extends Controller
         ->where('data_state','=',0)->first()->candidate_id;
 // dd($corecandidate);
 
-        $coretimsesmember = CoreTimsesMember::where('data_state', '=', 0)->pluck('timses_member_name', 'timses_member_id');
+        $coretimsesmember = CoreTimsesMember::where('data_state', '=', 0)
+        ->orderBy('timses_member_name', 'ASC')
+        ->pluck('timses_member_name', 'timses_member_id');
+        
         $coretimsesmember2 = CoreTimsesMember::where('data_state', '=', 0)->get();
         $nullcoretimses  = Program::where('data_state', '=', 0)->where('program_id', $program_id)->first();
         return view('content/Program_view/FormEditProgram', compact('program', 'coretimsesmember', 'nullcoretimses', 'coretimsesmember2', 'corecandidate'));
