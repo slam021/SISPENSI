@@ -26,10 +26,10 @@ class CoreCandidateController extends Controller
         ->orderBy('partai_id', 'DESC')->take(1)->get();
         // dd($corecandidatepartai);
 
-        $oneyear = "20-09-2022";
-        $until = date('d-m-Y', strtotime('+6 month', strtotime($oneyear)));
-        dd($until);
-        // print_r($until); exit;
+        // $oneyear = "14-07-2022";
+        // $until = date('d-m-Y', strtotime('+2 year', strtotime($oneyear)));
+        // dd($until);
+
         return view('content/CoreCandidate_view/ListCoreCandidate', compact('corecandidate', 'corecandidatepartai'));
     }
 

@@ -212,7 +212,6 @@ class ProgramController extends Controller
             $last_balance_timses->last_balance -= $request['program_fund'];
             $last_balance_timses->save();
         }
-       
 
         if(Program::create($data)){
             FinancialFlow::create($data_financial_flow);

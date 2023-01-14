@@ -155,6 +155,18 @@ class CoreDapilController extends Controller
         return $data;
     }
 
+    public function getDapilName($dapil_id){
+        $data = CoreDapil::where('data_state', 0)
+        ->where('dapil_id', $dapil_id)
+        ->first();
+
+        if($data == null){
+            "";
+        }else{
+            return $data->dapil_name;
+        }
+    }
+
     public function processAddCoreDapil(Request $request){
         $fields = $request->validate([
             'dapil_category_id'     => 'required',

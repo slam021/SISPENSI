@@ -56,7 +56,7 @@
                         <td class="" style='text-align:center'>
                             <a type="button" class="badge badge-warning btn-sm" href="{{ url('/dapil/edit/'.$val['dapil_id']) }}"><i class='fas fa-edit'></i> Edit</a>
                             <a type="button" class="badge bg-lime btn-sm" href="{{ url('/dapil/detail/'.$val['dapil_id']) }}"><i class='fas fa-list'></i> Detail</a>
-                            <a type="button" class="badge bg-indigo btn-sm" href="{{ url('/dapil/add-dapil-item/'.$val['dapil_id']) }}"><i class='fas fa-search-location'></i> Daerah </a>
+                            <a type="button" class="badge bg-indigo btn-sm" href="{{ url('/dapil/add-dapil-item/'.$val['dapil_id']) }}"><i class='fas fa-search-location'></i> Dapil</a>
                             <a type="button" class="badge badge-danger btn-sm" href="{{ url('/dapil/delete-dapil/'.$val['dapil_id']) }}"><i class='far fa-trash-alt'></i> Hapus</a>
                         </td>
                     </tr>

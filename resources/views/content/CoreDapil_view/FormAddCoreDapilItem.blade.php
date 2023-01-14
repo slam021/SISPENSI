@@ -130,19 +130,19 @@
     {{session('msg')}}
 </div>
 @endif
+    <?php 
+        $dapil_id = Request::segment(3);
+    ?>
 <div class="card border border-dark">
     <div class="card-header border-dark bg-dark">
         <h5 class="mb-0 float-left">
-            Tambah Data Bagian Dapil
+            Tambah Data Dapil {{$CDI->getDapilName($dapil_id)}}
         </h5>
         <div class="float-right">
             <button onclick="location.href='{{ url('dapil') }}'" name="back" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
         </div>
     </div>
 
-    <?php 
-        $dapil_id = Request::segment(3);
-    ?>
 
     <form method="post" action="{{route('process-add-dapil-item')}}" enctype="multipart/form-data">
     @csrf
@@ -201,7 +201,7 @@
     <div class="card border border-dark">
         <div class="card-header bg-dark clearfix">
             <h5 class="mb-0 float-left">
-                Mengelola Data Bagian Dapil  
+                Daftar Data Dapil {{$CDI->getDapilName($dapil_id)}}  
             </h5>
         </div>
     

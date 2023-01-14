@@ -46,7 +46,7 @@ return [
     |
     */
 
-    'logo' => '<b>SisPen Eleksi</b>',
+    'logo' => '<b>SISPENSI</b>',
     'logo_img' => 'vendor/adminlte/dist/img/logo_vote.ico',
     'logo_img_class' => 'brand-image',
     'logo_img_xl' => null,
