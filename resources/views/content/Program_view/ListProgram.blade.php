@@ -117,6 +117,7 @@
                 <thead>
                     <tr>
                         <th width="5%" style='text-align:center'>No</th>
+                        <th width="10%" style='text-align:center'>Tanggal</th>
                         <th width="10%" style='text-align:center'>Penyelenggara</th>
                         {{-- <th width="10%" style='text-align:center'>Kandidate</th> --}}
                         <th width="10%" style='text-align:center'>Nama Timses</th>
@@ -124,7 +125,6 @@
                         <th width="10%" style='text-align:center'>Deskripsi</th>
                         {{-- <th width="10%" style='text-align:center'>Lokasi</th> --}}
                         <th width="10%" style='text-align:center'>Lokasi Acara</th>
-                        <th width="10%" style='text-align:center'>Tanggal</th>
                         <th width="10%" style='text-align:center'>Dana</th>
                         {{-- <th width="10%" style='text-align:center'>Periode</th> --}}
                         {{-- <th width="10%" style='text-align:center'>Status</th> --}}
@@ -149,10 +149,11 @@
                     @foreach($program as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
+                        <td>{{date('d/m/Y', strtotime($val['program_date']))}}</td>
                         <td>{{$organizer[$val['program_organizer']]}}</td>
                         {{-- <td>{{$val['candidate_full_name']}}</td> --}}
                         @if ($val['program_organizer'] == 1)
-                            <td style='text-align:center'>{{'_'}}</td>
+                            <td style='text-align:center'>{{'-'}}</td>
                         @else
                             <td>{{$Program->getTimsesName($val['timses_member_id'])}}</td>
                         @endif
@@ -160,7 +161,6 @@
                         <td>{{$val['program_description']}}</td>
                         {{-- <td>{{$val['location_name']}}</td> --}}
                         <td>{{$val['program_address']}}</td>
-                        <td>{{date('d/m/Y', strtotime($val['program_date']))}}</td>
                         <td style='text-align:right'>{{rupiah($val['program_fund'])}}</td>
                         {{-- <td>{{$val['period_name']}}</td> --}}
                         {{-- <td><img width="150px" src="{{ url('/program-photos/'.$val['photos']) }}"></td> --}}

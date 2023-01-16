@@ -69,12 +69,7 @@
                 </div>
             </div>
             @if ($program->timses_member_id == null)
-            <div class="col-md-6">
-                <div class="form-group" >
-                    <a class="text-dark">Nama Timses<a class='red'> *</a></a>
-                    <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="" autocomplete="off" readonly/>
-                </div>
-            </div>
+                <div></div>
             @else
             <div class="col-md-6">
                 <div class="form-group" >
