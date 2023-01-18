@@ -330,18 +330,18 @@ class CoreDapilController extends Controller
         return redirect('/dapil')->with('msg',$msg);
     }
 
-    public function deleteCoredapilItem($dapil_id)
+    public function deleteCoredapilItem($dapil_id_item)
     {
-        $item               = Coredapil::findOrFail($dapil_id);
+        $item               = CoreDapilItem::findOrFail($dapil_id_item);
         $item->data_state   = 1;
         // $item->deleted_id   = Auth::id();
         // $item->deleted_at   = date("Y-m-d H:i:s");
         if($item->save()) {
-            $msg = 'Hapus Data dapil Berhasil';
+            $msg = 'Hapus Dapil Item Berhasil';
         }else{
-            $msg = 'Hapus Data dapil Gagal';
+            $msg = 'Hapus Dapil Item Gagal';
         }
 
-        return redirect('/dapil')->with('msg',$msg);
+        return back()->with('msg',$msg);
     }
 }

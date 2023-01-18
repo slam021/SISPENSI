@@ -24,7 +24,7 @@
 
 @section('content')
 <h3 class="page-title">
-    <b>Daftar Pemasukan Keuangan</b>
+    <b>Daftar Pemasukan Keuangan Timses</b>
 </h3>
 @if(session('msg'))
 <div class="alert alert-success" role="alert">
@@ -38,7 +38,7 @@
             Mengelola Data Pemasukan Keuangan 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('funding-income-timses/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Pemasukan Keuangan</button>
+            <button onclick="location.href='{{ url('funding-income-timses/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Pemasukan Timses</button>
         </div>
     </div>
 

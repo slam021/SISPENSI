@@ -38,7 +38,7 @@
             Mengelola Data Pemasukan Keuangan 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('funding-income-candidate/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Pemasukan Keuangan</button>
+            <button onclick="location.href='{{ url('funding-income-candidate/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Pemasukan Kandidat</button>
         </div>
     </div>
 

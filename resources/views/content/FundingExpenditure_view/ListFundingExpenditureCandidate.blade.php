@@ -38,7 +38,7 @@
             Mengelola Data Pengeluaran Keuangan Kandidat 
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('funding-expenditure-candidate/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Pengeluaran Keuangan</button>
+            <button onclick="location.href='{{ url('funding-expenditure-candidate/add') }}'" name="add" class="btn btn-sm bg-cyan" title="Add Data"><i class="fa fa-plus"></i> Tambah Pengeluaran Kandidat</button>
         </div>
     </div>
 

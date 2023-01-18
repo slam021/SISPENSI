@@ -50,7 +50,7 @@ $gender =[
                 <div class="col-md-3">
                     <div class="form-group">
                         <a class="text-dark"><a class='red'></a></a>
-                        <img width="250px" height="300px" src="{{ url('storage/candidate_photos/'.$val['candidate_photos']) }}">
+                        <img width="250px" height="300px" src="{{ asset('storage/candidate_photos/'.$val['candidate_photos']) }}">
                         <a type="button" style="margin-top: 7px; margin-left: 80px" class="btn bg-blue btn-sm" target="_blank" href="{{ url('/candidate/download/'. $val['candidate_id']) }}" ><i class="fa fa-download"></i> Download</a>
                     </div>
                 </div>

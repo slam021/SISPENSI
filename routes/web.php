@@ -77,6 +77,8 @@ Route::get('/dapil/dapil-province', [CoreDapilController::class, 'addReset'])->n
 Route::post('/dapil/city', [CoreDapilController::class, 'getCoreCity'])->name('dapil-city');
 Route::post('/dapil/district', [CoreDapilController::class, 'getCoreDistrict'])->name('dapil-district');
 Route::post('/dapil/village', [CoreDapilController::class, 'getCoreVillage'])->name('dapil-village');
+Route::get('/dapil/delete-dapil-item/{dapil_item_id}', [CoreDapilController::class, 'deleteCoreDapilItem'])->name('delete-dapil-item');
+
 
 //Configuration Data Candidate
 Route::get('/candidate', [CoreCandidateController::class, 'index']);

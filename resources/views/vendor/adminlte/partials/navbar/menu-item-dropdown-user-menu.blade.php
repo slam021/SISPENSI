@@ -19,10 +19,12 @@
     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
         @if(config('adminlte.usermenu_image'))
             <img src="{{ Auth::user()->adminlte_image() }}"
-                 class="user-image img-circle elevation-2"
-                 alt="{{ Auth::user()->name }}">
+                class="user-image img-circle elevation-2"
+                alt="{{ Auth::user()->name }}">
         @endif
         <span @if(config('adminlte.usermenu_image')) class="d-none d-md-inline" @endif>
+            <i class="fas fa-user-alt" style="font-size:130%;"></i>
+            {{-- <img src="{{ asset('resources/img/logosimpel/user.png')}}" class="user-image img-circle elevation-2"> --}}
             {{ Auth::user()->name }}
         </span>
     </a>
