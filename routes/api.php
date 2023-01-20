@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ApiController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +20,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('login', [ApiController::class, 'login']);
+Route::post('logout', [ApiController::class, 'logout']);
+Route::post('change-password', [ApiController::class, 'changePassword']);
+
+Route::get('get-program',[ApiController::class, 'getProgram']);
+Route::post('post-program',[ApiController::class, 'postProgram']);
+Route::post('post-documentation-program',[ApiController::class, 'postDocumentationProgram']);
 
