@@ -11,6 +11,7 @@ Use App\Models\Program;
 Use App\Models\CoreCandidate;
 Use App\Models\CoreTimsesMember;
 Use App\Models\FinancialFlow;
+Use App\Models\DocumentationProgram;
 
 class ApiController extends Controller
 {
@@ -115,50 +116,32 @@ class ApiController extends Controller
     }
 
     public function postProgram(Request $request){
-        if($request->program_organizer == 1){
-            $candidate_id = CoreCandidate::select('candidate_id')
-            ->where('data_state','=',0)->first()->candidate_id;
-            // dd($candidate_id);
-        }else{
-            $candidate_id = null;
-        }
-
-        $fields = $request->validate([
-            // 'candidate_id'              => 'required',
-            'program_organizer'         => 'required',
-            'program_name'              => 'required',
-            'program_description'       => 'required',
-            'program_address'           => 'required',
-            'program_date'              => 'required',
-            'program_fund'              => 'required',
-            // 'candidate_photos'              => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
         
         $data = array(
             // 'location_id'                    => $fields['location_id'], 
             // 'period_id'                      => $fields['period_id'], 
-            'candidate_id'                   => $candidate_id, 
+            // 'candidate_id'                   => $candidate_id, 
             'timses_member_id'               => $request['timses_member_id'], 
             'program_organizer'              => 2, 
-            'program_name'                   => $fields['program_name'], 
-            'program_description'            => $fields['program_description'], 
-            'program_address'                => $fields['program_address'], 
-            'program_date'                   => $fields['program_date'], 
-            'program_fund'                   => $fields['program_fund'], 
-            'created_id'                     => Auth::id(),
+            'program_name'                   => $request['program_name'], 
+            'program_description'            => $request['program_description'], 
+            'program_address'                => $request['program_address'], 
+            'program_date'                   => $request['program_date'], 
+            'program_fund'                   => $request['program_fund'], 
+            'created_id'                     => $request['timses_member_id'],
             'created_at'                     => date('Y-m-d'),
         );
         // dd($data);                  
 
-        if($request->program_organizer == 1){
-            $candidate_id = CoreCandidate::select('candidate_id')
-            ->where('data_state','=',0)->first()->candidate_id;
+        // if($request->program_organizer == 1){
+        //     $candidate_id = CoreCandidate::select('candidate_id')
+        //     ->where('data_state','=',0)->first()->candidate_id;
 
-            $timses_member_id = null;
-        }else{
-            $candidate_id = null;
-            $timses_member_id = $request['timses_member_id'];
-        }
+        //     $timses_member_id = null;
+        // }else{
+        //     $candidate_id = null;
+        //     $timses_member_id = $request['timses_member_id'];
+        // }
 
         $program_id = Program::orderBy('program_id', 'DESC')->first()->program_id;
 
@@ -166,19 +149,19 @@ class ApiController extends Controller
             'program_id'                     => $program_id + 1,
             'financial_category_id'          => 8,
             'financial_category_type'        => 2,
-            'candidate_id'                   => $candidate_id, 
-            'timses_member_id'               => $timses_member_id, 
+            // 'candidate_id'                   => $candidate_id, 
+            'timses_member_id'               => $request['timses_member_id'], 
             'financial_flow_nominal'         => $request['program_fund'],
             'financial_flow_description'     => $request['program_description'],
             'financial_flow_date'            => $request['program_date'],
-            'created_id'                     => Auth::id(),
+            'created_id'                     => $request['created_id'],
             'created_at'                     => date('Y-m-d'),
         ];
 
         // dd($data);
 
-        // $core_candidate_id = CoreCandidate::select('candidate_id')
-        // ->where('data_state','=',0)->first()->candidate_id;
+        $core_candidate_id = CoreCandidate::select('candidate_id')
+        ->where('data_state','=',0)->first()->candidate_id;
         if($request->program_organizer == 1){
             $candidate_id = CoreCandidate::select('candidate_id')
             ->where('data_state','=',0)->first()->candidate_id;
@@ -210,6 +193,24 @@ class ApiController extends Controller
     }
 
     public function postDocumentationProgram(Request $request){
+
+        // $program_id = Program::orderBy('program_id', 'DESC')->first()->program_id;
+
+        $request->hasFile('program_documentation_file');
+            $resorce            = $request->file('program_documentation_file');
+            $program_documentation_file    = time().'_'.$resorce->getClientOriginalName();
+            $resorce->storeAs('public/program_documentation_file', $program_documentation_file);
         
+        $data = array(
+            'program_id'                     => $request['program_id'],
+            'program_documentation_file'     => $program_documentation_file, 
+            'created_id'                     => $request['created_id'],
+            'created_at'                     => date('Y-m-d'),
+        );
+
+        $data_documentation_program = DocumentationProgram::create($data);
+
+        return $data_documentation_program;
+
     }
 }

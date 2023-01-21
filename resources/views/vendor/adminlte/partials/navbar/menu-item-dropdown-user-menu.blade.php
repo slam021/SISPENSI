@@ -23,9 +23,9 @@
                 alt="{{ Auth::user()->name }}">
         @endif
         <span @if(config('adminlte.usermenu_image')) class="d-none d-md-inline" @endif>
+            {{ Auth::user()->name }}
             <i class="fas fa-user-alt" style="font-size:130%;"></i>
             {{-- <img src="{{ asset('resources/img/logosimpel/user.png')}}" class="user-image img-circle elevation-2"> --}}
-            {{ Auth::user()->name }}
         </span>
     </a>
 
