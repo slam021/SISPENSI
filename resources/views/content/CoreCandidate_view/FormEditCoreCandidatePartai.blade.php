@@ -94,7 +94,7 @@
                 </div>
                 <div class="col-md-3">
                     <div class="form-group">
-                        <a class="text-dark">Nomor Candidate<a class='red'> *</a></a>
+                        <a class="text-dark">Nomor Kandidat<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="text" name="candidate_number" id="candidate_number" value="{{old('candidate_number')}}" autocomplete="off" />
                     </div>
                 </div>
