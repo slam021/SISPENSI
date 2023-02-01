@@ -44,11 +44,12 @@ class ProgramController extends Controller
             $end_date = Session::get('end_date');
         } 
 
-        $coretimsesmember = CoreTimsesMember::select('timses_member_id', 'timses_member_name')
-        ->where('data_state', '=', 0)
+        $coretimsesmember = CoreTimsesMember::raw("CONCAT('timses_name', '-','timses_member_name') AS member_name")
+        ->join('core_timses', 'core_timses.timses_id', '=', 'core_timses_member.timses_id')
+        ->where('core_timses_member.data_state', '=', 0)
         ->orderBy('timses_member_name', 'ASC')
         ->get()
-        ->pluck('timses_member_name', 'timses_member_id');
+        ->pluck('member_name', 'timses_member_id');
         
         $program = Program::select('program.*')
         ->where('program.data_state','=',0)

@@ -94,12 +94,12 @@
                         <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="{{old('timses_name')}}" onChange="function_elements_add(this.name, this.value);" autocomplete="off" />
                     </div>
                 </div>
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <div class="form-group">
                         <a class="text-dark">Partai Timses<a class='red'> *</a></a>
                         <input class="form-control input-bb" type="text" name="timses_partai" id="timses_partai" value="{{old('timses_partai')}}" onChange="function_elements_add(this.name, this.value);" autocomplete="off" />
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
         <div class="card-footer text-muted">

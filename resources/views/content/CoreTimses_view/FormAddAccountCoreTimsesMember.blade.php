@@ -79,7 +79,8 @@
 @endif
 <?php 
     $systemuser += 1; 
-    $timses_member_id = Request::segment(3);
+    $timses_id = Request::segment(3);
+    $timses_member_id = Request::segment(4);
 ?>
 <div class="card border border-dark">
     <div class="card-header border-dark bg-dark">
@@ -87,7 +88,7 @@
             Form Tambah Akun Anggota
         </h5>
         <div class="float-right">
-            <button onclick="location.href='{{ url('timses') }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
+            <button onclick="location.href='{{ url('timses/add-member/'.$timses_id) }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
         </div>
     </div>
 

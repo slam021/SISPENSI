@@ -15,7 +15,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
         <li class="breadcrumb-item"><a href="{{ url('timses') }}">Daftar Data Timses</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Edit Data Timses</li>
+        <li class="breadcrumb-item active" aria-current="page">Edit Timses Member</li>
     </ol>
 </nav>
 @stop
@@ -36,26 +36,27 @@
         @endforeach
     </div>
 @endif
+<?php 
+    $gender =[
+        ''  => '',
+        '1' => 'Laki-laki',
+        '2' => 'Perempuan',
+    ];
+
+    $timses_id = Request::segment(3);
+    $timses_member_id = Request::segment(4);
+    
+?>
 <div class="card border border-dark">
     <div class="card-header border-dark bg-dark">
         <h5 class="mb-0 float-left">
             Form Edit Data Timses
         </h5>
         <div class="float-right">
-            <button onclick="location.href='{{ url('timses') }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
+            <button onclick="location.href='{{ url('timses/add-member/'.$timses_id) }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
         </div>
     </div>
 
-    <?php 
-        $gender =[
-            ''  => '',
-            '1' => 'Laki-laki',
-            '2' => 'Perempuan',
-        ];
-
-        // $timses_member_id = Request::segment(3);
-        
-    ?>
 
     <form method="post" action="{{route('process-edit-timses-member')}}" enctype="multipart/form-data">
         @csrf
@@ -66,6 +67,7 @@
                     <a class="text-dark">Nama<a class='red'> *</a></a>
                     <input class="form-control input-bb" type="text" name="timses_member_name" id="timses_member_name" value="{{$membertimses->timses_member_name}}" autocomplete="off" />
                     <input class="form-control input-bb" type="hidden" name="timses_member_id" id="timses_member_id" value="{{$membertimses->timses_member_id}}" autocomplete="off" />
+                    <input class="form-control input-bb" type="hidden" name="timses_id" id="timses_id" value="{{$membertimses->timses_id}}" autocomplete="off" />
                     </div>
                 </div>
                 <div class="col-md-4">
