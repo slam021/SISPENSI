@@ -64,16 +64,27 @@ $('#myModal').on('shown.bs.modal', function () {
 
     <div class="card-body">
         <div class="row form-group">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                 <a class="text-dark">Nama Timses<a class='red'> *</a></a>
                 <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="{{$coretimses->timses_name}}" autocomplete="off" readonly/>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
-                <a class="text-dark">Partai Timses<a class='red'> *</a></a>
-                <input class="form-control input-bb" type="text" name="timses_partai" id="timses_partai" value="{{$coretimses->timses_partai}}" autocomplete="off" readonly />
+                <a class="text-dark">Alamat<a class='red'> *</a></a>
+                <input class="form-control input-bb" type="text" name="timses_address" id="timses_address" value="{{$coretimses->timses_address}}" autocomplete="off" readonly />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                <a class="text-dark">No.Telp<a class='red'> *</a></a>
+                <input class="form-control input-bb" type="text" name="timses_phone" id="timses_phone" value="{{$coretimses->timses_phone}}" autocomplete="off" readonly />
+                </div>
+            </div> <div class="col-md-3">
+                <div class="form-group">
+                <a class="text-dark">Kelamin<a class='red'> *</a></a>
+                <input class="form-control input-bb" type="text" name="timses_gender" id="timses_gender" value="{{$gender[$coretimses->timses_gender]}}" autocomplete="off" readonly />
                 </div>
             </div>
         </div>
@@ -92,23 +103,28 @@ $('#myModal').on('shown.bs.modal', function () {
                 <thead>
                     <tr>
                         <th width="3%" style='text-align:center'>No</th>
-                        <th width="10%" style='text-align:center'>Nama</th>
-                        <th width="10%" style='text-align:center'>NIK</th>
+                        <th width="10%" style='text-align:center'>Nama Anggota</th>
+                        <th width="10%" style='text-align:center'>Tempat Lahir</th>
+                        <th width="10%" style='text-align:center'>Tanggal Lahir</th>
                         <th width="10%" style='text-align:center'>Alamat</th>
+                        <th width="10%" style='text-align:center'>Agama</th>
                         <th width="10%" style='text-align:center'>No. Telp</th>
                         <th width="10%" style='text-align:center'>Kelamin</th>
+                        {{-- <th width="10%" style='text-align:center'>Akun</th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     <?php 
                         $no = 1; 
                     ?>
-                    @foreach($membertimses as $key => $val)
+                    @foreach($coretimsesmember as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
                         <td>{{$val['timses_member_name']}}</td>
-                        <td>{{$val['timses_member_nik']}}</td>
+                        <td>{{$val['timses_member_place_of_birth']}}</td>
+                        <td>{{date('d/m/Y', strtotime($val['timses_member_date_of_birth']))}}</td>
                         <td>{{$val['timses_member_address']}}</td>
+                        <td>{{$val['timses_member_religion']}}</td>
                         <td>{{$val['timses_member_phone']}}</td>
                         <td>{{$gender[$val['timses_member_gender']]}}</td>
                     </tr>

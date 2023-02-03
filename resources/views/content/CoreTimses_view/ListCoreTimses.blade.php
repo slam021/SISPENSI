@@ -40,7 +40,7 @@ $gender =[
             Daftar Timses
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('timses/add-member') }}'" name="add" class="btn btn-sm bg-info" title="Add Data"><i class="fas fa-plus"></i> Tambah Timses</button>
+            <button onclick="location.href='{{ url('timses/add') }}'" name="add" class="btn btn-sm bg-info" title="Add Data"><i class="fas fa-plus"></i> Tambah Timses</button>
         </div>
     </div>
 
@@ -51,7 +51,7 @@ $gender =[
                     <tr>
                         <th width="3%" style='text-align:center'>No</th>
                         <th width="10%" style='text-align:center'>Nama</th>
-                        <th width="10%" style='text-align:center'>NIK</th>
+                        {{-- <th width="10%" style='text-align:center'>NIK</th> --}}
                         <th width="10%" style='text-align:center'>Alamat</th>
                         <th width="10%" style='text-align:center'>No. Telp</th>
                         <th width="10%" style='text-align:center'>Kelamin</th>
@@ -63,25 +63,27 @@ $gender =[
                     <?php 
                         $no = 1; 
                     ?>
-                    @foreach($coretimsesmember as $key => $val)
+                    @foreach($coretimses as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['timses_member_name']}}</td>
-                        <td>{{$val['timses_member_nik']}}</td>
-                        <td>{{$val['timses_member_address']}}</td>
-                        <td>{{$val['timses_member_phone']}}</td>
-                        <td>{{$gender[$val['timses_member_gender']]}}</td>
+                        <td>{{$val['timses_name']}}</td>
+                        {{-- <td>{{$val['timses_nik']}}</td> --}}
+                        <td>{{$val['timses_address']}}</td>
+                        <td>{{$val['timses_phone']}}</td>
+                        <td>{{$gender[$val['timses_gender']]}}</td>
                         <td>{{$CT->getAkunName($val['user_id'])}}</td>
                         <td class="" style='text-align:center'>
-                            <a type="button" class="badge bg-warning" href="{{url('/timses/edit-member/'.$val['timses_member_id']) }}" title='Edit Acara'><i class='fas fa-edit'></i> Edit</a> 
+                            <a type="button" class="badge bg-warning" href="{{url('/timses/edit/'.$val['timses_id']) }}" title='Edit'><i class='fas fa-edit'></i> Edit</a> 
                             <?php
                                 if($val['user_id'] == null){
-                                    echo "<a type='button' class='badge bg-success' href='".url('/timses/add-account-member/'.$val['timses_member_id'])."' title='Buat Akun'><i class='fas fa-user-circle'></i> Buat Akun</a>";
+                                    echo "<a type='button' class='badge bg-success' href='".url('/timses/add-account/'.$val['timses_id'])."' title='Buat Akun'><i class='fas fa-user-circle'></i> Buat Akun</a>";
                                 }else{
-                                    // echo "<button disabled type='button' class='badge bg-info' title='Edit Acara'><i class='fas fa-edit'></i> Buat akun</button>";
+                                    
                                 }
-                            ?>
-                            <a type="button" class="badge badge-danger" href="{{url('/timses/delete-timses-member/'.$val['timses_member_id']) }}" title="Hapus"><i class='far fa-trash-alt'></i> Hapus</a>
+                                ?>
+                            <a type="button" class="badge bg-lime" href="{{url('/timses/detail/'.$val['timses_id']) }}" title='Edit'><i class='fas fa-list'></i> Detail</a> 
+                            <a type="button" class="badge bg-dark" href="{{url('/timses/add-member/'.$val['timses_id']) }}" title='Tambah Anggota'><i class='fas fa-users'></i> Tambah Anggota</a> 
+                            <a type="button" class="badge badge-danger" href="{{url('/timses/delete-timses/'.$val['timses_id']) }}" title="Hapus"><i class='far fa-trash-alt'></i> Hapus</a>
                         </td>
                     </tr>
 

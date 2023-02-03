@@ -9,6 +9,7 @@ use App\Http\Controllers\SystemUserGroupController;
 use App\Http\Controllers\CoreDapilController;
 use App\Http\Controllers\CoreCandidateController;
 use App\Http\Controllers\CoreTimsesController;
+use App\Http\Controllers\CoretimsesMemberController;
 use App\Http\Controllers\CoreSupporterController;
 use App\Http\Controllers\CorePeriodController;
 use App\Http\Controllers\CorePollingStationController;
@@ -59,7 +60,7 @@ Route::get('/system-user-group/edit/{user_id}', [SystemUserGroupController::clas
 Route::post('/system-user-group/process-edit-system-user-group', [SystemUserGroupController::class, 'processEditSystemUserGroup'])->name('process-edit-system-user-group');
 Route::get('/system-user-group/delete-system-user-group/{user_id}', [SystemUserGroupController::class, 'deleteSystemUserGroup'])->name('delete-system-user-group');
 
-//Configuration Data Dapil
+//Data Dapil
 Route::get('/dapil', [CoreDapilController::class, 'index']);
 Route::get('/dapil/add', [CoreDapilController::class, 'addCoreDapil'])->name('add-dapil');
 Route::post('/dapil/process-add', [CoreDapilController::class, 'processAddCoreDapil'])->name('process-add-dapil');
@@ -80,7 +81,7 @@ Route::post('/dapil/village', [CoreDapilController::class, 'getCoreVillage'])->n
 Route::get('/dapil/delete-dapil-item/{dapil_item_id}', [CoreDapilController::class, 'deleteCoreDapilItem'])->name('delete-dapil-item');
 
 
-//Configuration Data Candidate
+//Data Candidate
 Route::get('/candidate', [CoreCandidateController::class, 'index']);
 // Route::post('/candidate/elements-add', [CoreCandidateController::class, 'addElementsCoreCandidate'])->name('add-candidate-elements');
 // Route::get('/candidate/reset-add', [CoreCandidateController::class, 'addReset'])->name('add-candidate-reset');
@@ -93,26 +94,42 @@ Route::post('/candidate/process-edit-paratai', [CoreCandidateController::class, 
 Route::get('/candidate/download/{candidate_id}', [CoreCandidateController::class, 'downloadCoreCandidatePhotos'])->name('candidate-photos-download');
 Route::get('/candidate/delete-candidate/{candidate_id}', [CoreCandidateController::class, 'deleteCoreCandidate'])->name('delete-candidate');
 
-//Configuration Data Timses
+//Core Timses
 Route::get('/timses', [CoreTimsesController::class, 'index']);
-// Route::get('/timses/add', [CoreTimsesController::class, 'addCoreTimses'])->name('add-timses');
-// Route::post('/timses/process-add', [CoreTimsesController::class, 'processAddCoreTimses'])->name('process-add-timses');
-Route::post('/timses/elements-add', [CoreTimsesController::class, 'addElementsCoreTimses'])->name('add-timses-elements');
-Route::get('/timses/reset-add', [CoreTimsesController::class, 'addReset'])->name('add-timses-reset');
-// Route::get('/timses/edit/{timses_id}', [CoreTimsesController::class, 'editCoreTimses'])->name('edit-timses');
-// Route::post('/timses/process-edit', [CoreTimsesController::class, 'processEditCoreTimses'])->name('process-edit-timses');
-// Route::get('/timses/detail/{timses_id}', [CoreTimsesController::class, 'detailCoreTimses'])->name('detail-timses');
-// Route::get('/timses/delete-timses/{timses_id}', [CoreTimsesController::class, 'deleteCoreTimses'])->name('delete-timses');
+Route::get('/timses/add', [CoreTimsesController::class, 'addCoreTimses'])->name('add-timses');
+Route::post('/timses/process-add', [CoreTimsesController::class, 'processAddCoreTimses'])->name('process-add-timses');
+Route::get('/timses/edit/{timses_id}', [CoreTimsesController::class, 'editCoreTimses'])->name('edit-timses');
+Route::post('/timses/process-edit', [CoreTimsesController::class, 'processEdiCoreTimses'])->name('process-edit-timses');
+Route::get('/timses/detail/{timses_id}', [CoreTimsesController::class, 'detailCoreTimses'])->name('detail-timses');
+Route::get('/timses/add-account/{timses_id}', [CoreTimsesController::class, 'addAccountCoreTimses'])->name('add-timses-account');
+Route::post('/timses/process-add-account', [CoreTimsesController::class, 'processAddAccountCoreTimses'])->name('process-add-timses-account');
+Route::get('/timses/delete-timses/{timses_id}', [CoreTimsesController::class, 'deleteCoreTimses'])->name('delete-timses');
 
-Route::get('/timses/add-member', [CoreTimsesController::class, 'addMemberCoreTimses'])->name('add-timses-member');
-Route::post('/timses/process-add-member', [CoreTimsesController::class, 'processAddMemberCoreTimses'])->name('process-add-timses-member');
-Route::get('/timses/edit-member/{timses_member_id}', [CoreTimsesController::class, 'editMemberCoreTimses'])->name('edit-timses-member');
-Route::post('/timses/process-edit-member', [CoreTimsesController::class, 'processEdiMemberCoreTimses'])->name('process-edit-timses-member');
-Route::get('/timses/add-account-member/{timses_member_id}', [CoreTimsesController::class, 'addAccountMemberCoreTimses'])->name('add-timses-member-account');
-Route::post('/timses/process-add-account-member', [CoreTimsesController::class, 'processAddAccountMemberCoreTimses'])->name('process-add-timses-member-account');
-Route::get('/timses/delete-timses-member/{timses_member_id}', [CoreTimsesController::class, 'deleteMemberCoreTimses'])->name('delete-timses-member');
+//Core Timses Member in menu Admin 
+Route::get('/timses/add-member/{timses_id}', [CoreTimsesController::class, 'addCoreTimsesMember'])->name('add-timses-member');
+Route::post('/timses/process-add-member', [CoreTimsesController::class, 'processAddCoreTimsesMember'])->name('process-add-timses-member');
 
-//Configuration Data Supporter
+Route::get('/timses/add-ktp-member/{timses_id}/{timses_member_id}', [CoreTimsesController::class, 'addCoreTimsesMemberKTP'])->name('add-ktp-member');
+Route::post('/timses/process-add-ktp-member', [CoreTimsesController::class, 'processAddCoreTimsesMemberKTP'])->name('process-add-ktp-member');
+Route::get('/timses/download-ktp-member/{timses_member_ktp_id}', [CoreTimsesController::class, 'downloadCoreTimsesMemberKTP'])->name('download-ktp-member');
+Route::get('/timses/delete-ktp-member/{timses_member_ktp_id}', [CoreTimsesController::class, 'deleteCoreTimsesMemberKTP'])->name('delete-ktp-member');
+
+Route::get('/timses/edit-member/{timses_id}/{timses_member_id}', [CoreTimsesController::class, 'editCoreTimsesMember'])->name('edit-timses-member');
+Route::post('/timses/process-edit-member', [CoreTimsesController::class, 'processEdiCoreTimsesMember'])->name('process-edit-timses-member');
+// Route::get('/timses/add-account-member/{timses_id}/{timses_member_id}', [CoreTimsesController::class, 'addAccountMemberCoreTimses'])->name('add-timses-member-account');
+// Route::post('/timses/process-add-account-member', [CoreTimsesController::class, 'processAddAccountMemberCoreTimses'])->name('process-add-timses-member-account');
+Route::get('/timses/delete-timses-member/{timses_member_id}', [CoreTimsesController::class, 'deleteCoreTimsesMember'])->name('delete-timses-member');
+
+//Core Timses Member in menu Timses 
+Route::get('/timses-member', [CoreTimsesMemberController::class, 'addCoreTimsesMember'])->name('add-timses-member2');
+Route::post('/timses-member/process-add-member', [CoreTimsesMemberController::class, 'processAddCoreTimsesMember'])->name('process-add-timses-member2');
+
+Route::get('/timses-member/add-ktp-member/{timses_id}/{timses_member_id}', [CoreTimsesMemberController::class, 'addCoreTimsesMemberKTP'])->name('add-ktp-member2');
+Route::post('/timses-member/process-add-ktp-member', [CoreTimsesMemberController::class, 'processAddCoreTimsesMemberKTP'])->name('process-add-ktp-member2');
+Route::get('/timses-member/download-ktp-member/{timses_member_ktp_id}', [CoreTimsesMemberController::class, 'downloadCoreTimsesMemberKTP'])->name('download-ktp-member2');
+Route::get('/timses-member/delete-ktp-member/{timses_member_ktp_id}', [CoreTimsesMemberController::class, 'deleteCoreTimsesMemberKTP'])->name('delete-ktp-member2');
+
+//Data Supporter
 Route::get('/supporter', [CoreSupporterController::class, 'index']);
 Route::get('/supporter/add', [CoreSupporterController::class, 'addCoreSupporter'])->name('add-supporter');
 Route::post('/supporter/process-add', [CoreSupporterController::class, 'processAddCoreSupporter'])->name('process-add-supporter');
@@ -122,7 +139,7 @@ Route::get('/supporter/edit/{supporter_id}', [CoreSupporterController::class, 'e
 Route::post('/supporter/process-edit', [CoreSupporterController::class, 'processEditCoreSupporter'])->name('process-edit-supporter');
 Route::get('/supporter/delete-supporter/{supporter_id}', [CoreSupporterController::class, 'deleteCoreSupporter'])->name('delete-supporter');
 
-//Configuration Data Period
+//Data Period
 Route::get('/period', [CorePeriodController::class, 'index']);
 Route::get('/period/add', [CorePeriodController::class, 'addCorePeriod'])->name('add-period');
 Route::post('/period/process-add', [CorePeriodController::class, 'processAddCorePeriod'])->name('process-add-period');
@@ -132,7 +149,7 @@ Route::get('/period/edit/{period_id}', [CorePeriodController::class, 'editCorePe
 Route::post('/period/process-edit', [CorePeriodController::class, 'processEditCorePeriod'])->name('process-edit-period');
 Route::get('/period/delete-period/{period_id}', [CorePeriodController::class, 'deleteCorePeriod'])->name('delete-period');
 
-//Configuration Data Polling Station
+//Data Polling Station
 Route::get('/polling-station', [CorePollingStationController::class, 'index']);
 Route::get('/polling-station/add', [CorePollingStationController::class, 'addCorePollingStation'])->name('add-polling-station');
 Route::post('/polling-station/process-add', [CorePollingStationController::class, 'processAddCorePollingStation'])->name('process-add-polling-station');
@@ -160,7 +177,7 @@ Route::get('/program/detail/{program_id}', [ProgramController::class, 'detailPro
 // Route::post('/program/process-distribution-fund', [ProgramController::class, 'processDistributionFundProgram'])->name('process-distribution-fund');
 // Route::get('/program/edit-distribution-fund/{program_id}/{timses_id}/{distribution_fund_id}', [ProgramController::class, 'editDistributionFundProgram'])->name('edit-distribution-fund');
 // Route::post('/program/process-edit-distribution-fund', [ProgramController::class, 'processEditDistributionFundProgram'])->name('process-edit-distribution-fund');
-// Route::get('/program/get-user-akun/{timses_member_id}', [ProgramController::class, 'getUserAkun'])->name('get-user-akun');
+// Route::get('/program/get-user-akun/{timses__id}', [ProgramController::class, 'getUserAkun'])->name('get-user-akun');
 // Route::get('/program/detail-distribution-fund/{program_id}/{distribution_fund_id}', [ProgramController::class, 'detailDistributionFundProgram'])->name('detail-distribution-fund');
 
 // Route::get('/program/add-program-support/{program_id}', [ProgramController::class, 'addProgramSupport'])->name('add-program-support');
