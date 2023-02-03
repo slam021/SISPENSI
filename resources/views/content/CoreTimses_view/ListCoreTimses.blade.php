@@ -2,7 +2,7 @@
 
 @extends('adminlte::page')
 
-@section('title', 'Sistem Pendukung Eleksi')
+@section('title', 'Sistem Timses Eleksi')
 <link rel="icon" href="{{ asset('resources/assets/logo_vote.ico') }}" />
 
 @section('content_header')
@@ -25,13 +25,22 @@
 </div>
 @endif 
 
+<?php 
+$gender =[
+    ''  => '',
+    '1' => 'Laki-laki',
+    '2' => 'Perempuan',
+];
+
+?>
+
 <div class="card border border-dark">
     <div class="card-header bg-dark clearfix">
         <h5 class="mb-0 float-left">
             Daftar Timses
         </h5>
         <div class="form-actions float-right">
-            <button onclick="location.href='{{ url('timses/add') }}'" name="add" class="btn btn-sm bg-info" title="Add Data"><i class="fas fa-plus"></i> Tambah Timses</button>
+            <button onclick="location.href='{{ url('timses/add-member') }}'" name="add" class="btn btn-sm bg-info" title="Add Data"><i class="fas fa-plus"></i> Tambah Timses</button>
         </div>
     </div>
 
@@ -40,24 +49,39 @@
             <table id="example" class="table table-sm table-striped table-bordered table-hover " style="width:auto">
                 <thead>
                     <tr>
-                        <th width="2%" style='text-align:center'>No</th>
-                        <th width="20%" style='text-align:center'>Nama Timses</th>
-                        <th width="3%" style='text-align:center'>Aksi</th>
+                        <th width="3%" style='text-align:center'>No</th>
+                        <th width="10%" style='text-align:center'>Nama</th>
+                        <th width="10%" style='text-align:center'>NIK</th>
+                        <th width="10%" style='text-align:center'>Alamat</th>
+                        <th width="10%" style='text-align:center'>No. Telp</th>
+                        <th width="10%" style='text-align:center'>Kelamin</th>
+                        <th width="10%" style='text-align:center'>Akun</th>
+                        <th width="5%" style='text-align:center'>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php 
                         $no = 1; 
                     ?>
-                    @foreach($coretimses as $key => $val)
+                    @foreach($coretimsesmember as $key => $val)
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
-                        <td>{{$val['timses_name']}}</td>
+                        <td>{{$val['timses_member_name']}}</td>
+                        <td>{{$val['timses_member_nik']}}</td>
+                        <td>{{$val['timses_member_address']}}</td>
+                        <td>{{$val['timses_member_phone']}}</td>
+                        <td>{{$gender[$val['timses_member_gender']]}}</td>
+                        <td>{{$CT->getAkunName($val['user_id'])}}</td>
                         <td class="" style='text-align:center'>
-                            <a type="button" class="badge bg-warning" href="{{url('/timses/edit/'.$val['timses_id']) }}" title='Edit'><i class='fas fa-edit'></i> Edit</a> 
-                            <a type="button" class="badge bg-success" href="{{url('/timses/add-member/'.$val['timses_id']) }}" title='Tambah Member'><i class='fas fa-users'></i> Tambah Member</a> 
-                            <a type="button" class="badge bg-lime" href="{{url('/timses/detail/'.$val['timses_id']) }}" title='Detail'><i class='fas fa-list'></i> Detail</a> 
-                            <a type="button" class="badge badge-danger" href="{{url('/timses/delete-timses/'.$val['timses_id']) }}" title="Hapus"><i class='far fa-trash-alt'></i> Hapus</a>
+                            <a type="button" class="badge bg-warning" href="{{url('/timses/edit-member/'.$val['timses_member_id']) }}" title='Edit Acara'><i class='fas fa-edit'></i> Edit</a> 
+                            <?php
+                                if($val['user_id'] == null){
+                                    echo "<a type='button' class='badge bg-success' href='".url('/timses/add-account-member/'.$val['timses_member_id'])."' title='Buat Akun'><i class='fas fa-user-circle'></i> Buat Akun</a>";
+                                }else{
+                                    // echo "<button disabled type='button' class='badge bg-info' title='Edit Acara'><i class='fas fa-edit'></i> Buat akun</button>";
+                                }
+                            ?>
+                            <a type="button" class="badge badge-danger" href="{{url('/timses/delete-timses-member/'.$val['timses_member_id']) }}" title="Hapus"><i class='far fa-trash-alt'></i> Hapus</a>
                         </td>
                     </tr>
 

@@ -44,7 +44,7 @@ class ApiController extends Controller
         
         $login_log = array(
             'user_id'          => $user['user_id'],
-            // 'company_id'       => $user['company_id'],
+            'company_id'       => $user['company_id'],
             'log_time'         => date("Y-m-d H:i:s"),
             'log_status'       => 0,
             'created_at'       => date("Y-m-d H:i:s")

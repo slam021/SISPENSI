@@ -1,4 +1,4 @@
-@inject('DCT', 'App\Http\Controllers\CoreTimsesController')
+@inject('MemberCoreTimses', 'App\Http\Controllers\CoreTimsesController')
 
 @extends('adminlte::page')
 
@@ -19,7 +19,7 @@ $('#myModal').on('shown.bs.modal', function () {
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
         <li class="breadcrumb-item"><a href="{{ url('timses') }}">Daftar Data Timses</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Detail Timses</li>
+        <li class="breadcrumb-item active" aria-current="page">Tambah Anggota Timses</li>
     </ol>
 </nav>
 @stop
@@ -70,12 +70,12 @@ $('#myModal').on('shown.bs.modal', function () {
                 <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="{{$coretimses->timses_name}}" autocomplete="off" readonly/>
                 </div>
             </div>
-            {{-- <div class="col-md-6">
+            <div class="col-md-6">
                 <div class="form-group">
                 <a class="text-dark">Partai Timses<a class='red'> *</a></a>
                 <input class="form-control input-bb" type="text" name="timses_partai" id="timses_partai" value="{{$coretimses->timses_partai}}" autocomplete="off" readonly />
                 </div>
-            </div> --}}
+            </div>
         </div>
     </div>
 </div>
@@ -97,7 +97,6 @@ $('#myModal').on('shown.bs.modal', function () {
                         <th width="10%" style='text-align:center'>Alamat</th>
                         <th width="10%" style='text-align:center'>No. Telp</th>
                         <th width="10%" style='text-align:center'>Kelamin</th>
-                        <th width="10%" style='text-align:center'>Akun</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -112,7 +111,6 @@ $('#myModal').on('shown.bs.modal', function () {
                         <td>{{$val['timses_member_address']}}</td>
                         <td>{{$val['timses_member_phone']}}</td>
                         <td>{{$gender[$val['timses_member_gender']]}}</td>
-                        <td>{{$DCT->getAkunName($val['user_id'])}}</td>
                     </tr>
 
                     <?php $no++; ?>
