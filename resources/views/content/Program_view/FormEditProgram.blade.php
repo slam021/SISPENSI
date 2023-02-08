@@ -11,11 +11,11 @@
         var organizer = document.getElementById('program_organizer').value;
         console.log(organizer);
         if(organizer == 1){
-            document.getElementById('timses_member_id').disabled = true;
-            $("#timses_member_id").select2("val", "0"); 
+            document.getElementById('timses_id').disabled = true;
+            $("#timses_id").select2("val", "0"); 
         }
         if(organizer == 2){
-            document.getElementById('timses_member_id').disabled = false;
+            document.getElementById('timses_id').disabled = false;
         }
     }
 
@@ -110,15 +110,15 @@
                     <div class="form-group">
                         <a class="text-dark">Timses<a class='red'> *</a></a>
                         @if($program->program_organizer == 1)
-                        <select class="selection-search-clear" name="timses_member_id" id="timses_member_id">
-                                <option value="{{$program->timses_member_id}}"></option>
+                        <select class="selection-search-clear" name="timses_id" id="timses_id">
+                                <option value="{{$program->timses_id}}"></option>
                                 @foreach($coretimsesmember2 as $key => $val)
-                                <option value="{{$val->timses_member_id}}">{{$val->timses_member_name}}</option>
+                                <option value="{{$val->timses_id}}">{{$val->timses_name}}</option>
                                 @endforeach   
                             </select> 
-                        {{-- {!! Form::select('timses_member_id', $coretimses, '', ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id' ])!!} --}}
+                        {{-- {!! Form::select('timses_id', $coretimses, '', ['class' => 'selection-search-clear select-form', 'id' => 'timses_id' ])!!} --}}
                         @else
-                            {!! Form::select('timses_member_id', $coretimsesmember, $program->timses_member_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!}
+                            {!! Form::select('timses_id', $coretimses, $program->timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
                         @endif
                         <input class="form-control input-bb" type="hidden" name="program_id" id="program_id" value="{{$program->program_id}}" autocomplete="off"/>
                         {{-- <input class="form-control input-bb" type="text" name="candidate_id" id="candidate_id" value="{{$corecandidate}}" autocomplete="off"/> --}}

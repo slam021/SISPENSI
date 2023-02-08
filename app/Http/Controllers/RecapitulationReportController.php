@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\CoreCandidate;
 use App\Models\FinancialFlow;
 use App\Models\CoreTimses;
-use App\Models\CoreTimsesMember;
 use App\Models\FinancialCategory;
 use Elibyy\TCPDF\Facades\TCPDF;
 use Illuminate\Http\Request;
@@ -73,7 +72,7 @@ class RecapitulationReportController extends Controller
 
         $financial_category_id = Session::get('financial_category_id');
         $candidate_id = Session::get('candidate_id');
-        $timses_member_id = Session::get('timses_member_id');
+        $timses_id = Session::get('timses_id');
         $financialflow_list = Session::get('financialflow_list');
 
         // $code=[
@@ -85,9 +84,9 @@ class RecapitulationReportController extends Controller
         $listfinancialcategory = FinancialCategory::where('data_state', '=', 0)
         ->pluck('financial_category_name', 'financial_category_id');
 
-        // $listcoretimses = CoreTimsesMember :: where('data_state', 0)
+        // $listcoretimses = CoreTimses :: where('data_state', 0)
         // ->get()
-        // ->pluck('timses_member_name', 'timses_member_id');
+        // ->pluck('timses_name', 'timses_id');
 
         // $listcorecandidate = CoreCandidate :: where('data_state', 0)
         // ->get()
@@ -132,19 +131,19 @@ class RecapitulationReportController extends Controller
         //     $financialflow   = $financialflow->where('candidate_id', $candidate_id);
         // }
 
-        // if($timses_member_id||$timses_member_id!=null||$timses_member_id!=''){
-        //     $financialflow   = $financialflow->where('timses_member_id', $timses_member_id);
+        // if($timses_id||$timses_id!=null||$timses_id!=''){
+        //     $financialflow   = $financialflow->where('timses_id', $timses_id);
         // }
 
         // if($financialflow_list||$financialflow_list!=null||$financialflow_list!=''){
         //     if($financialflow_list == 1){           
         //         $financialflow   = $financialflow->where('candidate_id', '!=', null);
         //     }else{
-        //         $financialflow   = $financialflow->where('timses_member_id', '!=', null);
+        //         $financialflow   = $financialflow->where('timses_id', '!=', null);
         //     }
         // }else{
         //     $financialflow   = $financialflow->where('candidate_id', '=', null);
-        //     $financialflow   = $financialflow->where('timses_member_id', '=', null);
+        //     $financialflow   = $financialflow->where('timses_id', '=', null);
         // }
 
         $financialflow   = $financialflow->get();
@@ -158,12 +157,12 @@ class RecapitulationReportController extends Controller
         $start_date  = $request->start_date;
         $end_date    = $request->end_date;
         $year         = $request->year;
-        $timses_member_id    = $request->timses_member_id;
+        $timses_id    = $request->timses_id;
         $candidate_id = $request->candidate_id;
         $financial_category_id = $request->financial_category_id;
         $financialflow_list = $request->financialflow_list;
 
-        Session::put('timses_member_id', $timses_member_id);
+        Session::put('timses_id', $timses_id);
         Session::put('candidate_id', $candidate_id);
         Session::put('financial_category_id', $financial_category_id);
         Session::put('financialflow_list', $financialflow_list);
@@ -183,7 +182,7 @@ class RecapitulationReportController extends Controller
         Session::put('end_date');
         Session::put('year');
         Session::put('year');
-        Session::forget('timses_member_id');
+        Session::forget('timses_id');
         Session::forget('candidate_id');
         Session::forget('financial_category_id');
         Session::forget('financialflow_list');
@@ -202,14 +201,14 @@ class RecapitulationReportController extends Controller
         }
     }
 
-    public function getTimsesName($timses_member_id){
-        $data = CoreTimsesMember::where('timses_member_id', $timses_member_id)
+    public function getTimsesName($timses_id){
+        $data = CoreTimses::where('timses_id', $timses_id)
         ->first();
 
         if($data == null){
             "-";
         }else{
-            return $data['timses_member_name'];
+            return $data['timses_name'];
         }
     }
 
@@ -265,7 +264,7 @@ class RecapitulationReportController extends Controller
 
         $financial_category_id = Session::get('financial_category_id');
         $candidate_id = Session::get('candidate_id');
-        $timses_member_id = Session::get('timses_member_id');
+        $timses_id = Session::get('timses_id');
         $financialflow_list = Session::get('financialflow_list');
 
         $listfinancialcategory = FinancialCategory::where('data_state', '=', 0)
@@ -390,7 +389,7 @@ class RecapitulationReportController extends Controller
             if ($val['candidate_id']){
                 $kepemilikan = $this->getCandidateName($val['candidate_id']);
             }else{
-                $kepemilikan = $this->getTimsesName($val['timses_member_id']);
+                $kepemilikan = $this->getTimsesName($val['timses_id']);
             }
 
             if ($val->financial_category_type == 1){
@@ -476,7 +475,7 @@ class RecapitulationReportController extends Controller
 
         $financial_category_id = Session::get('financial_category_id');
         $candidate_id = Session::get('candidate_id');
-        $timses_member_id = Session::get('timses_member_id');
+        $timses_id = Session::get('timses_id');
         $financialflow_list = Session::get('financialflow_list');
 
         $listfinancialcategory = FinancialCategory::where('data_state', '=', 0)
@@ -608,7 +607,7 @@ class RecapitulationReportController extends Controller
                 if ($val['candidate_id']){
                     $kepemilikan = $this->getCandidateName($val['candidate_id']);
                 }else{
-                    $kepemilikan = $this->getTimsesName($val['timses_member_id']);
+                    $kepemilikan = $this->getTimsesName($val['timses_id']);
                 }
     
                 if ($val->financial_category_type == 1){

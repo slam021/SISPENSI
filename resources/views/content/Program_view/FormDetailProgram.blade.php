@@ -14,7 +14,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ url('home') }}">Beranda</a></li>
-        <li class="breadcrumb-item"><a href="{{ url('candidate') }}">Daftar Acara</a></li>
+        <li class="breadcrumb-item"><a href="{{ url('program') }}">Daftar Acara</a></li>
         <li class="breadcrumb-item active" aria-current="page">Detail Acara</li>
     </ol>
 </nav>
@@ -68,13 +68,13 @@
                     <input class="form-control input-bb" type="text" name="program_organizer" id="program_organizer" value="{{$organizer[$program->program_organizer]}}" autocomplete="off" readonly/>
                 </div>
             </div>
-            @if ($program->timses_member_id == null)
+            @if ($program->timses_id == null)
                 <div></div>
             @else
             <div class="col-md-6">
                 <div class="form-group" >
                     <a class="text-dark">Nama Timses<a class='red'> *</a></a>
-                    <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="{{$Program->getTimsesName($program->timses_member_id)}}" autocomplete="off" readonly/>
+                    <input class="form-control input-bb" type="text" name="timses_name" id="timses_name" value="{{$Program->getTimsesName($program->timses_id)}}" autocomplete="off" readonly/>
                 </div>
             </div>
             @endif
@@ -107,11 +107,11 @@
                         @foreach($membertimses as $key => $val)
                         <tr>
                             <td style='text-align:center'>{{$no}}</td>
-                            <td>{{$val['timses_member_name']}}</td>
-                            <td>{{$val['timses_member_nik']}}</td>
-                            <td>{{$val['timses_member_address']}}</td>
-                            <td>{{$val['timses_member_phone']}}</td>
-                            <td>{{$gender[$val['timses_member_gender']]}}</td>
+                            <td>{{$val['timses_name']}}</td>
+                            <td>{{$val['timses_nik']}}</td>
+                            <td>{{$val['timses_address']}}</td>
+                            <td>{{$val['timses_phone']}}</td>
+                            <td>{{$gender[$val['timses_gender']]}}</td>
                         </tr>
 
                         <?php $no++; ?>

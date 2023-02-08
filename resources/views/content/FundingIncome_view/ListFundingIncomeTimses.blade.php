@@ -69,7 +69,7 @@
                         <td style='text-align:center'>{{$no}}</td>
                         <td>{{date('d/m/Y', strtotime($val['financial_flow_date']))}}</td>
                         <td>{{$val['financial_category_name']}}</td>
-                        <td>{{$val['timses_member_name']}}</td>
+                        <td>{{$val['timses_name']}}</td>
                         <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
                         <td>{{$val['financial_flow_description']}}</td>
                         <td class="" style='text-align:center'>

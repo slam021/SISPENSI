@@ -43,8 +43,7 @@
 @endif
 
 <?php
-    $timses_id = Request::segment(3);
-    $timses_member_id = Request::segment(4);
+    $timses_member_id = Request::segment(3);
 ?>
 <div class="card border border-dark">
     <div class="card-header border-dark bg-dark">
@@ -52,11 +51,11 @@
             Form Tambah KTP Timses Member
         </h5>
         <div class="float-right">
-            <button onclick="location.href='{{ url('timses/add-member/'.$timses_id) }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
+            <button onclick="location.href='{{ url('timses-member') }}'" name="Find" class="btn btn-sm btn-info" title="Back"><i class="fa fa-angle-left"></i>  Kembali</button>
         </div>
     </div>
 
-    <form method="post" action="{{route('process-add-ktp-member')}}" enctype="multipart/form-data">
+    <form method="post" action="{{route('process-add-ktp-member2')}}" enctype="multipart/form-data">
         @csrf
             <div class="card-body">
                 <div class="row form-group">
@@ -65,7 +64,7 @@
                             <a class="text-dark">KTP<a class='red'> *</a></a>
                             <input class="form-control input-bb" type="file" name="timses_member_ktp" id="timses_member_ktp" value="{{old('timses_member_ktp')}}" autocomplete="off" />
                             <input class="form-control input-bb" type="hidden" name="timses_member_id" id="timses_member_id" value="{{$timses_member_id}}" autocomplete="off" />
-                            <input class="form-control input-bb" type="hidden" name="timses_id" id="timses_id" value="{{$timses_id}}" autocomplete="off" />
+                            {{-- <input class="form-control input-bb" type="hidden" name="timses_id" id="timses_id" value="{{$timses_id}}" autocomplete="off" /> --}}
                         </div>
                     </div>
                     <div class="col-md-4">

@@ -240,7 +240,7 @@
                         @if($val['candidate_id'])
                             <td>{{$RR->getCandidateName($val['candidate_id'])}}</td>
                         @else
-                            <td>{{$RR->getTimsesName($val['timses_member_id'])}}</td>
+                            <td>{{$RR->getTimsesName($val['timses_id'])}}</td>
                         @endif
                         
                         <td></td>
@@ -277,7 +277,7 @@
                         // array_push($financialflow_array_candidate, $val['candidate_id']);
 
                         // $financialflow_array_timses = array();
-                        // array_push($financialflow_array_timses, $val['timses_member_id']);
+                        // array_push($financialflow_array_timses, $val['timses_id']);
                     @endphp
                 @endforeach
                     <tr>

@@ -43,9 +43,13 @@ class HomeController extends Controller
         ->orderBy('system_menu_mapping.id_menu','ASC')
         ->get();
 
+        $user_group_login = User::where('data_state', 0)
+        ->where('system_user.user_id', Auth::id())->first()->user_group_id;
+        // dd($user_group_login);
+
         $corecandidate = CoreCandidate::select('core_candidate.*')
         ->where('data_state', '=', 0)
-        ->get();
+        ->first();
 
         $coredapil = CoreDapil::select('core_dapil.*')
         ->where('data_state', '=', 0)
@@ -63,6 +67,7 @@ class HomeController extends Controller
         ->where('data_state', '=', 0)
         ->get();
 
-        return view('home',compact('menus', 'corecandidate', 'coredapil', 'corepollingstation', 'coresupporter', 'coretimsesmember'));
+        return view('home',compact('user_group_login', 'menus', 'corecandidate', 'coredapil', 'corepollingstation', 'coresupporter', 'coretimsesmember'));
     }
+
 }

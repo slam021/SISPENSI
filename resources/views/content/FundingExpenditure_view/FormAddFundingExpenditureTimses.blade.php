@@ -60,10 +60,10 @@
     });
 
     $(document).ready(function(){
-        var timses_member_id = {!! json_encode($nullcoretimses) !!};
+        var timses_id = {!! json_encode($nullcoretimses) !!};
         
-        if(timses_member_id == null){
-            $("#timses_member_id").select2("val", "0");
+        if(timses_id == null){
+            $("#timses_id").select2("val", "0");
         }
     });
 </script>
@@ -134,7 +134,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <a class="text-dark">Timses<a class='red'> *</a></a>
-                        {!! Form::select('timses_member_id', $coretimsesmember, $nullcoretimses, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!}
+                        {!! Form::select('timses_id', $coretimses, $nullcoretimses, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
                     </div>
                 </div>
                 <div class="col-md-4">

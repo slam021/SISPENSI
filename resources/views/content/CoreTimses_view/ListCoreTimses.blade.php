@@ -82,7 +82,7 @@ $gender =[
                                 }
                                 ?>
                             <a type="button" class="badge bg-lime" href="{{url('/timses/detail/'.$val['timses_id']) }}" title='Edit'><i class='fas fa-list'></i> Detail</a> 
-                            <a type="button" class="badge bg-dark" href="{{url('/timses/add-member/'.$val['timses_id']) }}" title='Tambah Anggota'><i class='fas fa-users'></i> Tambah Anggota</a> 
+                            {{-- <a type="button" class="badge bg-dark" href="{{url('/timses/add-member/'.$val['timses_id']) }}" title='Tambah Anggota'><i class='fas fa-users'></i> Tambah Anggota</a>  --}}
                             <a type="button" class="badge badge-danger" href="{{url('/timses/delete-timses/'.$val['timses_id']) }}" title="Hapus"><i class='far fa-trash-alt'></i> Hapus</a>
                         </td>
                     </tr>

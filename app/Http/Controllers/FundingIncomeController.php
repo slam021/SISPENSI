@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\FinancialCategory;
 use App\Models\FinancialFlow;
-use App\Models\CoreTimsesMember;
+use App\Models\CoreTimses;
 use App\Models\CoreCandidate;
 
 class FundingIncomeController extends Controller
@@ -19,12 +19,12 @@ class FundingIncomeController extends Controller
     }
 
     public function indexTimses(){
-        $fundingincome = FinancialFlow::select('financial_category.*', 'financial_flow.*', 'core_timses_member.*')
+        $fundingincome = FinancialFlow::select('financial_category.*', 'financial_flow.*', 'core_timses.*')
         ->join('financial_category', 'financial_category.financial_category_id', '=', 'financial_flow.financial_category_id')
-        ->join('core_timses_member', 'core_timses_member.timses_member_id', '=', 'financial_flow.timses_member_id')
+        ->join('core_timses', 'core_timses.timses_id', '=', 'financial_flow.timses_id')
         ->where('financial_category.data_state', '=', 0)
         ->where('financial_flow.data_state', '=', 0)
-        ->where('core_timses_member.data_state', '=', 0)
+        ->where('core_timses.data_state', '=', 0)
         ->where('financial_flow.financial_category_type', '=', 1)
         ->get();
 
@@ -66,10 +66,10 @@ class FundingIncomeController extends Controller
         ->pluck('financial_category_name', 'financial_category_id');
         $nullfinancialcategory = Session::get('financial_category_id');
 
-        $coretimsesmember = CoreTimsesMember::where('data_state', '=', 0)->pluck('timses_member_name', 'timses_member_id');
-        $nullcoretimses  = Session::get('timses_member_id');
+        $coretimses = CoreTimses::where('data_state', '=', 0)->pluck('timses_name', 'timses_id');
+        $nullcoretimses  = Session::get('timses_id');
 
-        return view('content/FundingIncome_view/FormAddFundingIncomeTimses', compact('fundingincome', 'financialcategory', 'nullfinancialcategory', 'coretimsesmember', 'nullcoretimses'));
+        return view('content/FundingIncome_view/FormAddFundingIncomeTimses', compact('fundingincome', 'financialcategory', 'nullfinancialcategory', 'coretimses', 'nullcoretimses'));
     }
 
     public function addElementsFundingIncome(Request $request){
@@ -124,7 +124,7 @@ class FundingIncomeController extends Controller
     public function processAddFundingIncomeTimses(Request $request){
         $fields = $request->validate([
             'financial_category_id'             => 'required',
-            'timses_member_id'                  => 'required',
+            'timses_id'                  => 'required',
             'financial_category_type'           => 'required',
             'financial_flow_nominal'            => 'required|numeric',
             'financial_flow_date'               => 'required',
@@ -133,7 +133,7 @@ class FundingIncomeController extends Controller
 
         $data = array(
             'financial_category_id'             => $fields['financial_category_id'], 
-            'timses_member_id'                  => $fields['timses_member_id'], 
+            'timses_id'                  => $fields['timses_id'], 
             'financial_category_type'           => $fields['financial_category_type'],
             'financial_flow_nominal'            => $fields['financial_flow_nominal'],
             'financial_flow_date'               => $fields['financial_flow_date'],
@@ -150,7 +150,7 @@ class FundingIncomeController extends Controller
         $last_balance_candidate = CoreCandidate::findOrFail($candidate_id);
         $last_balance_candidate->last_balance += $fields['financial_flow_nominal'];
 
-        $last_balance_timses = CoreTimsesMember::findOrFail($fields['timses_member_id']);
+        $last_balance_timses = CoreTimses::findOrFail($fields['timses_id']);
         $last_balance_timses->last_balance += $fields['financial_flow_nominal'];
 
         if(FinancialFlow::create($data)){
@@ -184,10 +184,10 @@ class FundingIncomeController extends Controller
         ->where('financial_category_type', '=', 1)
         ->pluck('financial_category_name', 'financial_category_id');
 
-        $coretimsesmember = CoreTimsesMember::where('data_state', '=', 0)->pluck('timses_member_name', 'timses_member_id');
-        // $nullcoretimses  = Session::get('coretimsesmember');
+        $coretimses = CoreTimses::where('data_state', '=', 0)->pluck('timses_name', 'timses_id');
+        // $nullcoretimses  = Session::get('coretimses');
 
-        return view('content/FundingIncome_view/FormEditFundingIncomeTimses', compact('fundingincome', 'financialcategory', 'coretimsesmember'));
+        return view('content/FundingIncome_view/FormEditFundingIncomeTimses', compact('fundingincome', 'financialcategory', 'coretimses'));
     }
 
     public function processEditFundingIncomeCandidate(Request $request){
@@ -219,7 +219,7 @@ class FundingIncomeController extends Controller
     public function processEditFundingIncomeTimses(Request $request){
         $fields = $request->validate([
             'financial_flow_id'                 => 'required',
-            'timses_member_id'                  => 'required',
+            'timses_id'                  => 'required',
             'financial_category_id'             => 'required',
             'financial_flow_nominal'            => 'required',
             'financial_flow_date'               => 'required',
@@ -228,7 +228,7 @@ class FundingIncomeController extends Controller
 
         $item  = FinancialFlow::findOrFail($fields['financial_flow_id']);
         $item->financial_category_id            = $fields['financial_category_id'];
-        $item->timses_member_id                 = $fields['timses_member_id'];
+        $item->timses_id                 = $fields['timses_id'];
         $item->financial_flow_nominal           = $fields['financial_flow_nominal'];
         $item->financial_flow_date              = $fields['financial_flow_date'];
         $item->financial_flow_description       = $fields['financial_flow_description'];

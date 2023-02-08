@@ -8,10 +8,10 @@
 @section('js')
 <script>
     $(document).ready(function(){
-        var timses_member_id = {!! json_encode($timses_member_id) !!};
+        var timses_id = {!! json_encode($timses_id) !!};
         
-        if(timses_member_id == null){
-            $("#timses_member_id").select2("val", "0");
+        if(timses_id == null){
+            $("#timses_id").select2("val", "0");
         }
     });
 
@@ -30,7 +30,7 @@
 {{-- @php 
     Session::forget('start_date'); 
     Session::forget('end_date');  
-    Session::forget('timses_member_id');  
+    Session::forget('timses_id');  
 @endphp --}}
 
 @section('content')
@@ -98,7 +98,7 @@
                                         *
                                     </span>
                                 </section>
-                                {!! Form::select('timses_member_id', $coretimsesmember, $timses_member_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!}
+                                {!! Form::select('timses_id', $coretimses, $timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
                             </div>
                         </div>
                     </div>
@@ -166,10 +166,10 @@
                         @else
                         <td>{{$ReportFC->getCandidateName($val['candidate_id'])}}</td>
                         @endif
-                        @if($val['timses_member_id'] == null)
+                        @if($val['timses_id'] == null)
                         <td style='text-align:center'>-</td>
                         @else
-                        <td>{{$ReportFC->getTimsesMemberName($val['timses_member_id'])}}</td>
+                        <td>{{$ReportFC->getTimsesName($val['timses_id'])}}</td>
                         @endif
                         <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>
                         {{-- <td>{{$val['financial_flow_description']}}</td> --}}

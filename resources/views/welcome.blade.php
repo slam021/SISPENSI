@@ -17,23 +17,23 @@
         <link href="{{ asset('resources/css/styles.css') }}" rel="stylesheet" />
         <style>
             img.bg-video {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  transform: translateX(-50%) translateY(-50%);
-  z-index: 0;
-  filter: brightness(50%);
-}
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                min-width: 100%;
+                min-height: 100%;
+                width: auto;
+                height: auto;
+                transform: translateX(-50%) translateY(-50%);
+                z-index: 0;
+                filter: brightness(50%);
+                }
         </style>
     </head>
     {{-- <body style="background-image: {{asset('resources/img/logosimpel/pemilu.png')}}; background-size: cover; background-repeat: no-repeat; "> --}}
         <body>
             <img class="bg-video" src="{{asset('resources/img/logosimpel/pemilu.png')}}" alt="" srcset=""> </img>
-      
+    
         <div class="masthead">
             {{-- <img src="{{asset('resources/img/logosimpel/KPU.png')}}" id="logo" style="width: 80px; height: 80px; position:absolute; top: 5px; left:5px;"> --}}
             <div class="masthead-content text-white">

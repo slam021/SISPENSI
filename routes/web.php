@@ -9,21 +9,26 @@ use App\Http\Controllers\SystemUserGroupController;
 use App\Http\Controllers\CoreDapilController;
 use App\Http\Controllers\CoreCandidateController;
 use App\Http\Controllers\CoreTimsesController;
-use App\Http\Controllers\CoretimsesMemberController;
+use App\Http\Controllers\CoreTimsesMemberController;
 use App\Http\Controllers\CoreSupporterController;
 use App\Http\Controllers\CorePeriodController;
 use App\Http\Controllers\CorePollingStationController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\ProgramTimsesController;
 use App\Http\Controllers\QuickCountController;
 use App\Http\Controllers\FinancialCategoryController;
 use App\Http\Controllers\FundingIncomeController;
 use App\Http\Controllers\FundingIncomeReportController;
+use App\Http\Controllers\FundingIncomeReport2Controller;
 use App\Http\Controllers\FundingExpenditureController;
+use App\Http\Controllers\FundingExpenditureReport2Controller;
 use App\Http\Controllers\FundingExpenditureReportController;
 use App\Http\Controllers\FundingCombineReportController;
 use App\Http\Controllers\RecapitulationReportController;
 use App\Http\Controllers\FundingAcctReportController;
+use App\Http\Controllers\FundingTimsesController;
 use App\Http\Controllers\TimsesActivityReportController;
+use App\Http\Controllers\TimsesActivityReport2Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -124,10 +129,15 @@ Route::get('/timses/delete-timses-member/{timses_member_id}', [CoreTimsesControl
 Route::get('/timses-member', [CoreTimsesMemberController::class, 'addCoreTimsesMember'])->name('add-timses-member2');
 Route::post('/timses-member/process-add-member', [CoreTimsesMemberController::class, 'processAddCoreTimsesMember'])->name('process-add-timses-member2');
 
-Route::get('/timses-member/add-ktp-member/{timses_id}/{timses_member_id}', [CoreTimsesMemberController::class, 'addCoreTimsesMemberKTP'])->name('add-ktp-member2');
+Route::get('/timses-member/edit-member/{timses_member_id}', [CoreTimsesMemberController::class, 'editCoreTimsesMember'])->name('edit-timses-member2');
+Route::post('/timses-member/process-edit-member', [CoreTimsesMemberController::class, 'processEdiCoreTimsesMember'])->name('process-edit-timses-member2');
+
+Route::get('/timses-member/add-ktp-member/{timses_member_id}', [CoreTimsesMemberController::class, 'addCoreTimsesMemberKTP'])->name('add-ktp-member2');
 Route::post('/timses-member/process-add-ktp-member', [CoreTimsesMemberController::class, 'processAddCoreTimsesMemberKTP'])->name('process-add-ktp-member2');
-Route::get('/timses-member/download-ktp-member/{timses_member_ktp_id}', [CoreTimsesMemberController::class, 'downloadCoreTimsesMemberKTP'])->name('download-ktp-member2');
-Route::get('/timses-member/delete-ktp-member/{timses_member_ktp_id}', [CoreTimsesMemberController::class, 'deleteCoreTimsesMemberKTP'])->name('delete-ktp-member2');
+Route::get('/timses-member/download-ktp-member/{timses_member_id}', [CoreTimsesMemberController::class, 'downloadCoreTimsesMemberKTP'])->name('download-ktp-member2');
+Route::get('/timses-member/delete-ktp-member/{timses_member_id}', [CoreTimsesMemberController::class, 'deleteCoreTimsesMemberKTP'])->name('delete-ktp-member2');
+
+Route::get('/timses-member/delete-timses-member/{timses_member_id}', [CoreTimsesMemberController::class, 'deleteCoreTimsesMember'])->name('delete-timses-member2');
 
 //Data Supporter
 Route::get('/supporter', [CoreSupporterController::class, 'index']);
@@ -159,7 +169,7 @@ Route::get('/polling-station/edit/{polling_station_id}', [CorePollingStationCont
 Route::post('/polling-station/process-edit', [CorePollingStationController::class, 'processEditCorePollingStation'])->name('process-edit-polling-station');
 Route::get('/polling-station/delete-polling-station/{polling_station_id}', [CorePollingStationController::class, 'deleteCorePollingStation'])->name('delete-polling-station');
 
-//Program
+//Program in menu admin
 Route::get('/program', [ProgramController::class, 'index']);
 
 Route::post('/program/filter',[ProgramController::class, 'filterProgram'])->name('filter-program');
@@ -173,25 +183,30 @@ Route::get('/program/edit/{program_id}', [ProgramController::class, 'editProgram
 Route::post('/program/process-edit', [ProgramController::class, 'processEditProgram'])->name('process-edit-program');
 Route::get('/program/detail/{program_id}', [ProgramController::class, 'detailProgram'])->name('detail-program');
 
-// Route::get('/program/distribution-fund/{program_id}', [ProgramController::class, 'distributionFundProgram'])->name('distribution-fund');
-// Route::post('/program/process-distribution-fund', [ProgramController::class, 'processDistributionFundProgram'])->name('process-distribution-fund');
-// Route::get('/program/edit-distribution-fund/{program_id}/{timses_id}/{distribution_fund_id}', [ProgramController::class, 'editDistributionFundProgram'])->name('edit-distribution-fund');
-// Route::post('/program/process-edit-distribution-fund', [ProgramController::class, 'processEditDistributionFundProgram'])->name('process-edit-distribution-fund');
-// Route::get('/program/get-user-akun/{timses__id}', [ProgramController::class, 'getUserAkun'])->name('get-user-akun');
-// Route::get('/program/detail-distribution-fund/{program_id}/{distribution_fund_id}', [ProgramController::class, 'detailDistributionFundProgram'])->name('detail-distribution-fund');
-
-// Route::get('/program/add-program-support/{program_id}', [ProgramController::class, 'addProgramSupport'])->name('add-program-support');
-// Route::post('/program/process-add-program-support', [ProgramController::class, 'processAddProgramSupport'])->name('process-add-program-support');
-// Route::get('/program/add-supporter-new/{program_support_id}', [ProgramController::class, 'addCoreSupporterNew'])->name('add-supporter-new');
-// Route::post('/program/process-add-supporter-new', [ProgramController::class, 'processAddCoreSupporterNew'])->name('process-add-supporter-new');
-// Route::get('/program/delete-program-support/{program_support_id}', [ProgramController::class, 'deleteProgramSupport'])->name('delete-program-support');
-
 Route::get('/program/documentation-program/{program_id}', [ProgramController::class, 'documentationProgram'])->name('documentation-program');
 Route::post('/program/process-documentation-program', [ProgramController::class, 'processDocumentationProgram'])->name('process-documentation-program');
 Route::get('/program/download-documentation/{program_documentation_id}', [ProgramController::class, 'downloadDocumentationProgram'])->name('download-documentation');
 Route::get('/program/delete-documentation/{program_documentation_id}', [ProgramController::class, 'deleteDocumentationProgram'])->name('delete-documentation');
-Route::get('/program/closing-program/{program_id}', [ProgramController::class, 'closingProgram'])->name('closing-program');
 Route::get('/program/delete-program/{program_id}', [ProgramController::class, 'deleteProgram'])->name('delete-program');
+
+//Program in menu timses
+Route::get('/program-timses', [ProgramTimsesController::class, 'index'])->name('program-timses');
+
+Route::post('/program-timses/filter',[ProgramTimsesController::class, 'filterProgram'])->name('filter-program2');
+Route::get('/program-timses/filter-reset',[ProgramTimsesController::class, 'filterResetProgram'])->name('filter-reset-program2');
+
+Route::get('/program-timses/add', [ProgramTimsesController::class, 'addProgram'])->name('add-program2');
+Route::post('/program-timses/process-add', [ProgramTimsesController::class, 'processAddProgram'])->name('process-add-program2');
+Route::post('/program-timses/elements-add', [ProgramTimsesController::class, 'addElementsProgram'])->name('add-program-elements2');
+Route::get('/program-timses/reset-add', [ProgramTimsesController::class, 'addReset'])->name('add-program-reset2');
+Route::get('/program-timses/edit/{program_id}', [ProgramTimsesController::class, 'editProgram'])->name('edit-program2');
+Route::post('/program-timses/process-edit', [ProgramTimsesController::class, 'processEditProgram'])->name('process-edit-program2');
+Route::get('/program-timses/detail/{program_id}', [ProgramTimsesController::class, 'detailProgram'])->name('detail-program2');
+Route::get('/program-timses/documentation-program/{program_id}', [ProgramTimsesController::class, 'documentationProgram'])->name('documentation-program2');
+Route::post('/program-timses/process-documentation-program', [ProgramTimsesController::class, 'processDocumentationProgram'])->name('process-documentation-program2');
+Route::get('/program-timses/download-documentation/{program_documentation_id}', [ProgramTimsesController::class, 'downloadDocumentationProgram'])->name('download-documentation2');
+Route::get('/program-timses/delete-documentation/{program_documentation_id}', [ProgramTimsesController::class, 'deleteDocumentationProgram'])->name('delete-documentation2');
+Route::get('/program-timses/delete-program/{program_id}', [ProgramTimsesController::class, 'deleteProgram'])->name('delete-program2');
 
 //Quick Count
 Route::get('/quick-count', [QuickCountController::class, 'index']);
@@ -296,3 +311,46 @@ Route::post('/report-timses-activity/filter',[TimsesActivityReportController::cl
 Route::get('/report-timses-activity/reset-filter',[TimsesActivityReportController::class, 'filterResetTimsesActivityReport'])->name('filter-reset-report-timses-activity');
 Route::get('/report-timses-activity/print',[TimsesActivityReportController::class, 'printTimsesActivityReport'])->name('print-report-timses-activity');
 Route::get('/report-timses-activity/export',[TimsesActivityReportController::class, 'exportTimsesActivityReport'])->name('export-report-timses-activity');
+
+//funding in menu timses
+Route::get('/income-timses', [FundingTimsesController::class, 'indexTimses']);
+Route::get('/income-timses/add', [FundingTimsesController::class, 'addFundingIncomeTimses'])->name('add-income');
+Route::post('/income-timses/process-add', [FundingTimsesController::class, 'processAddFundingIncomeTimses'])->name('process-add-income-timses');
+Route::get('/income-timses/edit/{financial_flow_id}', [FundingTimsesController::class, 'editFundingIncomeTimses'])->name('edit-income-timses');
+Route::post('/income-timses/process-edit', [FundingTimsesController::class, 'processEditFundingIncomeTimses'])->name('process-edit-income-timses');
+Route::get('/income-timses/delete-income/{financial_flow_id}', [FundingTimsesController::class, 'deleteFundingIncomeTimses'])->name('delete-income-timses');
+
+Route::get('/expenditure-timses', [FundingTimsesController::class, 'indexExpenditureTimses']);
+Route::get('/expenditure-timses/add', [FundingTimsesController::class, 'addFundingExpenditureTimses'])->name('add-expenditure-timses');
+Route::post('/expenditure-timses/process-add', [FundingTimsesController::class, 'processAddFundingExpenditureTimses'])->name('process-add-expenditure-timses');
+Route::get('/expenditure-timses/edit/{financial_flow_id}', [FundingTimsesController::class, 'editFundingExpenditureTimses'])->name('edit-expenditure-timses');
+Route::post('/expenditure-timses/process-edit', [FundingTimsesController::class, 'processEditFundingExpenditureTimses'])->name('process-edit-expenditure-timses');
+Route::get('/expenditure-timses/delete-expenditure/{financial_flow_id}', [FundingTimsesController::class, 'deleteFundingExpenditureTimses'])->name('delete-expenditure-timses');
+
+//timses activity report in menu timses
+Route::get('/report-timses-activity2',[TimsesActivityReport2Controller::class, 'index']);
+Route::post('/report-timses-activity2/filter',[TimsesActivityReport2Controller::class, 'filterTimsesActivityReport2'])->name('filter-report-timses-activity2');
+Route::get('/report-timses-activity2/reset-filter',[TimsesActivityReport2Controller::class, 'filterResetTimsesActivityReport2'])->name('filter-reset-report-timses-activity2');
+Route::get('/report-timses-activity2/print',[TimsesActivityReport2Controller::class, 'printTimsesActivityReport2'])->name('print-report-timses-activity2');
+Route::get('/report-timses-activity2/export',[TimsesActivityReport2Controller::class, 'exportTimsesActivityReport2'])->name('export-report-timses-activity2');
+
+//Report Funding Income in menub timses
+Route::get('/report-income2', [FundingIncomeReport2Controller::class, 'index']);
+Route::post('/report-income2/filter',[FundingIncomeReport2Controller::class, 'filterFundingIncomeReport2'])->name('filter-report-income2');
+Route::get('/report-income2/filter-reset',[FundingIncomeReport2Controller::class, 'filterResetFundingIncomeReport2'])->name('filter-reset-report-income2');
+Route::get('/report-income2/print',[FundingIncomeReport2Controller::class, 'printFundingIncomeReport2'])->name('print-funding-income-report2');
+Route::get('/report-income2/export',[FundingIncomeReport2Controller::class, 'exportFundingIncomeReport2'])->name('export-funding-income-report2');
+
+//Report Funding Expenditure
+Route::get('/report-expenditure2', [FundingExpenditureReport2Controller::class, 'index']);
+Route::post('/report-expenditure2/filter',[FundingExpenditureReport2Controller::class, 'filterFundingExpenditureReport2'])->name('filter-report-expenditure2');
+Route::get('/report-expenditure2/filter-reset',[FundingExpenditureReport2Controller::class, 'filterResetFundingExpenditureReport2'])->name('filter-reset-report-expenditure2');
+Route::get('/report-expenditure2/print',[FundingExpenditureReport2Controller::class, 'printFundingExpenditureReport2'])->name('print-funding-expenditure-report2');
+Route::get('/report-expenditure2/export',[FundingExpenditureReport2Controller::class, 'exportFundingExpenditureReport2'])->name('export-funding-expenditure-report2');
+
+//Report Funding Combine
+Route::get('/report-combine', [FundingCombineReportController::class, 'index']);
+Route::post('/report-combine/filter',[FundingCombineReportController::class, 'filterFundingCombineReport'])->name('filter-report-combine');
+Route::get('/report-combine/filter-reset',[FundingCombineReportController::class, 'filterResetFundingCombineReport'])->name('filter-reset-report-combine');
+Route::get('/report-combine/print',[FundingCombineReportController::class, 'printFundingCombineReport'])->name('print-funding-combine-report');
+Route::get('/report-combine/export',[FundingCombineReportController::class, 'exportFundingCombineReport'])->name('export-funding-combine-report');

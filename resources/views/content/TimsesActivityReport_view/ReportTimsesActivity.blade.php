@@ -8,17 +8,17 @@
 @section('js')
 <script>
     $(document).ready(function(){
-        var timses_member_id = {!! json_encode($timses_member_id) !!};
+        var timses_id = {!! json_encode($timses_id) !!};
         
-        if(timses_member_id == null){
-            $("#timses_member_id").select2("val", "0");
+        if(timses_id == null){
+            $("#timses_id").select2("val", "0");
         }
     });
 </script>
 {{-- @php
     Session::forget('start_date');
     Session::forget('end_date');
-    Session::forget('timses_member_id');
+    Session::forget('timses_id');
 @endphp --}}
 @stop
 
@@ -104,7 +104,7 @@
                                         *
                                     </span>
                                 </section>
-                                {!! Form::select('timses_member_id', $listcoretimsesmember, $timses_member_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!}
+                                {!! Form::select('timses_id', $listcoretimses, $timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
                             </div>
                         </div>
                     </div>
@@ -156,7 +156,7 @@
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
                         <td>{{date('d/m/Y', strtotime($val['financial_flow_date']))}}</td>
-                        <td>{{$RTA->getTimsesMemberName($val['timses_member_id'])}}</td>
+                        <td>{{$RTA->getTimsesName($val['timses_id'])}}</td>
                         {{-- <td>{{$ReportFX->getCategoryName($val['financial_category_id'])}}</td> --}}
                         <td>{{$RTA->getProgramName($val['program_id'])}}</td>
                         <td style='text-align:right'>{{rupiah($val['financial_flow_nominal'])}}</td>

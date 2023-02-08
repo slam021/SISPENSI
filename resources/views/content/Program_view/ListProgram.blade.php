@@ -8,10 +8,10 @@
 @section('js')
 <script>
       $(document).ready(function(){
-        var timses_member_id = {!! json_encode($timses_member_id) !!};
+        var timses_id = {!! json_encode($timses_id) !!};
         
-        if(timses_member_id == null){
-            $("#timses_member_id").select2("val", "0");
+        if(timses_id == null){
+            $("#timses_id").select2("val", "0");
         }
     });
 </script>
@@ -44,6 +44,7 @@
         @endforeach
     </div>
 @endif 
+
 <form  method="post" action="{{ route('filter-program') }}" enctype="multipart/form-data">
     @csrf
         <div class="card border border-dark">
@@ -87,7 +88,7 @@
                                     *
                                 </span>
                             </section>
-                            {!! Form::select('timses_member_id', $coretimsesmember, $timses_member_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_member_id','' ])!!}
+                            {!! Form::select('timses_id', $coretimses, $timses_id, ['class' => 'selection-search-clear select-form', 'id' => 'timses_id','' ])!!}
                         </div>
                     </div>
                 </div>
@@ -155,7 +156,7 @@
                         @if ($val['program_organizer'] == 1)
                             <td style='text-align:center'>{{'-'}}</td>
                         @else
-                            <td>{{$Program->getTimsesName($val['timses_member_id'])}}</td>
+                            <td>{{$Program->getTimsesName($val['timses_id'])}}</td>
                         @endif
                         <td>{{$val['program_name']}}</td>
                         <td>{{$val['program_description']}}</td>
