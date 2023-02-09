@@ -29,6 +29,7 @@ use App\Http\Controllers\FundingAcctReportController;
 use App\Http\Controllers\FundingTimsesController;
 use App\Http\Controllers\TimsesActivityReportController;
 use App\Http\Controllers\TimsesActivityReport2Controller;
+use App\Http\Controllers\DataTimsesMemberReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -354,3 +355,8 @@ Route::post('/report-combine/filter',[FundingCombineReportController::class, 'fi
 Route::get('/report-combine/filter-reset',[FundingCombineReportController::class, 'filterResetFundingCombineReport'])->name('filter-reset-report-combine');
 Route::get('/report-combine/print',[FundingCombineReportController::class, 'printFundingCombineReport'])->name('print-funding-combine-report');
 Route::get('/report-combine/export',[FundingCombineReportController::class, 'exportFundingCombineReport'])->name('export-funding-combine-report');
+
+//Report Data Timses Member
+Route::get('/report-data-member', [DataTimsesMemberReportController::class, 'index']);
+Route::get('/report-data-member/print',[DataTimsesMemberReportController::class, 'printDataTimsesMemberReport'])->name('print-report-data-member');
+Route::get('/report-data-member/export',[DataTimsesMemberReportController::class, 'exportDataTimsesMemberReport'])->name('export-report-data-member');

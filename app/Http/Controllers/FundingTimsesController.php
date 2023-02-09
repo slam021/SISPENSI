@@ -282,9 +282,9 @@ class FundingTimsesController extends Controller
         // $item->deleted_at   = date("Y-m-d H:i:s");
         if($item->save())
         {
-            $msg = 'Hapus Pemasukan Keuangan Timses Berhasil';
+            $msg = 'Hapus Pengeluaran Keuangan Timses Berhasil';
         }else{
-            $msg = 'Hapus Pemasukan Keuangan Timses Gagal';
+            $msg = 'Hapus Pengeluaran Keuangan Timses Gagal';
         }
 
         return back()->with('msg',$msg);

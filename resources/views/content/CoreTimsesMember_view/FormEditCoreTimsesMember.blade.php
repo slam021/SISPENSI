@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <form method="post" action="{{route('process-edit-timses-member')}}" enctype="multipart/form-data">
+    <form method="post" action="{{route('process-edit-timses-member2')}}" enctype="multipart/form-data">
         @csrf
         <div class="card-body">
             <div class="row form-group">

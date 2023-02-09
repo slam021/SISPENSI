@@ -141,6 +141,7 @@
                         <th width="10%" style='text-align:center'>NIK</th>
                         <th width="10%" style='text-align:center'>Tempat Lahir</th>
                         <th width="10%" style='text-align:center'>Tanggal Lahir</th>
+                        <th width="10%" style='text-align:center'>Umur</th>
                         <th width="10%" style='text-align:center'>Alamat</th>
                         <th width="10%" style='text-align:center'>Agama</th>
                         <th width="10%" style='text-align:center'>No. Telp</th>
@@ -150,16 +151,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
-                        $no = 1; 
-                    ?>
                     @foreach($coretimsesmember as $key => $val)
+                    <?php 
+                        $no = 1;
+                        $lahir = new DateTime(date($val['timses_member_date_of_birth']));
+                        $today = new DateTime('today');
+                        $umur  = $today->diff($lahir);
+                    ?>
                     <tr>
                         <td style='text-align:center'>{{$no}}</td>
                         <td>{{$val['timses_member_name']}}</td>
                         <td>{{$val['timses_member_nik']}}</td>
                         <td>{{$val['timses_member_place_of_birth']}}</td>
                         <td>{{date('d/m/Y', strtotime($val['timses_member_date_of_birth']))}}</td>
+                        <td>{{$umur->y.' Tahun'}}</td>
                         <td>{{$val['timses_member_address']}}</td>
                         <td>{{$val['timses_member_religion']}}</td>
                         <td>{{$val['timses_member_phone']}}</td>

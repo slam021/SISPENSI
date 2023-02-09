@@ -81,10 +81,10 @@ class CoreTimsesMemberController extends Controller
 
         if(CoreTimsesMember::create($data)){
             $msg = 'Tambah Data Anggota Timses Berhasil';
-            return redirect('/timses-member/add-member/'.$timses_id)->with('msg',$msg);
+            return redirect('/timses-member')->with('msg',$msg);
         } else {
             $msg = 'Tambah Data Anggota Timses Gagal';
-            return redirect('/timses-member/add-member/'.$timses_id)->with('msg',$msg);
+            return redirect('/timses-member')->with('msg',$msg);
         }
     }
 
@@ -184,10 +184,13 @@ class CoreTimsesMemberController extends Controller
         $fields = $request->validate([
             'timses_member_id'               => 'required',
             'timses_member_name'             => 'required',
-            'timses_member_nik'              => 'required',
+            'timses_member_date_of_birth'    => 'required',
+            'timses_member_place_of_birth'   => 'required',
             'timses_member_address'          => 'required',
             'timses_member_phone'            => 'required',
             'timses_member_gender'           => 'required',
+            'timses_member_religion'         => 'required',
+            'timses_member_nik'              => 'required',
         ]);
 
         $item  = CoreTimsesMember::findOrFail($fields['timses_member_id']);
@@ -196,13 +199,16 @@ class CoreTimsesMemberController extends Controller
             $item->timses_member_address     = $fields['timses_member_address'];
             $item->timses_member_phone       = $fields['timses_member_phone'];
             $item->timses_member_gender      = $fields['timses_member_gender'];
+            $item->timses_member_date_of_birth      = $fields['timses_member_date_of_birth'];
+            $item->timses_member_place_of_birth      = $fields['timses_member_place_of_birth'];
+            $item->timses_member_religion      = $fields['timses_member_religion'];
     
             if($item->save()){
                 $msg = 'Edit Data Timses Berhasil';
-                return redirect('/timses-member/add-member/'.$timses_id)->with('msg',$msg);
+                return redirect('/timses-member')->with('msg',$msg);
             }else{
                 $msg = 'Edit Data Timses Gagal';
-                return redirect('/timses-member/add-member/'.$timses_id)->with('msg',$msg);
+                return redirect('/timses-member')->with('msg',$msg);
             }
     }
 
