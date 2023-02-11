@@ -216,7 +216,8 @@ class DataTimsesMemberReportController extends Controller
             $spreadsheet->getActiveSheet()->mergeCells("B1:I1");
             $spreadsheet->getActiveSheet()->mergeCells("B2:I2");
             $spreadsheet->getActiveSheet()->getStyle('B1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $spreadsheet->getActiveSheet()->getStyle('B2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $spreadsheet->getActiveSheet()->getStyle('B2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $spreadsheet->getActiveSheet()->getStyle('B3')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
             $spreadsheet->getActiveSheet()->getStyle('B1')->getFont()->setBold(true)->setSize(16);
             $spreadsheet->getActiveSheet()->getStyle('B4:I4')->getFont()->setBold(true);
 
@@ -225,7 +226,7 @@ class DataTimsesMemberReportController extends Controller
 
             $sheet->setCellValue('B1',"Laporan Data Anggota Timses");	
             $sheet->setCellValue('B2', "Nama Timses    : ". $timses_name);	
-            $sheet->setCellValue('B2', "Jumlah Anggota    : ". count($coretimsesmember));	
+            $sheet->setCellValue('B3', "Jumlah Anggota    : ". count($coretimsesmember));	
             $sheet->setCellValue('B4',"No");
             $sheet->setCellValue('C4',"Nama Anggota");
             $sheet->setCellValue('D4',"TTL");

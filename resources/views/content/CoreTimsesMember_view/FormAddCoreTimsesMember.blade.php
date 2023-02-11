@@ -124,7 +124,7 @@
 <div class="card border border-dark">
     <div class="card-header bg-dark clearfix">
         <h5 class="mb-0 float-left">
-            Daftar Timses
+            Daftar Anggot Timses
         </h5>
         {{-- <div class="form-actions float-right">
             <button onclick="location.href='{{ url('timses/add-member') }}'" name="add" class="btn btn-sm bg-info" title="Add Data"><i class="fas fa-plus"></i> Tambah Timses</button>

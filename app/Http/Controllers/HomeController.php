@@ -11,6 +11,7 @@ use App\Models\CoreDapil;
 use App\Models\CorePollingStation;
 use App\Models\CoreSupporter;
 use App\Models\CoreTimsesMember;
+use App\Models\CoreTimses;
 
 class HomeController extends Controller
 {
@@ -63,11 +64,23 @@ class HomeController extends Controller
         ->where('data_state', '=', 0)
         ->get();
 
-        $coretimsesmember = CoreTimsesMember::select('core_timses_member.*')
-        ->where('data_state', '=', 0)
+        
+        $timses_id = CoreTimses::where('core_timses.data_state', 0)
+        ->where('core_timses.user_id', Auth::id())->first();
+        // dd($timses_id);
+
+        // $timses_id = $take_timses_id;
+
+        $coretimsesmember = CoreTimsesMember::where('core_timses_member.data_state','=',0)
+        ->where('core_timses_member.timses_id', $timses_id)
         ->get();
 
-        return view('home',compact('user_group_login', 'menus', 'corecandidate', 'coredapil', 'corepollingstation', 'coresupporter', 'coretimsesmember'));
+
+        $coretimses = CoreTimses::select('core_timses.*')
+        ->where('core_timses.data_state','=',0)
+        ->get();
+
+        return view('home',compact('timses_id', 'coretimses', 'user_group_login', 'menus', 'corecandidate', 'coredapil', 'corepollingstation', 'coresupporter', 'coretimsesmember'));
     }
 
 }

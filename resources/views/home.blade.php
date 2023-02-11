@@ -10,7 +10,10 @@ Dashboard
 @stop --}}
 
 @section('content')
-    
+
+@php
+    // dd($timses_id);
+@endphp
 <br>
 <div class="card border border-dark">
     <div class="card-header border-dark bg-dark">
@@ -70,7 +73,7 @@ Dashboard
             <div class='col-md-3'>
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3 style="text-align: left; margin-left:10px "><b>{{$coretimsesmember->count('core_timses_member.timses_member_id')}}</b></h3>
+                        <h3 style="text-align: left; margin-left:10px "><b>{{$coretimses->count('core_timses.timses_id')}}</b></h3>
                     </div>
                     <div class="icon">
                         <i class="fas fa-users" style='font-size:60px; color:rgb(255, 255, 255); margin-right: 70px'></i>
@@ -149,7 +152,7 @@ Dashboard
 
     <div class="card-body">
         <div class="row">
-            <div class='col-md-6'>
+            {{--<div class='col-md-6'>
                 <div class="small-box bg-warning">
                     <div class="inner">
                         <h3 style="text-align: left; margin-left:10px"><b>{{ $corecandidate->candidate_full_name }}</b></h3>
@@ -164,7 +167,7 @@ Dashboard
                     </a>
                 </div>
             </div>
-            {{-- <div class='col-md-3'>
+            <div class='col-md-3'>
                 <div class="small-box bg-primary">
                     <div class="inner">
                         <h3 style="text-align: left; margin-left:10px "><b>{{$coredapil->count('core_dapil.dapil_id') }}</b></h3>
@@ -193,39 +196,39 @@ Dashboard
                         <i class='far fa-arrow-alt-circle-right'></i>
                     </a>
                 </div>
-            </div> --}}
+            </div> 
             <div class='col-md-6'>
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3 style="text-align: left; margin-left:10px "><b>{{$coretimsesmember->count('core_timses_member.timses_member_id')}}</b></h3>
+                        <h3 style="text-align: left; margin-left:10px "><b>{{$timses_id->timses_name}}</b></h3>
                     </div>
                     <div class="icon">
                         <i class="fas fa-users" style='font-size:60px; color:rgb(255, 255, 255); margin-right: 70px'></i>
                     </div>
                     <br>
-                    <a class="small-box-footer" href="{{url('timses-member')}}">
-                        <b>Anggota Timses</b>
+                    <a class="small-box-footer" href="">
+                        <b>Timses</b>
                         <i class='far fa-arrow-alt-circle-right'></i>
                     </a>
                 </div>
-            </div>
+            </div>--}}
         </div>
         <div class="row">
             <div class='col-md-6'>
-                <div class="card" style="height: 250px;">
+                <div class="card" style="height: 300px;">
                     <div class="card-header bg-secondary">
-                    Other
+                    List
                     </div>
                     <div class="card-body">
                     <ul class="list-group">
                     <?php foreach($menus as $menu){
-                        if($menu['id_menu']==4){
+                        if($menu['id_menu']==22){
                     ?>
-                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('program')}}'"> <i class="fa fa-angle-right"></i> List Acara</li>         
+                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('program-timses')}}'"> <i class="fa fa-angle-right"></i> List Acara</li>         
                     <?php   }
-                        if($menu['id_menu']==53){
+                        if($menu['id_menu']==21){
                     ?> 
-                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('period')}}'"> <i class="fa fa-angle-right"></i> List Periode</li>  
+                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('timses-member')}}'"> <i class="fa fa-angle-right"></i> List Anggota Timses</li>  
                     <?php 
                             }
                         if($menu['id_menu']==33){
@@ -240,29 +243,30 @@ Dashboard
                 </div>
             </div>
             <div class='col-md-6'>
-                <div class="card" style="height: 250px;">
+                <div class="card" style="height: 300px;">
                     <div class="card-header bg-secondary">
                     Laporan
                     </div>
                     <div class="card-body">
                     <ul class="list-group">
                     <?php foreach($menus as $menu){
-                            if($menu['id_menu']==43){
+                            if($menu['id_menu']==471){
                     ?>
-                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-combine')}}'"> <i class="fa fa-angle-right"></i> Laporan Pemasukan & Pengeluaran</li>
+                        <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-timses-activity2')}}'"> <i class="fa fa-angle-right"></i> Laporan Kegiatan Timses</li>
                     <?php   }
-                            if($menu['id_menu']==46){
+                            if($menu['id_menu']==474){
                     ?> 
-                            <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-funding')}}'"> <i class="fa fa-angle-right"></i> Laporan Perhitungan Keuangan</li>      
+                            <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-data-member')}}'"> <i class="fa fa-angle-right"></i> Laporan Data Anggota Timses</li>      
                     <?php   }
-                            if($menu['id_menu']==44){
+                            if($menu['id_menu']==473){
                     ?> 
-                            <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-recap')}}'"> <i class="fa fa-angle-right"></i> Laporan Rekapitulasi</li>  
+                            <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-income2')}}'"> <i class="fa fa-angle-right"></i> Laporan Pemasukan Timses</li>  
                     <?php   }
-                            if($menu['id_menu']==45){
-                    
-                            }
-                        } 
+                            if($menu['id_menu']==473){
+                    ?>
+                            <li class="list-group-item main-menu-item" onClick="location.href='{{url('report-expenditure2')}}'"> <i class="fa fa-angle-right"></i> Laporan Pengeluaran Timses</li>  
+                    <?php   }
+                        }
                     ?>                                
                     </ul>
                 </div>

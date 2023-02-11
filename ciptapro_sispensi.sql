@@ -55,7 +55,7 @@ CREATE TABLE `core_candidate` (
 /*Data for the table `core_candidate` */
 
 insert  into `core_candidate`(`candidate_id`,`last_balance`,`candidate_full_name`,`candidate_nick_name`,`candidate_nik`,`candidate_gender`,`candidate_address`,`candidate_birth_place`,`candidate_birth_date`,`candidate_phone_number`,`candidate_photos`,`candidate_point`,`data_state`,`created_id`,`created_at`,`updated_at`) values 
-(1,-6796445,'Fajar Jos','Fajar','33131435353','1','Sragen','Karanganyar','2022-11-15','087343434','1673669900_user_kids_avatar_user_profile_icon_149314.png',11,0,55,'2022-11-30 00:00:00','2023-02-08 06:43:10');
+(1,-12096445,'Fajar Jos','Fajar','33131435353','1','Sragen','Karanganyar','2022-11-15','087343434','1673669900_user_kids_avatar_user_profile_icon_149314.png',11,0,55,'2022-11-30 00:00:00','2023-02-09 03:21:06');
 
 /*Table structure for table `core_candidate_partai` */
 
@@ -7975,7 +7975,7 @@ CREATE TABLE `core_timses` (
 
 insert  into `core_timses`(`timses_id`,`user_id`,`last_balance`,`timses_name`,`timses_nik`,`timses_gender`,`timses_phone`,`timses_address`,`created_id`,`data_state`,`created_at`,`updated_at`) values 
 (1,91,NULL,'AAN','453636363',1,'0893415315','Solo',55,1,'2022-11-28 00:00:00','2022-12-27 09:35:46'),
-(2,92,-3490300,'Bagas','331313174189',1,'0867767724','Solo',55,0,'2022-11-28 00:00:00','2023-02-08 06:43:10'),
+(2,92,-8790300,'Bagas','331313174189',1,'0867767724','Solo',55,0,'2022-11-28 00:00:00','2023-02-09 03:21:06'),
 (3,94,4700000,'Anang','56543634636236',1,'0977947923','Kebakkramat',55,0,'2022-11-28 00:00:00','2023-02-08 03:14:49'),
 (4,93,-200,'Joni','64563737357',1,'52525353','afagfasfasf',55,0,'2022-11-30 00:00:00','2023-01-04 04:14:32'),
 (5,95,-500200,'Denji','31331318980',1,'08773583456','Solo',55,0,'2022-12-01 00:00:00','2023-01-04 04:25:48'),
@@ -8004,14 +8004,16 @@ CREATE TABLE `core_timses_member` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`timses_member_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `core_timses_member` */
 
 insert  into `core_timses_member`(`timses_member_id`,`timses_id`,`timses_member_nik`,`timses_member_name`,`timses_member_address`,`timses_member_place_of_birth`,`timses_member_date_of_birth`,`timses_member_religion`,`timses_member_gender`,`timses_member_phone`,`data_state`,`created_id`,`created_at`,`updated_at`) values 
-(1,9,'64646446464','Deko T','Matesih','Kra','2023-02-03','Islam','1','0897786876',0,55,'2023-02-03 00:00:00','2023-02-03 09:56:39'),
-(2,2,'64646464646','fafa','kra','kra','2023-02-08','islam','2','0897697866',0,92,'2023-02-08 00:00:00','2023-02-08 09:18:12'),
-(3,2,'adad','dadad','adada','adadad','2023-02-08','kristen','1','089898989',0,92,'2023-02-08 00:00:00','2023-02-08 09:23:03');
+(1,9,'64646446464','Deko T','Matesih','Kra','2016-12-03','Islam','1','0897786876',0,55,'2023-02-03 00:00:00','2023-02-10 08:17:09'),
+(2,2,'64646464646','fafa','kra','kra','2010-12-17','fjjfjfjf','2','08567676767',0,92,'2023-02-08 00:00:00','2023-02-09 03:56:08'),
+(3,2,'adad','dadad','adada','adadad','2006-02-01','kristen','1','089898989',0,92,'2023-02-08 00:00:00','2023-02-09 03:56:30'),
+(4,2,'668686868','asasa','adadada','jgjgjgj','1973-12-14','adadad','1','08989788787',0,92,'2023-02-09 00:00:00','2023-02-09 03:56:53'),
+(5,2,'668686868','asasa','adadada','jgjgjgj','2023-02-09','adadad','1','08989788787',1,92,'2023-02-09 00:00:00','2023-02-09 03:18:18');
 
 /*Table structure for table `core_timses_member_ktp` */
 
@@ -8026,7 +8028,7 @@ CREATE TABLE `core_timses_member_ktp` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`timses_member_ktp_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `core_timses_member_ktp` */
 
@@ -8043,8 +8045,9 @@ insert  into `core_timses_member_ktp`(`timses_member_ktp_id`,`timses_member_id`,
 (10,NULL,'1675848462_ktp_user.png',0,92,'2023-02-08 00:00:00','2023-02-08 09:27:42'),
 (11,NULL,'1675848495_ktp_bluelock.jpg',0,92,'2023-02-08 00:00:00','2023-02-08 09:28:15'),
 (12,NULL,'1675848655_ktp_nagi.jpg',0,92,'2023-02-08 00:00:00','2023-02-08 09:30:55'),
-(13,2,'1675848733_ktp_bluelock.jpg',0,92,'2023-02-08 00:00:00','2023-02-08 09:32:13'),
-(14,3,'1675848747_ktp_bluelock.jpg',0,92,'2023-02-08 00:00:00','2023-02-08 09:32:27');
+(13,2,'1675848733_ktp_bluelock.jpg',1,92,'2023-02-08 00:00:00','2023-02-09 03:17:50'),
+(14,3,'1675848747_ktp_bluelock.jpg',0,92,'2023-02-08 00:00:00','2023-02-08 09:32:27'),
+(15,2,'1675912684_ktp_1669802474_kucing.png',0,92,'2023-02-09 00:00:00','2023-02-09 03:18:04');
 
 /*Table structure for table `core_village` */
 
@@ -90223,7 +90226,7 @@ CREATE TABLE `financial_flow` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`financial_flow_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=372 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=375 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `financial_flow` */
 
@@ -90242,7 +90245,7 @@ insert  into `financial_flow`(`financial_flow_id`,`candidate_id`,`timses_id`,`pr
 (352,NULL,4,95,8,'2',200,'2023-01-04','sfsfsfs',-3200200,-2100200,0,55,'2023-01-04 00:00:00','2023-01-04 04:14:33'),
 (353,1,NULL,96,8,'2',200,'2023-01-04','swfwsrfwf',-3200400,-2100200,0,55,'2023-01-04 00:00:00','2023-01-04 04:15:06'),
 (354,NULL,5,97,8,'2',200,'2023-01-04','dgdgdgdsg',-3200600,-2100400,0,55,'2023-01-04 00:00:00','2023-01-04 04:25:48'),
-(355,NULL,2,98,8,'2',300,'2023-01-04','dadadada',-3200900,-2100700,0,55,'2023-01-04 00:00:00','2023-01-04 04:39:58'),
+(355,NULL,2,98,8,'2',500000,'2023-01-04','dadadada',-3200900,-2100700,0,55,'2023-01-04 00:00:00','2023-02-09 03:20:15'),
 (356,NULL,3,99,8,'2',300000,'2023-01-11','adadadad',-3500900,-2400700,0,55,'2023-01-04 00:00:00','2023-01-04 09:04:58'),
 (357,1,NULL,100,8,'2',1000,'2023-02-07','adad',-3501900,-2400700,0,96,'2023-02-07 00:00:00','2023-02-07 09:30:35'),
 (358,1,NULL,101,8,'2',5000000,'2023-02-08','dsdsd',-8501900,-2400700,0,55,'2023-02-08 00:00:00','2023-02-08 03:11:30'),
@@ -90254,11 +90257,14 @@ insert  into `financial_flow`(`financial_flow_id`,`candidate_id`,`timses_id`,`pr
 (364,NULL,2,NULL,6,'2',700000,'2023-02-08','dgdgdg',9498100,7899300,0,55,'2023-02-08 00:00:00','2023-02-08 03:16:28'),
 (365,NULL,2,102,8,'2',500000,'2023-02-08','dadad',8998100,7399300,0,92,'2023-02-08 00:00:00','2023-02-08 03:30:38'),
 (366,NULL,2,103,8,'2',900000,'2023-02-08','adada',8098100,6499300,0,92,'2023-02-08 00:00:00','2023-02-08 03:36:44'),
-(367,NULL,2,NULL,2,'1',500000,'2023-02-08','dgdgdg',8598100,6999300,0,92,'2023-02-08 00:00:00','2023-02-08 05:04:30'),
+(367,NULL,2,NULL,2,'1',500000,'2023-02-08','hghghghg',8598100,6999300,1,92,'2023-02-08 00:00:00','2023-02-09 03:19:59'),
 (368,NULL,2,NULL,1,'1',50000,'2023-02-09','jhjhjhjh',8648100,7049300,0,92,'2023-02-08 00:00:00','2023-02-08 05:04:37'),
 (369,NULL,2,NULL,3,'1',60000,'2023-02-09','popop',8708100,7109300,1,92,'2023-02-08 00:00:00','2023-02-08 06:47:31'),
 (370,NULL,2,NULL,5,'2',1000000,'2023-02-08','fsfsfsfs',7708100,6109300,0,92,'2023-02-08 00:00:00','2023-02-08 06:42:10'),
-(371,NULL,2,NULL,4,'2',500000,'2023-02-08','dsdsdsd',7208100,5609300,0,92,'2023-02-08 00:00:00','2023-02-08 06:43:10');
+(371,NULL,2,NULL,4,'2',500000,'2023-02-08','dsdsdsd',7208100,5609300,0,92,'2023-02-08 00:00:00','2023-02-08 06:43:10'),
+(372,NULL,2,104,8,'2',600000,'2023-02-09','fsfsfsf',6608100,5009300,1,92,'2023-02-09 00:00:00','2023-02-09 03:21:13'),
+(373,NULL,2,NULL,3,'1',300000,'2023-02-09','sfsfsfsf',6908100,5309300,0,92,'2023-02-09 00:00:00','2023-02-09 03:19:46'),
+(374,NULL,2,NULL,6,'2',5000000,'2023-02-09','gjgjgjgj',1908100,309300,0,92,'2023-02-09 00:00:00','2023-02-09 03:21:06');
 
 /*Table structure for table `migrations` */
 
@@ -90367,7 +90373,7 @@ CREATE TABLE `program` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`program_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=105 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `program` */
 
@@ -90390,7 +90396,7 @@ insert  into `program`(`program_id`,`candidate_id`,`timses_id`,`financial_catego
 (77,NULL,6,NULL,500000,'2','Seni Musik','Metal','Solo','2022-12-30',0,0,55,'2022-12-30 00:00:00','2022-12-30 03:16:55'),
 (78,1,NULL,NULL,300000,'1','Pokemon','dadadad','Solo','2022-12-30',0,0,55,'2022-12-30 00:00:00','2022-12-30 03:18:01'),
 (79,NULL,7,NULL,600000,'2','Bagi Hp','Android','Solo','2022-12-30',0,0,55,'2022-12-30 00:00:00','2022-12-30 03:21:30'),
-(80,NULL,2,NULL,400000,'2','Kasti','fsfsfsf','sfsfsf','2023-01-03',0,0,55,'2023-01-03 00:00:00','2023-02-08 03:45:18'),
+(80,NULL,2,NULL,400000,'2','Kasti','fsfsfsf','dsdsdsds','2023-01-03',0,0,55,'2023-01-03 00:00:00','2023-02-09 03:19:03'),
 (81,NULL,4,NULL,400000,'2','sfsfsfsf','sfsfsfsf','fsfsfsf','2023-01-03',0,0,55,'2023-01-03 00:00:00','2023-01-03 08:29:18'),
 (82,1,NULL,NULL,3000000,'1','fsfsf','sfsfsfs','sfsfsf','2023-01-03',0,0,55,'2023-01-03 00:00:00','2023-01-03 08:33:07'),
 (83,NULL,2,NULL,500000,'2','Bagi Sembako','Beras','Triyagan','2023-01-03',0,0,55,'2023-01-03 00:00:00','2023-01-03 08:34:32'),
@@ -90413,7 +90419,8 @@ insert  into `program`(`program_id`,`candidate_id`,`timses_id`,`financial_catego
 (100,NULL,9,NULL,20000,'2','adad','adad','rtrtrtrt','2023-02-07',0,0,96,'2023-02-07 00:00:00','2023-02-07 10:00:53'),
 (101,1,NULL,NULL,5000000,'1','Mendayu','dsdsd','dsdsd','2023-02-08',0,0,55,'2023-02-08 00:00:00','2023-02-08 03:11:30'),
 (102,NULL,2,NULL,500000,'2','dada','dadad','sdsdsd','2023-02-08',0,0,92,'2023-02-08 00:00:00','2023-02-08 03:30:38'),
-(103,NULL,2,NULL,50000,'2','golf','adada','fsfsfsfsf','2023-02-08',0,0,92,'2023-02-08 00:00:00','2023-02-08 03:37:57');
+(103,NULL,2,NULL,50000,'2','golf','adada','fsfsfsfsf','2023-02-08',0,0,92,'2023-02-08 00:00:00','2023-02-08 03:37:57'),
+(104,NULL,2,NULL,600000,'2','bowling','fsfsfsf','Solo','2023-02-09',0,0,92,'2023-02-09 00:00:00','2023-02-09 03:18:49');
 
 /*Table structure for table `program_distribution_fund` */
 
@@ -90455,7 +90462,7 @@ CREATE TABLE `program_documentation` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`program_documentation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `program_documentation` */
 
@@ -90471,7 +90478,8 @@ insert  into `program_documentation`(`program_documentation_id`,`program_id`,`pr
 (9,16,'1671598337_download.jpg',0,55,'2022-12-21 00:00:00','2022-12-21 04:52:17'),
 (10,35,'1671598587_download.jpg',1,55,'2022-12-21 00:00:00','2022-12-21 04:56:31'),
 (11,15,'1671604078_download.jpg',0,55,'2022-12-21 00:00:00','2022-12-21 06:27:58'),
-(12,56,'1672209082_bluelock.jpg',0,55,'2022-12-28 00:00:00','2022-12-28 06:31:22');
+(12,56,'1672209082_bluelock.jpg',0,55,'2022-12-28 00:00:00','2022-12-28 06:31:22'),
+(13,80,'1675912753_1675849341_nagi.jpg',1,92,'2023-02-09 00:00:00','2023-02-09 03:19:19');
 
 /*Table structure for table `program_support` */
 
@@ -91636,6 +91644,7 @@ insert  into `system_menu`(`id_menu`,`id`,`type`,`indent_level`,`text`,`image`,`
 ('471','report-timses-activity2','file',2,'Laporan Kegiatan Timses',NULL,'2023-02-08 14:28:38'),
 ('472','report-income2','file',2,'Laporan Pemasukan',NULL,'2023-02-08 14:30:55'),
 ('473','report-expenditure2','file',2,'Laporan Pengeluaran',NULL,'2023-02-08 14:31:08'),
+('474','report-data-member','file',2,'Laporan Data Anggota Timses',NULL,'2023-02-09 10:24:18'),
 ('5','#','folder',1,'Konfigurasi',NULL,'2023-01-02 10:43:52'),
 ('51','dapil','file',2,'Data Dapil',NULL,'2023-01-02 10:43:56'),
 ('52','polling-station','file',2,'Data TPS',NULL,'2023-01-02 10:44:00'),
@@ -91660,7 +91669,7 @@ CREATE TABLE `system_menu_mapping` (
   PRIMARY KEY (`menu_mapping_id`),
   KEY `FK_system_menu_mapping` (`id_menu`) USING BTREE,
   CONSTRAINT `FK_system_menu_mapping_id_menu` FOREIGN KEY (`id_menu`) REFERENCES `system_menu` (`id_menu`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=271 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=272 DEFAULT CHARSET=utf8;
 
 /*Data for the table `system_menu_mapping` */
 
@@ -91727,7 +91736,8 @@ insert  into `system_menu_mapping`(`menu_mapping_id`,`user_group_level`,`id_menu
 (266,3,'47','2023-02-08 07:37:16','2023-02-08 07:37:16'),
 (267,3,'471','2023-02-08 07:37:16','2023-02-08 07:37:16'),
 (268,3,'472','2023-02-08 07:37:16','2023-02-08 07:37:16'),
-(269,3,'473','2023-02-08 07:37:16','2023-02-08 07:37:16');
+(269,3,'473','2023-02-08 07:37:16','2023-02-08 07:37:16'),
+(271,3,'474',NULL,'2023-02-09 10:24:31');
 
 /*Table structure for table `system_user` */
 
