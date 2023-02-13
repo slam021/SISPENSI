@@ -216,7 +216,7 @@ Dashboard
         <div class="row">
             <div class='col-md-6'>
                 <div class="card" style="height: 300px;">
-                    <div class="card-header bg-secondary">
+                    <div class="card-header bg-info">
                     List
                     </div>
                     <div class="card-body">
